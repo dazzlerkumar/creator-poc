@@ -19,25 +19,25 @@ Next.js defaults are strict, but enabling `noUncheckedIndexedAccess` ensures tha
 ## 🛠 Technical Implementation Plan (TDD Methodology)
 
 ### Phase 1: Red (Test First)
-- [ ] **Type Check Script**: Create a file `src/test/strict-check.ts` that contains code that *should* fail under strict mode (e.g., accessing an index and using it without a check).
-- [ ] **Execution**: Run `tsc --noEmit` and confirm it passes (incorrectly) before the changes.
+- [x] **Type Check Script**: Create a file `src/test/strict-check.ts` that contains code that *should* fail under strict mode (e.g., accessing an index and using it without a check).
+- [x] **Execution**: Run `tsc --noEmit` and confirm it passes (incorrectly) before the changes.
 
 ### Phase 2: Green (Implementation)
-- [ ] **TSConfig Update**: Modify `tsconfig.json`:
+- [x] **TSConfig Update**: Modify `tsconfig.json`:
     - Set `"noUncheckedIndexedAccess": true`
     - Set `"exactOptionalPropertyTypes": true`
-- [ ] **Verify Strict**: Confirm `"strict": true` is still present.
+- [x] **Verify Strict**: Confirm `"strict": true` is still present.
 
 ### Phase 3: Refactor & Verify
-- [ ] **Verification**: Run `tsc --noEmit` again and confirm the `src/test/strict-check.ts` now produces errors.
-- [ ] **Cleanup**: Delete `src/test/strict-check.ts`.
+- [x] **Verification**: Run `tsc --noEmit` again and confirm the `src/test/strict-check.ts` now produces errors.
+- [x] **Cleanup**: Delete `src/test/strict-check.ts`.
 
 ---
 
 ## ✅ Acceptance Criteria (AC)
-- [ ] **AC-001: Strict Indexing**: `noUncheckedIndexedAccess` is enabled in `tsconfig.json`.
-- [ ] **AC-002: Exact Optionals**: `exactOptionalPropertyTypes` is enabled in `tsconfig.json`.
-- [ ] **AC-003: Type Safety**: The project passes `tsc --noEmit` (after cleanup/fixes if any existing code breaks).
+- [x] **AC-001: Strict Indexing**: `noUncheckedIndexedAccess` is enabled in `tsconfig.json`.
+- [x] **AC-002: Exact Optionals**: `exactOptionalPropertyTypes` is enabled in `tsconfig.json`.
+- [x] **AC-003: Type Safety**: The project passes `tsc --noEmit` (after cleanup/fixes if any existing code breaks).
 
 ---
 
@@ -51,6 +51,6 @@ Next.js defaults are strict, but enabling `noUncheckedIndexedAccess` ensures tha
 ---
 
 ## 🏁 Definition of Done (DoD)
-- [ ] `tsconfig.json` contains the new strict flags.
-- [ ] No existing boilerplate code is broken by these changes.
-- [ ] No linting warnings introduced.
+- [x] `tsconfig.json` contains the new strict flags.
+- [x] No existing boilerplate code is broken by these changes.
+- [x] No linting warnings introduced.

@@ -2,6 +2,21 @@
 
 Derived from [system-design.md](file:///Users/deepak/TechPix/creator-stage-frontend/docs/system-design.md).
 
+## Architecture Decision: Client-Side Rendered SPA
+
+This app runs **entirely in the browser**. Next.js 16 is used as a build tool and routing framework only — no server runtime dependency.
+
+Key constraints:
+- `output: 'export'` — `next build` produces static HTML/CSS/JS in `out/`
+- No Server Components, Server Actions, or Route Handlers
+- No `rewrites`, `redirects`, or `headers` in Next.js config
+- No `cookies()`, `headers()`, `redirect()` server-side imports
+- All page components are Client Components (`'use client'`)
+- All data fetching via TanStack Query (client-side `fetch`)
+- API base URL configured via `NEXT_PUBLIC_API_URL` env var
+- WebSocket URL via `NEXT_PUBLIC_WS_URL` env var
+- Deployable to any static host (S3, CloudFront, Nginx, Vercel static)
+
 ## Current State
 
 - Fresh Next.js 16.2.6 scaffold (React 19, Tailwind v4, TypeScript)
@@ -66,30 +81,51 @@ src/
 └── test/
 ```
 
-Map this to Next.js App Router under `app/`:
+Map to Next.js App Router under `app/` — all pages are Client Components:
 ```
 app/
 ├── (public)/
-│   ├── login/page.tsx
-│   ├── join/page.tsx
-│   ├── ended/page.tsx
-│   └── error/page.tsx
-├── c/              # creator routes
+│   ├── login/page.tsx        # 'use client'
+│   ├── join/page.tsx         # 'use client'
+│   ├── ended/page.tsx        # 'use client'
+│   └── error/page.tsx        # 'use client'
+├── c/                        # creator routes
 │   └── sessions/
-│       └── [sessionId]/page.tsx
-├── a/              # audience routes
+│       └── [sessionId]/page.tsx  # 'use client'
+├── a/                        # audience routes
 │   └── s/
-│       └── [sessionId]/page.tsx
-├── layout.tsx
-├── providers.tsx
+│       └── [sessionId]/page.tsx  # 'use client'
+├── layout.tsx                # 'use client' — wraps providers
+├── providers.tsx             # 'use client' — provider composition
 └── globals.css
 ```
 
 ---
 
-### Task 1.4 — Next.js Config: API Proxy
+### Task 1.4 — Next.js Config: Static Export & Environment
 
-Configure `next.config.ts` with `rewrites` to proxy `/api/*` to backend `:8080` and `/connection/*` to `:8000` during dev.
+Configure `next.config.ts`:
+
+```ts
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  output: 'export',
+};
+
+export default nextConfig;
+```
+
+No `rewrites` — API requests go directly to the backend via `NEXT_PUBLIC_API_URL`.
+
+Environment variables (`.env.local` for dev, CI/deployment for prod):
+```
+NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_WS_URL=ws://localhost:8000/connection/websocket
+NEXT_PUBLIC_HMAC_KEY=dev-only-key
+```
+
+**Dev proxy alternative:** Use Vite's proxy or a local Caddy/Nginx reverse proxy during development if CORS is not configured on the backend. This is outside Next.js config.
 
 ---
 
@@ -112,16 +148,18 @@ Configure `next.config.ts` with `rewrites` to proxy `/api/*` to backend `:8080` 
 
 ## Phase 2 — Auth & State Infrastructure
 
-**Goal:** Implement JWT auth flow, Zustand stores, TanStack Query client, and the provider tree.
+**Goal:** Implement JWT auth flow, Zustand stores, TanStack Query client, and the provider tree. All client-side — no server-side auth helpers.
 
 ---
 
-### Task 2.1 — API Client (`src/api/client.ts`)
+### Task 2.1 — API Client (`src/api/client.ts`) [x]
 
 Fetch wrapper that:
+- Reads base URL from `NEXT_PUBLIC_API_URL` (compile-time inlined)
 - Attaches JWT from `useAuthStore` as `Authorization: Bearer` header
 - Handles 401 → triggers auth refresh or redirect
 - Typed response handling with error discrimination
+- No server-side fetch — runs only in browser
 
 ---
 
@@ -133,42 +171,46 @@ Zustand store holding:
 - `expiry: number | null`
 - `refreshTimerHandle: ReturnType<typeof setTimeout> | null`
 - Actions: `setToken`, `clearToken`, `scheduleRefresh`
+- Persisted to `sessionStorage` (Zustand `persist` middleware with `sessionStorage` adapter)
 
 ---
 
 ### Task 2.3 — Auth API (`src/auth/api.ts`)
 
-Functions:
-- `login(identityToken: string)` → `POST /api/auth/login`
-- `getToken(params: { sessionId: string; inviteToken?: string; identityToken?: string })` → `POST /api/auth/token`
+Functions (all client-side fetch to `NEXT_PUBLIC_API_URL`):
+- `login(identityToken: string)` → `POST {API_URL}/api/auth/login`
+- `getToken(params: { sessionId: string; inviteToken?: string; identityToken?: string })` → `POST {API_URL}/api/auth/token`
 
 ---
 
 ### Task 2.4 — Auth Provider (`src/auth/auth-provider.tsx`)
 
-React context provider:
+Client Component (`'use client'`) React context provider:
 - On mount, checks `sessionStorage` for cached upstream token
 - Implements silent refresh loop: `setTimeout(refresh, exp - now - 60s)`
 - Exposes `useAuth()` hook returning `{ jwt, role, isAuthenticated, logout }`
-- On refresh failure: redirect to `/join` (audience) or `/login` (creator)
+- On refresh failure: client-side redirect via `router.push('/join')` (audience) or `router.push('/login')` (creator)
+- No server-side `redirect()` — uses `next/navigation` `useRouter` only
 
 ---
 
 ### Task 2.5 — Creator Login Page (`app/(public)/login/page.tsx`)
 
+`'use client'` component:
 - Dev-only HMAC identity_token minter using `NEXT_PUBLIC_HMAC_KEY`
-- Form: email/identifier input → generates identity_token → `POST /api/auth/login` → redirect to `/c/sessions`
-- Gated via `process.env.NODE_ENV === 'development'`
+- Form: email/identifier input → generates identity_token → `POST {API_URL}/api/auth/login` → `router.push('/c/sessions')`
+- Gated via `process.env.NODE_ENV === 'development'` (compile-time eliminated in prod build)
 
 ---
 
 ### Task 2.6 — Audience Join Page (`app/(public)/join/page.tsx`)
 
-- Reads `session` and `invite` from URL search params
-- Calls `GET /api/sessions/{sid}/status` (public, unauth)
-- If ended → redirect `/ended`
-- If live → `POST /api/auth/token` with invite JWT → store JWT → navigate `/a/s/{sid}`
-- If 401 → redirect `/error?reason=invalid_invite`
+`'use client'` component:
+- Reads `session` and `invite` from URL search params via `useSearchParams()`
+- Calls `GET {API_URL}/api/sessions/{sid}/status` (public, unauth)
+- If ended → `router.push('/ended')`
+- If live → `POST {API_URL}/api/auth/token` with invite JWT → store JWT → `router.push('/a/s/{sid}')`
+- If 401 → `router.push('/error?reason=invalid_invite')`
 - Stores `invite_jwt` in `sessionStorage` keyed by `session_id`
 
 ---
@@ -190,30 +232,32 @@ Create remaining stores:
 - Create `QueryClient` with defaults (staleTime, retry, refetchOnWindowFocus)
 - Create `QueryClientProvider` wrapper in `app/providers.tsx`
 - Define query key factory: `queryKeys.session(id)`, `queryKeys.chat.recent(id)`, etc.
+- All queries use client-side `fetch` to `NEXT_PUBLIC_API_URL`
 
 ---
 
 ### Task 2.9 — Provider Tree (`app/providers.tsx`)
 
-Compose providers in order:
+`'use client'` component composing providers in order:
 ```
 QueryClientProvider → AuthProvider → RealtimeProvider → UIStore → children
 ```
 
-Wire into `app/layout.tsx`.
+Wire into `app/layout.tsx` (also `'use client'`).
 
 ---
 
 ### Task 2.10 — Error & Ended Pages
 
+`'use client'` components:
 - `app/(public)/ended/page.tsx` — session ended state
-- `app/(public)/error/page.tsx` — reads `reason` from URL, displays error
+- `app/(public)/error/page.tsx` — reads `reason` from URL via `useSearchParams()`, displays error
 
 ---
 
 ## Phase 3 — Realtime Infrastructure
 
-**Goal:** Centrifuge client, channel subscriptions, and the `useRealtimeBackedQuery` pattern.
+**Goal:** Centrifuge client, channel subscriptions, and the `useRealtimeBackedQuery` pattern. All browser-side.
 
 ---
 
@@ -232,14 +276,17 @@ export const channels = {
 ### Task 3.2 — Centrifuge Client Singleton (`src/realtime/centrifuge-client.ts`)
 
 - Creates one `Centrifuge` instance per app lifecycle
+- Connects to `NEXT_PUBLIC_WS_URL`
 - Accepts JWT for connection token
 - Exposes `connect()`, `disconnect()`, `getClient()`
 - Relies on Centrifuge's built-in exponential backoff for reconnection
+- Loaded via `next/dynamic` with `ssr: false` if Centrifuge accesses browser globals at import time
 
 ---
 
 ### Task 3.3 — Realtime Provider (`src/realtime/realtime-provider.tsx`)
 
+`'use client'` component:
 - Creates Centrifuge instance when session-scoped JWT is available
 - Updates `useRealtimeStore` with connection status
 - Disconnects on unmount or auth change
@@ -262,7 +309,7 @@ export const channels = {
 The standard recovery pattern:
 - Wraps a TanStack Query query + a Centrifuge subscription
 - On WS message → writes into query cache via `queryClient.setQueryData`
-- On reconnect → refetches the query (REST recovery)
+- On reconnect → refetches the query (REST recovery via client-side fetch)
 - Components read only from `useQuery` — never directly from WS
 
 ---
@@ -275,29 +322,31 @@ The standard recovery pattern:
 
 ### Task 4.1 — Session API (`src/api/sessions.ts`)
 
-- `getSessionStatus(sid: string)` → `GET /api/sessions/{sid}/status` (public)
-- `getSession(sid: string)` → `GET /api/sessions/{sid}` (authed)
+All requests to `NEXT_PUBLIC_API_URL`:
+- `getSessionStatus(sid: string)` → `GET {API_URL}/api/sessions/{sid}/status` (public)
+- `getSession(sid: string)` → `GET {API_URL}/api/sessions/{sid}` (authed)
 
 ---
 
 ### Task 4.2 — Chat API (`src/api/chat.ts`)
 
-- `getChatRecent(sid: string)` → `GET /api/sessions/{sid}/chat/recent` (returns `{ messages, pinned_message, active_cta }`)
-- `sendMessage(sid: string, body: string)` → `POST /api/sessions/{sid}/chat`
-- `pinMessage(sid: string, messageId: string)` → `POST /api/sessions/{sid}/chat/pin`
-- `unpinMessage(sid: string)` → `DELETE /api/sessions/{sid}/chat/pin`
+- `getChatRecent(sid: string)` → `GET {API_URL}/api/sessions/{sid}/chat/recent` (returns `{ messages, pinned_message, active_cta }`)
+- `sendMessage(sid: string, body: string)` → `POST {API_URL}/api/sessions/{sid}/chat`
+- `pinMessage(sid: string, messageId: string)` → `POST {API_URL}/api/sessions/{sid}/chat/pin`
+- `unpinMessage(sid: string)` → `DELETE {API_URL}/api/sessions/{sid}/chat/pin`
 
 ---
 
 ### Task 4.3 — CTA API (`src/api/cta.ts`)
 
-- `pushCTA(sid: string, data: { label: string; url: string })` → `POST /api/sessions/{sid}/cta`
-- `dismissCTA(sid: string)` → `DELETE /api/sessions/{sid}/cta`
+- `pushCTA(sid: string, data: { label: string; url: string })` → `POST {API_URL}/api/sessions/{sid}/cta`
+- `dismissCTA(sid: string)` → `DELETE {API_URL}/api/sessions/{sid}/cta`
 
 ---
 
 ### Task 4.4 — YouTube Player Component (`src/features/sessions/youtube-player.tsx`)
 
+`'use client'` — loaded via `next/dynamic({ ssr: false })` since it uses `YT.Player` (browser API):
 - Loads `YT.Player` via IFrame API script
 - Configures params: `enablejsapi=1`, `playsinline=1`, `modestbranding=1`, `rel=0`, `controls=1`, `origin`
 - Exposes state change events (play/pause/buffering)
@@ -321,7 +370,7 @@ The standard recovery pattern:
 - Single-line input with send button
 - Slow-mode aware: disables on 429 response, shows countdown timer
 - Reads/writes `useSlowModeStore` for cooldown deadline
-- Sends via `POST /api/sessions/{sid}/chat`, reacts to `Retry-After` header
+- Sends via `POST {API_URL}/api/sessions/{sid}/chat`, reacts to `Retry-After` header
 
 ---
 
@@ -346,7 +395,7 @@ The standard recovery pattern:
 
 ### Task 4.9 — Audience Layout (`app/a/s/[sessionId]/page.tsx`)
 
-Responsive layout per viewport:
+`'use client'` — responsive layout per viewport:
 
 | Viewport | Layout |
 |---|---|
@@ -354,6 +403,8 @@ Responsive layout per viewport:
 | Mobile landscape | Fullscreen player, chat as translucent right drawer (~30%), pin + CTA inside drawer |
 | Tablet | Player left (60%), chat right (40%), pin + CTA stacked above chat |
 | Desktop (`>= 1024px`) | Player left, chat right rail, pin + CTA above chat, resizable split |
+
+**Note on dynamic routes with static export:** `[sessionId]` dynamic segments require `generateStaticParams()` at build time OR the app must be served with a catch-all fallback (e.g., Nginx `try_files $uri /index.html`). Since session IDs are runtime-determined, use catch-all route `app/a/s/[...slug]/page.tsx` or configure the hosting layer to serve `index.html` for all paths.
 
 ---
 
@@ -381,15 +432,16 @@ Responsive layout per viewport:
 
 ### Task 5.1 — Creator Session List (`app/c/sessions/page.tsx`)
 
-- Lists creator's sessions via `GET /api/sessions`
-- Session selection → `POST /api/auth/token` to upgrade to session-scoped JWT
-- Navigate to `/c/s/{sessionId}`
+`'use client'`:
+- Lists creator's sessions via `GET {API_URL}/api/sessions`
+- Session selection → `POST {API_URL}/api/auth/token` to upgrade to session-scoped JWT
+- `router.push('/c/s/{sessionId}')`
 
 ---
 
 ### Task 5.2 — Creator Session Dashboard (`app/c/s/[sessionId]/page.tsx`)
 
-Layout:
+`'use client'` layout:
 - YouTube player (same component as audience)
 - Chat feed (same `useLiveChat` hook, shared `chat-list.tsx`)
 - Pin control panel
@@ -413,8 +465,8 @@ export const PIN_TEMPLATES: ReadonlyArray<PinTemplate> = [
 
 Creator-only component:
 1. Template picker — select from `PIN_TEMPLATES`
-2. On select: `POST /api/sessions/{sid}/chat` with template body → get `message_id`
-3. Immediately: `POST /api/sessions/{sid}/chat/pin { message_id }`
+2. On select: `POST {API_URL}/api/sessions/{sid}/chat` with template body → get `message_id`
+3. Immediately: `POST {API_URL}/api/sessions/{sid}/chat/pin { message_id }`
 4. Error recovery: if step 3 fails, message exists unpinned — creator can retry
 
 ---
@@ -423,9 +475,9 @@ Creator-only component:
 
 - Dialog with two fields: `label` (button text) and `url` (https://, max 2048 chars)
 - Zod validation matching backend DTO
-- Submit → `POST /api/sessions/{sid}/cta`
+- Submit → `POST {API_URL}/api/sessions/{sid}/cta`
 - Live preview of CTA card
-- "Dismiss" button → `DELETE /api/sessions/{sid}/cta`
+- "Dismiss" button → `DELETE {API_URL}/api/sessions/{sid}/cta`
 
 ---
 
@@ -473,7 +525,7 @@ Rules enforced:
 
 ### Task 6.3 — Initial Chat Load
 
-- On mount: `GET /api/sessions/{sid}/chat/recent` → seeds query cache with `{ messages, pinned_message, active_cta }`
+- On mount: `GET {API_URL}/api/sessions/{sid}/chat/recent` → seeds query cache with `{ messages, pinned_message, active_cta }`
 - Subscribe to `:chat` channel → WS messages flow into ring buffer
 - Subscribe to `:activity` channel → handles `chat_pinned`, CTA events → update query cache
 
@@ -482,7 +534,7 @@ Rules enforced:
 ### Task 6.4 — Reconnect Recovery
 
 On Centrifuge reconnect:
-1. Re-fetch `GET /api/sessions/{sid}/chat/recent` (REST recovery)
+1. Re-fetch `GET {API_URL}/api/sessions/{sid}/chat/recent` (REST recovery)
 2. Resume `:chat` and `:activity` subscriptions
 3. Merge REST results into query cache
 4. Ring buffer continues from fresh WS messages
@@ -502,19 +554,20 @@ On Centrifuge reconnect:
 
 ---
 
-### Task 7.2 — Code Splitting
+### Task 7.2 — Code Splitting & Static Export Validation
 
-- Lazy load creator and audience route trees via Next.js dynamic imports
+- Lazy load creator and audience route trees via `next/dynamic`
 - Audience bundle target: < 200KB gzipped initial JS
 - Creator bundle: no strict budget (analytics, charting)
-- Verify with `next build` + bundle analyzer
+- Verify with `next build` — confirms static export to `out/` directory
+- Validate all dynamic routes work with static fallback hosting config
 
 ---
 
 ### Task 7.3 — Unit Tests — Auth
 
-- `auth-store` — token set/clear/refresh scheduling
-- `auth-provider` — silent refresh loop, redirect on failure
+- `auth-store` — token set/clear/refresh scheduling, sessionStorage persistence
+- `auth-provider` — silent refresh loop, client-side redirect on failure
 - `api.ts` — request/response handling (MSW mocked)
 
 ---
@@ -546,6 +599,7 @@ On Centrifuge reconnect:
 
 ### Task 7.7 — Error Boundary (`app/error-boundary.tsx`)
 
+`'use client'` component:
 - Global error boundary at app root
 - Per-route error boundaries for graceful degradation
 - Centrifuge connection error handling (non-blocking toast, not crash)
@@ -558,6 +612,18 @@ On Centrifuge reconnect:
 - Verify < 200KB gz audience bundle
 - Chat pipeline stress test: simulate 400+ msg/sec, verify no main thread lock
 - Memory leak check: ring buffer stays bounded, no unbounded growth
+- Validate static export output (`out/` directory) serves correctly
+
+---
+
+### Task 7.9 — Deployment Configuration
+
+Static hosting setup:
+- Nginx: `try_files $uri $uri.html $uri/ /index.html` for SPA fallback
+- S3 + CloudFront: error page redirects to `/index.html` with 200 status
+- Vercel: auto-detects static export from `output: 'export'`
+
+CORS: Backend must allow `Origin` from the static host domain. No Next.js proxy available.
 
 ---
 
@@ -597,7 +663,10 @@ graph TD
 > **Font choice** — Design doc mentions no specific font. Current scaffold uses Geist. Should we keep Geist or switch to Inter/another font?
 
 > [!IMPORTANT]
-> **Backend availability** — Several tasks depend on backend APIs (`/api/auth/*`, `/api/sessions/*`, `/api/chat/*`). Are these endpoints already deployed, or should we build with MSW mocks first and integrate later?
+> **Backend CORS** — Since no server-side proxy is available, the backend must set `Access-Control-Allow-Origin` for the frontend domain. Is CORS already configured, or does the backend team need a heads-up?
+
+> [!IMPORTANT]
+> **Dynamic route hosting** — Static export needs the hosting layer to serve fallback HTML for unknown paths (e.g., `/a/s/abc123`). Which hosting provider is targeted? This determines the fallback config needed.
 
 > [!IMPORTANT]
 > **shadcn/ui components** — The design doc mentions shadcn. Which specific components should be initialized upfront? Full set or minimal (Button, Input, Dialog, Card, Toast)?

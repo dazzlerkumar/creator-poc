@@ -19,29 +19,29 @@ The application serves different roles (Audience, Creator). A central Zustand st
 ## 🛠 Technical Implementation Plan (TDD Methodology)
 
 ### Phase 1: Red (Test First)
-- [ ] **Unit Test Creation**: Create `src/auth/__tests__/auth-store.test.ts`.
+- [x] **Unit Test Creation**: Create `src/auth/__tests__/auth-store.test.ts`.
     - Test: `setToken` updates `jwt`, `role`, and `expiry`.
     - Test: `clearToken` resets all state to `null`.
     - Test: Store persists/hydrates from `sessionStorage` (if middleware used).
-- [ ] **Execution**: Run `npm test` and confirm they fail.
+- [x] **Execution**: Run `npm test` and confirm they fail.
 
 ### Phase 2: Green (Implementation)
-- [ ] **Type Definitions**: Define `AuthState` and `AuthActions` in `src/auth/auth-store.ts`.
-- [ ] **Store Creation**: Implement the Zustand store.
+- [x] **Type Definitions**: Define `AuthState` and `AuthActions` in `src/auth/auth-store.ts`.
+- [x] **Store Creation**: Implement the Zustand store.
     - Fields: `jwt`, `role`, `expiry`, `refreshTimerHandle`.
     - Actions: `setToken`, `clearToken`, `scheduleRefresh`.
-- [ ] **Persistence**: (Optional but recommended) Use Zustand `persist` middleware with `createJSONStorage(() => sessionStorage)`.
+- [x] **Persistence**: (Optional but recommended) Use Zustand `persist` middleware with `createJSONStorage(() => sessionStorage)`.
 
 ### Phase 3: Refactor & Verify
-- [ ] **Verification**: Run Vitest and ensure all store tests pass.
-- [ ] **Integration**: Export the store for use in the API client and Auth Provider.
+- [x] **Verification**: Run Vitest and ensure all store tests pass.
+- [x] **Integration**: Export the store for use in the API client and Auth Provider.
 
 ---
 
 ## ✅ Acceptance Criteria (AC)
-- [ ] **AC-001: State Integrity**: The store correctly holds and updates `jwt`, `role`, and `expiry`.
-- [ ] **AC-002: Actions**: `setToken` and `clearToken` work as expected.
-- [ ] **AC-003: Persistence**: The JWT survives a browser refresh within the same session.
+- [x] **AC-001: State Integrity**: The store correctly holds and updates `jwt`, `role`, and `expiry`.
+- [x] **AC-002: Actions**: `setToken` and `clearToken` work as expected.
+- [x] **AC-003: Persistence**: The JWT survives a browser refresh within the same session.
 
 ---
 
@@ -55,6 +55,6 @@ The application serves different roles (Audience, Creator). A central Zustand st
 ---
 
 ## 🏁 Definition of Done (DoD)
-- [ ] Zustand store is implemented and tested.
-- [ ] `src/auth/auth-store.ts` follows the project's clean code standards.
-- [ ] No console errors or linting warnings.
+- [x] Zustand store is implemented and tested.
+- [x] `src/auth/auth-store.ts` follows the project's clean code standards.
+- [x] No console errors or linting warnings.

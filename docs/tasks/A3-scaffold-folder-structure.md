@@ -26,10 +26,14 @@ A consistent folder structure is critical for maintainability in a multi-role ap
 - [ ] **Src Directories**: Create the following under `src/`:
     - `auth/`, `realtime/`, `api/`, `lib/`, `stores/`, `test/`
     - `features/chat/`, `features/cta/`, `features/analytics/`, `features/sessions/`
-- [ ] **App Directories**: Create the following under `app/`:
-    - `(public)/login/`, `(public)/join/`, `(public)/ended/`, `(public)/error/`
-    - `c/sessions/[sessionId]/`
-    - `a/s/[sessionId]/`
+- [ ] **App Directories**: Create the following under `app/` (all pages must be `'use client'`):
+    - `(public)/login/page.tsx`
+    - `(public)/join/page.tsx`
+    - `(public)/ended/page.tsx`
+    - `(public)/error/page.tsx`
+    - `c/sessions/[...slug]/page.tsx` (Catch-all for SPA fallback)
+    - `a/s/[...slug]/page.tsx` (Catch-all for SPA fallback)
+- [ ] **Next Config**: Ensure `next.config.ts` has `output: 'export'`.
 - [ ] **Placeholders**: Add empty `index.ts` or `.gitkeep` files to each directory to ensure they are tracked by Git.
 
 ### Phase 3: Refactor & Verify
