@@ -28,7 +28,10 @@ export async function client<T>(
     config.body = JSON.stringify(body)
   }
 
-  const response = await fetch(endpoint, config)
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || ''
+  const url = endpoint.startsWith('http') ? endpoint : `${baseUrl}${endpoint}`
+
+  const response = await fetch(url, config)
 
   if (response.status === 401) {
     useAuthStore.getState().clearToken()

@@ -163,7 +163,7 @@ Fetch wrapper that:
 
 ---
 
-### Task 2.2 — Auth Store (`src/auth/auth-store.ts`)
+### Task 2.2 — Auth Store (`src/stores/auth-store.ts`)
 
 Zustand store holding:
 - `jwt: string | null`
@@ -175,7 +175,7 @@ Zustand store holding:
 
 ---
 
-### Task 2.3 — Auth API (`src/auth/api.ts`)
+### Task 2.3 — Auth API (`src/api/auth.ts`)
 
 Functions (all client-side fetch to `NEXT_PUBLIC_API_URL`):
 - `login(identityToken: string)` → `POST {API_URL}/api/auth/login`
@@ -183,7 +183,7 @@ Functions (all client-side fetch to `NEXT_PUBLIC_API_URL`):
 
 ---
 
-### Task 2.4 — Auth Provider (`src/auth/auth-provider.tsx`)
+### Task 2.4 — Auth Provider (`src/components/providers/auth-provider.tsx`)
 
 Client Component (`'use client'`) React context provider:
 - On mount, checks `sessionStorage` for cached upstream token
@@ -194,7 +194,7 @@ Client Component (`'use client'`) React context provider:
 
 ---
 
-### Task 2.5 — Creator Login Page (`app/(public)/login/page.tsx`)
+### Task 2.5 — Creator Login Page (`app/auth/login/page.tsx`)
 
 `'use client'` component:
 - Dev-only HMAC identity_token minter using `NEXT_PUBLIC_HMAC_KEY`
@@ -203,7 +203,7 @@ Client Component (`'use client'`) React context provider:
 
 ---
 
-### Task 2.6 — Audience Join Page (`app/(public)/join/page.tsx`)
+### Task 2.6 — Audience Join Page (`app/auth/join/page.tsx`)
 
 `'use client'` component:
 - Reads `session` and `invite` from URL search params via `useSearchParams()`
