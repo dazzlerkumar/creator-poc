@@ -32,37 +32,6 @@ Scale constraint inherited from the platform: the audience surface must remain r
 
 ---
 
-## Role Surfaces
-
-Each surface is a route subtree mounted at a stable prefix. Login flow lands the user on the right surface; the router does not let a user open a surface outside their role.
-
-| Surface | Route prefix | Entry path | Audience |
-|---|---|---|---|
-| Creator dashboard | `/c/*` | `/login` → `/c/sessions` → `/c/s/:sessionId` | role = `creator` |
-| Team moderator | `/t/*` | **DEFERRED** — currently redirects to `/error` | role = `team` (future) |
-| Audience | `/join`, `/a/s/:sessionId` | magic-link `/join?session=…&invite=…` → `/a/s/:sessionId` | role = `audience` |
-| Public | `/login`, `/join`, `/ended`, `/error` | — | unauthenticated |
-
-The router is a single `createBrowserRouter` with two active role-tree segments (creator, audience). A loader at each tree root enforces role: if the in-memory JWT's `role` claim does not match the tree, redirect to the user's correct landing page (or `/login` if no token).
-
-### Creator dashboard (`/c/*`)
-
-| Route | Purpose |
-|---|---|
-| `/c/sessions` | List own sessions (active, scheduled, ended) |
-| `/c/sessions/new` | Create session form |
-| `/c/s/:sessionId` | Live control panel: chat, composer, pin/CTA controls, analytics strip |
-
-The control panel is the primary surface. Default layout: chat (left, 1/3), composer + pin/CTA controls (center, 1/3), analytics (right, 1/3). Resizable.
-
-The pin control is a button alongside the composer that opens a list of pre-configured templates (see [Pin Templates](#pin-templates)); selecting one sends the message and pins it in a single action. Unpin is a button on the currently-pinned banner. The CTA control is a small dialog (`label`, `url`) with push/dismiss buttons.
-
-> **Deferred routes** (`feature-intent.md`): `/c/s/:sessionId/polls`, `/c/s/:sessionId/activities`, `/c/s/:sessionId/team`, `/c/s/:sessionId/invites`, `/c/s/:sessionId/insights`. None of these exist in POC. The audience invite flow is fed by externally-minted JWTs — the creator does not generate or rotate invites in-app.
-
-### Team moderator (`/t/*`) — DEFERRED
-
-The `/t/*` tree is not part of POC. Routes redirect to `/error`. Future scope adds the moderator panel, full-bleed chat moderation surface, and chat moderation actions (delete / pin free-form / timeout / ban).
-
 ### Audience (`/a/s/:sessionId`)
 
 The creator's YouTube embed is the visual focus. Engagement (chat, pinned banner, CTA card) sits beside or below the player depending on viewport. The mental model is **YouTube Live with a richer right rail** — viewers should not need a tutorial.
@@ -155,8 +124,8 @@ The invite JWT is **stored once in `sessionStorage`** keyed by `session_id` so a
 
 ```
 /login
-  → in-app HMAC identity_token minter (DEV/POC — gated by import.meta.env.DEV
-    via VITE_IDENTITY_HMAC_KEY). Production replaces this with a real IdP
+  → in-app HMAC identity_token minter (DEV/POC — gated
+    via NEXT_PUBLIC_HMAC_KEY). Production replaces this with a real IdP
     handoff.
   → POST /api/auth/login { identity_token }
   → store platform-scoped JWT
