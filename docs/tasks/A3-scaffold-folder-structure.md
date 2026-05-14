@@ -32,7 +32,6 @@ A consistent folder structure is critical for maintainability in a multi-role ap
     - `(public)/ended/page.tsx`
     - `(public)/error/page.tsx`
     - `c/sessions/[...slug]/page.tsx` (Catch-all for SPA fallback)
-    - `a/s/[...slug]/page.tsx` (Catch-all for SPA fallback)
 - [ ] **Next Config**: Ensure `next.config.ts` has `output: 'export'`.
 - [ ] **Placeholders**: Add empty `index.ts` or `.gitkeep` files to each directory to ensure they are tracked by Git.
 

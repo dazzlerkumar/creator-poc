@@ -84,16 +84,13 @@ src/
 Map to Next.js App Router under `app/` — all pages are Client Components:
 ```
 app/
-├── (public)/
+├── auth/
 │   ├── login/page.tsx        # 'use client'
 │   ├── join/page.tsx         # 'use client'
 │   ├── ended/page.tsx        # 'use client'
 │   └── error/page.tsx        # 'use client'
-├── c/                        # creator routes
+├── (main)/                        # creator routes
 │   └── sessions/
-│       └── [sessionId]/page.tsx  # 'use client'
-├── a/                        # audience routes
-│   └── s/
 │       └── [sessionId]/page.tsx  # 'use client'
 ├── layout.tsx                # 'use client' — wraps providers
 ├── providers.tsx             # 'use client' — provider composition
@@ -198,20 +195,25 @@ Client Component (`'use client'`) React context provider:
 
 `'use client'` component:
 - Dev-only HMAC identity_token minter using `NEXT_PUBLIC_HMAC_KEY`
-- Form: email/identifier input → generates identity_token → `POST {API_URL}/api/auth/login` → `router.push('/c/sessions')`
+- Form: email/identifier input → generates identity_token → `POST {API_URL}/api/auth/login` → `router.push('/join?session={session_id}&invite={invite_token}')`
 - Gated via `process.env.NODE_ENV === 'development'` (compile-time eliminated in prod build)
 
 ---
 
-### Task 2.6 — Audience Join Page (`app/auth/join/page.tsx`)
+### Task 2.6 — Audience Join Page (`app/(main)/join/page.tsx`)
 
 `'use client'` component:
 - Reads `session` and `invite` from URL search params via `useSearchParams()`
 - Calls `GET {API_URL}/api/sessions/{sid}/status` (public, unauth)
 - If ended → `router.push('/ended')`
-- If live → `POST {API_URL}/api/auth/token` with invite JWT → store JWT → `router.push('/a/s/{sid}')`
+- If live →
+  - `POST {API_URL}/api/auth/token` with invite JWT → store JWT
+  - Set local state `isLive: true` to trigger conditional rendering of `AudienceStage`
 - If 401 → `router.push('/error?reason=invalid_invite')`
 - Stores `invite_jwt` in `sessionStorage` keyed by `session_id`
+- Displays a "Joining..." loading state during status check and token exchange
+- Uses conditional rendering: `isLive ? <AudienceStage sid={sid} /> : <JoinLoading />`
+- No redirect to separate route for audience viewing; experience is handled entirely within this component.
 
 ---
 
@@ -250,8 +252,8 @@ Wire into `app/layout.tsx` (also `'use client'`).
 ### Task 2.10 — Error & Ended Pages
 
 `'use client'` components:
-- `app/(public)/ended/page.tsx` — session ended state
-- `app/(public)/error/page.tsx` — reads `reason` from URL via `useSearchParams()`, displays error
+- `app/(main)/ended/page.tsx` — session ended state
+- `app/(main)/error/page.tsx` — reads `reason` from URL via `useSearchParams()`, displays error
 
 ---
 
@@ -393,9 +395,9 @@ All requests to `NEXT_PUBLIC_API_URL`:
 
 ---
 
-### Task 4.9 — Audience Layout (`app/a/s/[sessionId]/page.tsx`)
+### Task 4.9 — Audience Stage Component (`src/features/sessions/audience-stage.tsx`)
 
-`'use client'` — responsive layout per viewport:
+`'use client'` — responsive layout component rendered conditionally within `app/auth/join/page.tsx`:
 
 | Viewport | Layout |
 |---|---|
@@ -404,7 +406,7 @@ All requests to `NEXT_PUBLIC_API_URL`:
 | Tablet | Player left (60%), chat right (40%), pin + CTA stacked above chat |
 | Desktop (`>= 1024px`) | Player left, chat right rail, pin + CTA above chat, resizable split |
 
-**Note on dynamic routes with static export:** `[sessionId]` dynamic segments require `generateStaticParams()` at build time OR the app must be served with a catch-all fallback (e.g., Nginx `try_files $uri /index.html`). Since session IDs are runtime-determined, use catch-all route `app/a/s/[...slug]/page.tsx` or configure the hosting layer to serve `index.html` for all paths.
+**Note on state management:** This component receives `sid` as a prop and relies on `AuthProvider` for the session-scoped JWT already stored in `sessionStorage`. It initializes all realtime subscriptions and data fetching on mount.
 
 ---
 
@@ -556,7 +558,7 @@ On Centrifuge reconnect:
 
 ### Task 7.2 — Code Splitting & Static Export Validation
 
-- Lazy load creator and audience route trees via `next/dynamic`
+- Lazy load creator route tree and `AudienceStage` component via `next/dynamic`
 - Audience bundle target: < 200KB gzipped initial JS
 - Creator bundle: no strict budget (analytics, charting)
 - Verify with `next build` — confirms static export to `out/` directory
@@ -608,7 +610,7 @@ On Centrifuge reconnect:
 
 ### Task 7.8 — Performance Audit
 
-- Lighthouse audit on audience route (mobile profile)
+- Lighthouse audit on audience stage (mobile profile)
 - Verify < 200KB gz audience bundle
 - Chat pipeline stress test: simulate 400+ msg/sec, verify no main thread lock
 - Memory leak check: ring buffer stays bounded, no unbounded growth

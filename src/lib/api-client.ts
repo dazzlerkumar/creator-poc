@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { CookiesKeys } from '@/types/enums';
+import { CookiesKeys } from '@/interfaces/enums';
 import { useAuthStore } from '@/stores/auth-store';
 import { API_VERSION, APP_NAME } from './constants';
 import { authApi } from '@/api/auth';
