@@ -45,7 +45,7 @@ export default function FullscreenLandscape() {
       ref={videoRef}
       controls
       src="yoga.mp4"
-      playsInline // Crucial: prevents iOS from forcing fullscreen immediately on play
+      autoPlay
     />
   );
 };

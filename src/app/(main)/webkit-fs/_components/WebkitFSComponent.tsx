@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { YouTubePlayer } from "../../join/_components/YouTubePlayer";
-import { YouTubePlayerEmbed } from "@/components/youtube-iframe-embed"
 import { MessageSquare, X, Send, Maximize, Minimize } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TriggeredDialog } from "@/components/triggered-dialog";
 
 // ─── Platform Detection ────────────────────────────────────────────────────────
 function detectPlatform() {
@@ -63,6 +63,7 @@ export default function WebkitFSComponent() {
     { id: 2, text: "Try entering fullscreen on iOS.", user: "System" },
   ]);
   const [inputText, setInputText] = useState("");
+  const [showTriggeredDialog, setShowTriggeredDialog] = useState(false);
   const [platform, setPlatform] = useState<{ isIOS: boolean; isMobile: boolean } | null>(null);
 
   const videoRef = useRef<any>(null);
@@ -88,6 +89,17 @@ export default function WebkitFSComponent() {
       videoRef.current?.remove();
       portalRootRef.current?.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    /* if (isFullscreen) { */
+    const timer = setTimeout(() => {
+      setShowTriggeredDialog(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+    /*  } else {
+       setShowTriggeredDialog(false);
+     } */
   }, []);
 
   const handleSendMessage = (e?: React.FormEvent) => {
@@ -195,6 +207,14 @@ export default function WebkitFSComponent() {
       "flex flex-col w-full bg-slate-950 text-white overflow-hidden",
       isFullscreen ? "fixed inset-0 z-50 h-[100dvh]" : "relative min-h-[100dvh]"
     )}>
+      {/* Experiment: Mocked API Triggered Overlay */}
+      <TriggeredDialog
+        isOpen={showTriggeredDialog}
+        onClose={() => setShowTriggeredDialog(false)}
+        title="Webkit FS Test"
+        description="This custom overlay works inside the Webkit Fullscreen portal! It demonstrates that we have full DOM control even in native iOS video presentation modes."
+      />
+
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-slate-900/50 backdrop-blur-md border-b border-white/10 shrink-0">
         <div>
@@ -218,11 +238,10 @@ export default function WebkitFSComponent() {
       )}>
         {/* Video Side */}
         <div className="flex-1 bg-black flex items-center justify-center relative min-h-0 min-w-0">
-          {/*  <YouTubePlayer
+          <YouTubePlayer
             videoId="mn1PGW8NBC8"
             className="w-full h-full"
-          /> */}
-          <YouTubePlayerEmbed videoId='mn1PGW8NBC8' />
+          />
         </div>
 
         {/* Chat Side */}

@@ -8,11 +8,6 @@ function isIOS(): boolean {
     );
 }
 
-function isAndroid(): boolean {
-    if (typeof navigator === 'undefined') return false;
-    return /Android/.test(navigator.userAgent);
-}
-
 export function useFullscreenLandscape() {
     const overlayRef = useRef<HTMLDivElement | null>(null);
 

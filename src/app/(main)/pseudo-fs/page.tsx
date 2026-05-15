@@ -14,9 +14,10 @@ export default function ImmersiveLayout() {
             setIsImmersive(isLandscape);
 
             // The "Trick": Scroll 1px to nudge Safari into minimizing the UI bars
-            if (isLandscape) {
-                setTimeout(() => window.scrollTo(0, 1), 100);
-            }
+            /* if (isLandscape) { */
+            // Scroll to 64px to nudge iOS Safari into hiding the toolbar
+            setTimeout(() => window.scrollTo(0, 64), 100);
+            /* } */
         };
 
         window.addEventListener('orientationchange', handleOrientation);

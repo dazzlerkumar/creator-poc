@@ -3,7 +3,6 @@ import { test, expect } from '@playwright/test';
 test.describe('Audience Join Page', () => {
   const SID = 'test-session';
   const INVITE = 'test-invite-token';
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
   test('should show loading state then audience stage on success', async ({ page }) => {
     // Mock session status - using regex to match with potential prefixes

@@ -1,22 +1,21 @@
 'use client';
 
-import React, { useEffect, useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+/* import { useRouter, useSearchParams } from 'next/navigation';
 import { sessionsApi } from '@/api/sessions';
 import { authApi } from '@/api/auth';
-import { useAuthStore } from '@/stores/auth-store';
+import { useAuthStore } from '@/stores/auth-store'; */
 import { JoinLoading } from '@/components/auth/JoinLoading';
 import { AudienceStage } from '@/app/(main)/join/_components/AudienceStage';
-import FullscreenPOC from './_components/FullscreenPOC';
 
 function JoinPageContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isLive, setIsLive] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [sid, setSid] = useState<string | null>("123");
+  /*  const router = useRouter();
+   const searchParams = useSearchParams();
+   const [isLive, setIsLive] = useState(true);
+   const [isLoading, setIsLoading] = useState(false);
+   const [sid, setSid] = useState<string | null>("123"); */
 
-  const setToken = useAuthStore((state) => state.setToken);
+  // const setToken = useAuthStore((state) => state.setToken);
   /* 
     useEffect(() => {
       const session = searchParams.get('session');
@@ -67,11 +66,11 @@ function JoinPageContent() {
  
    if (isLive) {
      return <AudienceStage sid={sid} />;
-   } */
+   }
+ 
+   return <JoinLoading />; */
 
-  // return <JoinLoading />;
-
-  return <FullscreenPOC />
+  return <AudienceStage sid={"123"} />
 }
 
 export default function JoinPage() {

@@ -256,7 +256,7 @@
 /* Prevents iOS address bar from pushing content */
 @supports (-webkit-touch-callout: none) {
   .fullscreen-page {
-    height: 100dvh;
+    /*  height: 100dvh; */
     /* dvh = dynamic viewport height, accounts for Safari toolbar */
   }
 }

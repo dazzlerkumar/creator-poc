@@ -1,10 +1,11 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFullscreenLandscape } from '@/hooks/use-fullscreen';
+import { TriggeredDialog } from '@/components/triggered-dialog';
 
 const YouTubePlayer = dynamic(
   () => import('./YouTubePlayer').then((mod) => mod.YouTubePlayer),
@@ -21,6 +22,16 @@ export function AudienceStage({ sid }: AudienceStageProps) {
   const { enterFullscreen, lockLandscape } = useFullscreenLandscape();
   const stageRef = useRef<HTMLDivElement>(null);
   const [hasEntered, setHasEntered] = useState(false);
+  const [showTriggeredDialog, setShowTriggeredDialog] = useState(false);
+
+  useEffect(() => {
+    if (hasEntered) {
+      const timer = setTimeout(() => {
+        setShowTriggeredDialog(true);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [hasEntered]);
 
   const handleEnterStage = async () => {
     try {
@@ -61,6 +72,12 @@ export function AudienceStage({ sid }: AudienceStageProps) {
         </div>
       )}
 
+      {/* Experiment: Mocked API Triggered Overlay */}
+      <TriggeredDialog
+        isOpen={showTriggeredDialog}
+        onClose={() => setShowTriggeredDialog(false)}
+      />
+
       {/* Main Stage Content */}
       <main className={cn(
         "flex-1 flex flex-col md:flex-row h-full overflow-hidden transition-opacity duration-1000",
@@ -69,13 +86,13 @@ export function AudienceStage({ sid }: AudienceStageProps) {
         {/* Video Region */}
         <div className="flex-1 relative flex items-center justify-center bg-black">
           <YouTubePlayer
-            videoId="rEKifG2XUZg" // TODO: Fetch from session API
-            className="w-full max-w-(--breakpoint-2xl) mx-auto"
+            videoId="F1bQwUOh5Hs" // TODO: Fetch from session API
+            className="w-[70%]"
           />
         </div>
 
         {/* Chat Drawer Placeholder - To be implemented in Task 4.5/4.9 */}
-        <div className="hidden md:flex w-80 lg:w-96 border-l border-white/10 bg-zinc-900/50 backdrop-blur-xl flex-col">
+        <div className="hidden md:flex w-[30%] border-l border-white/10 bg-zinc-900/50 backdrop-blur-xl flex-col">
           <div className="p-4 border-b border-white/10">
             <h2 className="font-semibold">Live Chat</h2>
           </div>
