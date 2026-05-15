@@ -57,7 +57,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
             <div className="relative">
               <button
                 onClick={handleEnterStage}
-                className="relative h-screen w-screen rounded-full bg-linear-to-br from-yoga-blue to-yoga-green flex items-center justify-center text-white shadow-yoga hover:scale-110 active:scale-95 transition-all duration-300 group"
+                className="relative h-[50vh] w-[70vw] rounded-full bg-linear-to-br from-yoga-blue to-yoga-green flex items-center justify-center text-white shadow-yoga hover:scale-110 active:scale-95 transition-all duration-300 group"
                 aria-label="Enter Live Session"
               >
                 <Play size={40} fill="currentColor" className="ml-2" />

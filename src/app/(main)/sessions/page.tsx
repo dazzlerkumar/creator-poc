@@ -41,11 +41,15 @@ export default function FullscreenLandscape() {
   }, []);
 
   return (
-    <video
-      ref={videoRef}
-      controls
-      src="yoga.mp4"
-      autoPlay
-    />
+    <div>
+      <h1 className='pt-24 text-center text-lg mb-2'>Using native <code>video</code> html element</h1>
+      <video
+        ref={videoRef}
+        controls
+        src="yoga.mp4"
+        autoPlay
+      />
+    </div>
+
   );
 };
