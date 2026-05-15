@@ -7,6 +7,7 @@ import { authApi } from '@/api/auth';
 import { useAuthStore } from '@/stores/auth-store';
 import { JoinLoading } from '@/components/auth/JoinLoading';
 import { AudienceStage } from '@/app/(main)/join/_components/AudienceStage';
+import FullscreenPOC from './_components/FullscreenPOC';
 
 function JoinPageContent() {
   const router = useRouter();
@@ -60,15 +61,17 @@ function JoinPageContent() {
       handleJoin();
     }, [searchParams, router, setToken]); */
 
-  if (isLoading || !sid) {
-    return <JoinLoading />;
-  }
+  /*  if (isLoading || !sid) {
+     return <JoinLoading />;
+   }
+ 
+   if (isLive) {
+     return <AudienceStage sid={sid} />;
+   } */
 
-  if (isLive) {
-    return <AudienceStage sid={sid} />;
-  }
+  // return <JoinLoading />;
 
-  return <JoinLoading />;
+  return <FullscreenPOC />
 }
 
 export default function JoinPage() {

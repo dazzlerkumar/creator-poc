@@ -346,7 +346,7 @@ All requests to `NEXT_PUBLIC_API_URL`:
 
 ---
 
-### Task 4.4 — YouTube Player Component (`src/features/sessions/youtube-player.tsx`)
+### Task 4.4 — YouTube Player Component (`src/app/(main)/join/_components/youtube-player.tsx`)
 
 `'use client'` — loaded via `next/dynamic({ ssr: false })` since it uses `YT.Player` (browser API):
 - Loads `YT.Player` via IFrame API script
@@ -355,6 +355,7 @@ All requests to `NEXT_PUBLIC_API_URL`:
 - Custom fullscreen button that calls `requestFullscreen()` on the **container** (player + chat overlay)
 - Chat toggle button in player chrome
 - iOS Safari `webkitpresentationmode` detection with "tap to return" affordance
+- On redirecting to /join and mount of `AudienceStage` component, force the website to open in fullscreen landscape mode.
 
 ---
 
