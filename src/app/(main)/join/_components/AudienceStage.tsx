@@ -53,16 +53,16 @@ export function AudienceStage({ sid }: AudienceStageProps) {
       {/* Entry Overlay (User Gesture Provider) */}
       {!hasEntered && (
         <div className="absolute inset-0 z-50 h-screen w-screen flex flex-col items-center justify-center bg-zinc-950/90 backdrop-blur-xl transition-all duration-500">
-          <div className="text-center space-y-8 animate-in fade-in zoom-in duration-700">
-            <div className="relative">
-              <button
-                onClick={handleEnterStage}
-                className="relative w-[25vw] aspect-square rounded-full bg-linear-to-br from-[var(--yoga-blue)] to-[var(--yoga-green)] flex items-center justify-center text-white shadow-yoga hover:scale-110 active:scale-95 transition-all duration-300 group"
-                aria-label="Enter Live Session"
-              >
-                <Play size={40} fill="currentColor" className="ml-2" />
-              </button>
-            </div>
+          <div className="text-center space-y-8 animate-in fade-in zoom-in duration-700 flex flex-col items-center justify-center">
+
+            <button
+              onClick={handleEnterStage}
+              className="w-40 aspect-square rounded-full bg-linear-to-br from-[var(--yoga-blue)] to-[var(--yoga-green)] flex items-center justify-center text-white shadow-yoga hover:scale-110 active:scale-95 transition-all duration-300 group "
+              aria-label="Enter Live Session"
+            >
+              <Play size={40} fill="currentColor" className="ml-2" />
+            </button>
+
 
             <div className="space-y-2">
               <h1 className="text-2xl font-bold tracking-tight">Ready to join?</h1>
