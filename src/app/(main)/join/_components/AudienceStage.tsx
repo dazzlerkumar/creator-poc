@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import { Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFullscreenLandscape } from '@/hooks/use-fullscreen';
@@ -17,6 +18,9 @@ interface AudienceStageProps {
 }
 
 export function AudienceStage({ sid }: AudienceStageProps) {
+  const searchParams = useSearchParams();
+  const videoId = searchParams.get('v') || 'F1bQwUOh5Hs';
+
   // Hook handles: orientation change listener + iOS overlay + cleanup on unmount.
   // enterFullscreen / lockLandscape are called on button click (user gesture required).
   const { enterFullscreen, lockLandscape } = useFullscreenLandscape();
@@ -43,7 +47,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
       setHasEntered(true);
     }
   };
-
+  console.log("video id", videoId)
   return (
     <div
       ref={stageRef}
@@ -86,7 +90,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
         {/* Video Region */}
         <div className="flex-1 relative flex items-center justify-center bg-black">
           <YouTubePlayer
-            videoId="F1bQwUOh5Hs" // TODO: Fetch from session API
+            videoId={videoId}
             className="w-[70%]"
           />
         </div>
