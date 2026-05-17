@@ -13,15 +13,15 @@ interface TriggeredDialogProps {
 export function TriggeredDialog({
   isOpen,
   onClose,
-  title = "Exclusive Bonus!",
-  description = "This interaction was triggered by a simulated API event. Custom overlays stay interactive on iOS!",
-  buttonText = "I'm Impressed"
+  title = "Water break time",
+  description = "This is your chance to grab a sip of water. It will help you stay hydrated and focused during the session.",
+  buttonText = "Sip Water"
 }: TriggeredDialogProps) {
   if (!isOpen) return null;
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-80 p-6 bg-zinc-900/80 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-2xl animate-in fade-in zoom-in slide-in-from-bottom-10 duration-700">
-      <button 
+      <button
         onClick={onClose}
         className="absolute top-4 right-4 p-1 rounded-full hover:bg-white/10 text-zinc-500 hover:text-white transition-colors"
         aria-label="Close dialog"
