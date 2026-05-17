@@ -111,22 +111,27 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
   };
 
   const handleFullscreen = () => {
-    if (!containerRef.current) return;
-
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen().catch((err) => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
-      });
-      setIsFullscreen(true);
+    if (!document.fullscreenElement && !(document as any).webkitFullscreenElement) {
+      const el = document.documentElement;
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch((err) => {
+          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else if ((el as any).webkitRequestFullscreen) {
+        (el as any).webkitRequestFullscreen();
+      }
     } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
     }
   };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      setIsFullscreen(!!(document.fullscreenElement || (document as any).webkitFullscreenElement));
     };
 
     // iOS Safari specific presentation mode handling
@@ -139,6 +144,7 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
     const playerElement = playerRef.current;
     if (playerElement && 'webkitPresentationMode' in playerElement) {
@@ -147,6 +153,7 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
 
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
       if (playerElement && 'webkitPresentationMode' in playerElement) {
         playerElement.removeEventListener('webkitpresentationmodechanged', handleWebKitPresentationModeChange);
       }
@@ -159,7 +166,6 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
       data-testid="youtube-player-container"
       className={cn(
         "relative w-full bg-black overflow-hidden group shadow-3xl h-full w-full",
-        isFullscreen && "rounded-none w-screen h-screen max-h-screen",
         className
       )}
     >
