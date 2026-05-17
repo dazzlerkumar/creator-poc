@@ -8,3 +8,8 @@ export const AUTH_ENDPOINTS = {
     LOGOUT: `${BASE_API}/auth/logout`,
     TOKEN: `${BASE_API}/auth/token`,
 };
+
+export const PAYMENT_ENDPOINTS = {
+    CREATE_ORDER: `${BASE_API}/payments/create-order`,
+    VERIFY: `${BASE_API}/payments/verify`,
+};

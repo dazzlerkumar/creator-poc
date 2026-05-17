@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
-import { Play } from 'lucide-react';
+import { Play, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFullscreenLandscape } from '@/hooks/use-fullscreen';
 import { TriggeredDialog } from '@/components/triggered-dialog';
 import { LiveChat } from '@/components/live-chat';
+import { PaymentOverlay } from '@/components/payment-overlay';
 import { useUIStore } from '@/stores/ui-store';
+import { usePaymentStore } from '@/stores/payment-store';
 
 const YouTubePlayer = dynamic(
   () => import('./YouTubePlayer').then((mod) => mod.YouTubePlayer),
@@ -27,6 +29,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
   // enterFullscreen / lockLandscape are called on button click (user gesture required).
   const { enterFullscreen, lockLandscape } = useFullscreenLandscape();
   const { isChatVisible } = useUIStore();
+  const { isPaymentOpen, openPayment } = usePaymentStore();
   const stageRef = useRef<HTMLDivElement>(null);
   const [hasEntered, setHasEntered] = useState(false);
   const [showTriggeredDialog, setShowTriggeredDialog] = useState(false);
@@ -100,14 +103,30 @@ export function AudienceStage({ sid }: AudienceStageProps) {
           />
         </div>
 
-        {/* Live Chat sidebar */}
+        {/* Live Chat sidebar and Payment container */}
         <div className={cn(
           "flex w-full md:w-[20%] landscape:w-[28%] shrink-0 border-l border-white/10 bg-zinc-950/20 backdrop-blur-xl flex-col transition-all duration-300",
           isChatVisible
             ? "h-[70%] md:h-full landscape:h-full"
             : "hidden"
         )}>
-          <LiveChat />
+          {isPaymentOpen ? (
+            <PaymentOverlay />
+          ) : (
+            <>
+              <div className="flex items-center justify-end px-2 py-1.5 border-b border-white/5">
+                <button
+                  onClick={openPayment}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 transition-all active:scale-95"
+                  aria-label="Open payment"
+                >
+                  <CreditCard size={13} />
+                  Pay
+                </button>
+              </div>
+              <LiveChat />
+            </>
+          )}
         </div>
       </main>
     </div>
