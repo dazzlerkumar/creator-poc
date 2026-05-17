@@ -121,7 +121,7 @@ export function LiveChat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-card text-foreground overflow-hidden relative">
+    <div className="flex flex-col h-full bg-card text-foreground overflow-hidden relative">
       <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-border select-none">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />

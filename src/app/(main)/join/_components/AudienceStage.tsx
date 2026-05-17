@@ -54,7 +54,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
     <div
       ref={stageRef}
       data-testid="audience-stage"
-      className="flex min-h-screen flex-col bg-zinc-950 text-white overflow-hidden relative fullscreen-page"
+      className="flex h-screen flex-col bg-zinc-950 text-white overflow-hidden relative fullscreen-page"
     >
       {/* Entry Overlay (User Gesture Provider) */}
       {!hasEntered && (
@@ -85,35 +85,31 @@ export function AudienceStage({ sid }: AudienceStageProps) {
       />
 
       <main className={cn(
-        "flex-1 flex flex-col md:flex-row landscape:flex-row h-full overflow-hidden transition-opacity duration-1000",
+        "flex-1 flex flex-col md:flex-row landscape:flex-row min-h-0 overflow-hidden transition-opacity duration-1000",
         !hasEntered ? "opacity-0" : "opacity-100"
       )}>
         {/* Video Region */}
-        <div className="flex-1 relative flex items-center justify-center bg-secondary/50">
+        <div className={cn(
+          "relative flex items-center justify-center bg-secondary/50 transition-all duration-300",
+          isChatVisible
+            ? "h-[30%] shrink-0 md:h-full md:flex-1 landscape:h-full landscape:flex-1"
+            : "h-full flex-1"
+        )}>
           <YouTubePlayer
             videoId={videoId}
           />
         </div>
 
         {/* Live Chat sidebar */}
-        <div className={cn("flex w-full md:w-[20%] landscape:w-[28%] shrink-0 h-screen border-l border-white/10 bg-zinc-950/20 backdrop-blur-xl flex-col", !isChatVisible && "hidden")}>
+        <div className={cn(
+          "flex w-full md:w-[20%] landscape:w-[28%] shrink-0 border-l border-white/10 bg-zinc-950/20 backdrop-blur-xl flex-col transition-all duration-300",
+          isChatVisible
+            ? "h-[70%] md:h-full landscape:h-full"
+            : "hidden"
+        )}>
           <LiveChat />
         </div>
       </main>
-
-      {/* Mobile Chat Toggle / Status Bar */}
-      <div className={cn(
-        "md:hidden p-4 border-t border-white/10 bg-zinc-900 flex items-center justify-between transition-opacity duration-1000",
-        !hasEntered ? "opacity-0" : "opacity-100"
-      )}>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-xs font-bold uppercase tracking-wider text-red-500">Live</span>
-        </div>
-        <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">
-          Session: {sid}
-        </div>
-      </div>
     </div>
   );
 }
