@@ -7,6 +7,7 @@ import { Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFullscreenLandscape } from '@/hooks/use-fullscreen';
 import { TriggeredDialog } from '@/components/triggered-dialog';
+import { LiveChat } from '@/components/live-chat';
 
 const YouTubePlayer = dynamic(
   () => import('./YouTubePlayer').then((mod) => mod.YouTubePlayer),
@@ -25,7 +26,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
   // enterFullscreen / lockLandscape are called on button click (user gesture required).
   const { enterFullscreen, lockLandscape } = useFullscreenLandscape();
   const stageRef = useRef<HTMLDivElement>(null);
-  const [hasEntered, setHasEntered] = useState(false);
+  const [hasEntered, setHasEntered] = useState(true);
   const [showTriggeredDialog, setShowTriggeredDialog] = useState(false);
 
   useEffect(() => {
@@ -47,7 +48,6 @@ export function AudienceStage({ sid }: AudienceStageProps) {
       setHasEntered(true);
     }
   };
-  console.log("video id", videoId)
   return (
     <div
       ref={stageRef}
@@ -82,27 +82,20 @@ export function AudienceStage({ sid }: AudienceStageProps) {
         onClose={() => setShowTriggeredDialog(false)}
       />
 
-      {/* Main Stage Content */}
       <main className={cn(
-        "flex-1 flex flex-col md:flex-row h-full overflow-hidden transition-opacity duration-1000",
+        "flex-1 flex flex-col md:flex-row landscape:flex-row h-full overflow-hidden transition-opacity duration-1000",
         !hasEntered ? "opacity-0" : "opacity-100"
       )}>
         {/* Video Region */}
         <div className="flex-1 relative flex items-center justify-center bg-black">
           <YouTubePlayer
             videoId={videoId}
-            className="w-[70%]"
           />
         </div>
 
-        {/* Chat Drawer Placeholder - To be implemented in Task 4.5/4.9 */}
-        <div className="hidden md:flex w-[30%] border-l border-white/10 bg-zinc-900/50 backdrop-blur-xl flex-col">
-          <div className="p-4 border-b border-white/10">
-            <h2 className="font-semibold">Live Chat</h2>
-          </div>
-          <div className="flex-1 flex items-center justify-center text-zinc-500 italic">
-            Chat list placeholder...
-          </div>
+        {/* Live Chat sidebar */}
+        <div className="hidden md:flex landscape:flex w-full md:w-[30%] landscape:w-[35%] shrink-0 h-screen border-l border-white/10 bg-zinc-950/20 backdrop-blur-xl flex-col">
+          <LiveChat />
         </div>
       </main>
 
