@@ -158,9 +158,8 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
       ref={containerRef}
       data-testid="youtube-player-container"
       className={cn(
-        "relative w-full bg-black rounded-2xl overflow-hidden group shadow-2xl",
-        !className?.includes('aspect-') && !className?.includes('h-') && "aspect-video",
-        isFullscreen && "rounded-none w-screen h-screen",
+        "relative w-full bg-black overflow-hidden group shadow-3xl h-full w-full",
+        isFullscreen && "rounded-none w-screen h-screen max-h-screen",
         className
       )}
     >
@@ -184,14 +183,6 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
-            </button>
-
-            <button
-              onClick={() => playerInstanceRef.current?.seekTo(0)}
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white"
-              aria-label="Restart"
-            >
-              <RotateCcw size={20} />
             </button>
 
             <button

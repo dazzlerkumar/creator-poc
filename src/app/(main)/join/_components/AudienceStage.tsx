@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { useFullscreenLandscape } from '@/hooks/use-fullscreen';
 import { TriggeredDialog } from '@/components/triggered-dialog';
 import { LiveChat } from '@/components/live-chat';
+import { useUIStore } from '@/stores/ui-store';
 
 const YouTubePlayer = dynamic(
   () => import('./YouTubePlayer').then((mod) => mod.YouTubePlayer),
@@ -25,8 +26,9 @@ export function AudienceStage({ sid }: AudienceStageProps) {
   // Hook handles: orientation change listener + iOS overlay + cleanup on unmount.
   // enterFullscreen / lockLandscape are called on button click (user gesture required).
   const { enterFullscreen, lockLandscape } = useFullscreenLandscape();
+  const { isChatVisible } = useUIStore();
   const stageRef = useRef<HTMLDivElement>(null);
-  const [hasEntered, setHasEntered] = useState(true);
+  const [hasEntered, setHasEntered] = useState(false);
   const [showTriggeredDialog, setShowTriggeredDialog] = useState(false);
 
   useEffect(() => {
@@ -87,14 +89,14 @@ export function AudienceStage({ sid }: AudienceStageProps) {
         !hasEntered ? "opacity-0" : "opacity-100"
       )}>
         {/* Video Region */}
-        <div className="flex-1 relative flex items-center justify-center bg-black">
+        <div className="flex-1 relative flex items-center justify-center bg-secondary/50">
           <YouTubePlayer
             videoId={videoId}
           />
         </div>
 
         {/* Live Chat sidebar */}
-        <div className="hidden md:flex landscape:flex w-full md:w-[30%] landscape:w-[35%] shrink-0 h-screen border-l border-white/10 bg-zinc-950/20 backdrop-blur-xl flex-col">
+        <div className={cn("flex w-full md:w-[20%] landscape:w-[28%] shrink-0 h-screen border-l border-white/10 bg-zinc-950/20 backdrop-blur-xl flex-col", !isChatVisible && "hidden")}>
           <LiveChat />
         </div>
       </main>
