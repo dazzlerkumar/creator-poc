@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { client } from '../client'
 import { useAuthStore } from '../../stores/auth-store'
-import { server } from '../../test/server'
+import { server } from '../../../tests/server'
 import { http, HttpResponse } from 'msw'
 
 beforeAll(() => server.listen())
