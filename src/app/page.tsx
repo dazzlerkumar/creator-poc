@@ -125,7 +125,7 @@ export default function SimpleReportPage() {
             <div className="p-6 border border-slate-200 rounded-xl">
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-bold">2. Pseudo-FS (CSS Layout)</h3>
-                <Link href="/pseudo-fs" target="_blank" className="text-blue-600 underline text-sm">Launch Demo</Link>
+                <span className="text-slate-400 text-sm italic">Demo not implemented</span>
               </div>
               <p className="text-sm text-slate-700 mb-6">
                 Purely CSS-driven approach using 100dvh. Simplest to implement but never hides browser chrome.
@@ -141,7 +141,7 @@ export default function SimpleReportPage() {
             <div className="p-6 border border-slate-200 rounded-xl">
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-bold">3. Native {`<Video/>`} HTML Element</h3>
-                <Link href="/sessions" target="_blank" className="text-blue-600 underline text-sm">Launch Demo</Link>
+                <span className="text-slate-400 text-sm italic">Demo not implemented</span>
               </div>
               <p className="text-sm text-slate-700 mb-6">
                 Calls <code>webkitEnterFullscreen</code> directly on the video element. Hides all chrome on iOS but
@@ -158,7 +158,7 @@ export default function SimpleReportPage() {
             <div className="p-6 border border-slate-200 rounded-xl">
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-bold">4. WebKit Presentation Mode</h3>
-                <Link href="/webkit-fs" target="_blank" className="text-blue-600 underline text-sm">Launch Demo</Link>
+                <span className="text-slate-400 text-sm italic">Demo not implemented</span>
               </div>
               <p className="text-sm text-slate-700 mb-6">
                 Experimental approach using <code>webkitSetPresentationMode</code> and React Portals.
