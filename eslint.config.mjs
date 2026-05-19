@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "src/lib/proto.js",
+    "src/lib/proto.d.ts",
   ]),
 ]);
 
