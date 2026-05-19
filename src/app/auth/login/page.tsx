@@ -19,8 +19,6 @@ type LoginFormValues = z.infer<typeof loginSchema>
 export default function LoginPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const isDev = process.env.NODE_ENV === 'development'
-
   const {
     register,
     handleSubmit,
@@ -28,18 +26,6 @@ export default function LoginPage() {
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   })
-
-  if (!isDev) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950 p-4">
-        <div className="flex flex-col items-center gap-4 text-center">
-          <ShieldAlert className="h-12 w-12 text-red-500" />
-          <h1 className="text-2xl font-bold text-white">Access Denied</h1>
-          <p className="text-zinc-400">This tool is only available in development mode.</p>
-        </div>
-      </div>
-    )
-  }
 
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true)
@@ -52,7 +38,7 @@ export default function LoginPage() {
       toast.success('Login successful!')
       
       // Redirect to join with dummy params for development
-      router.push('/auth/join?session=dev-session&invite=dev-invite')
+      router.push('/join/?session=dev-session&invite=dev-invite')
     } catch (error) {
       console.error('Login failed:', error)
       toast.error('Login failed. Please check your credentials or backend status.')
