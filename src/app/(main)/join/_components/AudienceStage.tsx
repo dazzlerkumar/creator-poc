@@ -6,14 +6,13 @@ import { useSearchParams } from 'next/navigation';
 import { Play, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFullscreenLandscape } from '@/hooks/use-fullscreen';
-import { TriggeredDialog } from '@/components/triggered-dialog';
 import { LiveChat } from '@/components/live-chat';
 import { PaymentOverlay } from '@/components/payment-overlay';
 import { useUIStore } from '@/stores/ui-store';
 import { usePaymentStore } from '@/stores/payment-store';
 
 const YouTubePlayer = dynamic(
-  () => import('./YouTubePlayer').then((mod) => mod.YouTubePlayer),
+  () => import('./youtube-player').then((mod) => mod.YouTubePlayer),
   { ssr: false }
 );
 
@@ -80,13 +79,6 @@ export function AudienceStage({ sid }: AudienceStageProps) {
           </div>
         </div>
       )}
-
-      {/* Experiment: Mocked API Triggered Overlay */}
-      <TriggeredDialog
-        isOpen={showTriggeredDialog}
-        onClose={() => setShowTriggeredDialog(false)}
-      />
-
       <main className={cn(
         "flex-1 flex flex-col md:flex-row landscape:flex-row min-h-0 overflow-hidden transition-opacity duration-1000",
         !hasEntered ? "opacity-0" : "opacity-100"
