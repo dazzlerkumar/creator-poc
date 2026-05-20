@@ -57,9 +57,9 @@ describe('LiveChat component', () => {
 
     // Verify chat messages are rendered
     expect(screen.getByText('Hello from Alice!')).toBeInTheDocument();
-    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Alice:')).toBeInTheDocument();
     expect(screen.getByText('Hello from Bob!')).toBeInTheDocument();
-    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Bob:')).toBeInTheDocument();
   });
 
   it('calls sendMessage callback on composer form submission and clears input', () => {
@@ -72,7 +72,7 @@ describe('LiveChat component', () => {
 
     render(<LiveChat sid="session-123" />);
 
-    const input = screen.getByPlaceholderText(/Chat privately.../i);
+    const input = screen.getByPlaceholderText(/Send a message.../i);
     const form = input.closest('form');
 
     fireEvent.change(input, { target: { value: 'Hello world' } });
@@ -83,5 +83,36 @@ describe('LiveChat component', () => {
 
     expect(mockSendMessage).toHaveBeenCalledWith('Hello world');
     expect(input).toHaveValue('');
+  });
+
+  it('toggles the quick emojis panel and appends emojis to the input field', () => {
+    vi.mocked(useLiveChat).mockReturnValue({
+      messages: [],
+      pinnedMessage: null,
+      sendMessage: mockSendMessage,
+      isLoading: false,
+    });
+
+    render(<LiveChat sid="session-123" />);
+
+    // Emojis panel should not be present initially
+    expect(screen.queryByText('👍')).not.toBeInTheDocument();
+
+    // Click the toggle button to show emojis
+    const toggleButton = screen.getByRole('button', { name: /toggle emoji picker/i });
+    fireEvent.click(toggleButton);
+
+    // Now 👍 should be visible
+    const thumbEmoji = screen.getByText('👍');
+    expect(thumbEmoji).toBeInTheDocument();
+
+    // Click 👍 to append it
+    fireEvent.click(thumbEmoji);
+    const input = screen.getByPlaceholderText(/Send a message.../i);
+    expect(input).toHaveValue('👍');
+
+    // Click toggle button again to hide emojis
+    fireEvent.click(toggleButton);
+    expect(screen.queryByText('👍')).not.toBeInTheDocument();
   });
 });

@@ -13,7 +13,16 @@ const AVATAR_GRADIENTS = [
   'from-teal-500 to-emerald-500',
   'from-cyan-500 to-blue-500',
 ];
-
+const DUMMY_MESSAGES: ChatMessage[] = [
+  { id: '1', authorName: 'John Doe', authorAvatarColor: 'bg-red-500', messageText: 'Hello Saurabh Ji!', timestamp: new Date().toISOString(), role: 'viewer' },
+  { id: '2', authorName: 'Jane Smith', authorAvatarColor: 'bg-blue-500', messageText: 'Nice to see you all!', timestamp: new Date().toISOString(), role: 'viewer' },
+  { id: '3', authorName: 'Saurabh', authorAvatarColor: 'bg-green-500', messageText: 'Welcome to the stream!', timestamp: new Date().toISOString(), role: 'moderator' },
+  { id: '4', authorName: 'John Doe', authorAvatarColor: 'bg-red-500', messageText: 'This is a test message.', timestamp: new Date().toISOString(), role: 'viewer' },
+  { id: '5', authorName: 'Jane Smith', authorAvatarColor: 'bg-blue-500', messageText: 'Looking forward to the yoga session.', timestamp: new Date().toISOString(), role: 'viewer' },
+  { id: '6', authorName: 'Saurabh', authorAvatarColor: 'bg-green-500', messageText: 'The session will start in 5 minutes.', timestamp: new Date().toISOString(), role: 'moderator' },
+  { id: '7', authorName: 'Saurabh', authorAvatarColor: 'bg-green-500', messageText: 'The session will start in 5 minutes.', timestamp: new Date().toISOString(), role: 'moderator' },
+  { id: '8', authorName: 'Jane Smith', authorAvatarColor: 'bg-blue-500', messageText: 'This is a very long message. It should wrap around the container. Let us see how it works. If it breaks the layout, we will fix it later.', timestamp: new Date().toISOString(), role: 'viewer' },
+]
 interface FlexibleRawChatMessage {
   id?: string;
   video_broadcast_id?: string;
@@ -85,7 +94,7 @@ function mapToUiMessage(raw: FlexibleRawChatMessage): ChatMessage {
 
 export function useLiveChat(sessionId: string) {
   const [prevSessionId, setPrevSessionId] = useState(sessionId);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(DUMMY_MESSAGES);
   const [pinnedMessage, setPinnedMessage] = useState<ChatMessage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

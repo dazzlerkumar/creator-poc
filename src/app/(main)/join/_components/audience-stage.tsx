@@ -34,7 +34,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
     <div
       ref={stageRef}
       data-testid="audience-stage"
-      className="flex h-screen flex-col bg-zinc-950 text-white overflow-hidden relative fullscreen-page"
+      className="flex h-dvh flex-col bg-zinc-950 text-white overflow-hidden relative fullscreen-page"
     >
       {/* Main Content Canvas */}
       <main className="flex-1 flex flex-col md:flex-row landscape:flex-row min-h-0 overflow-hidden transition-all duration-300">
@@ -71,7 +71,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
             </div>
             <p className="text-gray-800 text-center opacity-70 leading-relaxed">
               Experience the calmness of morning yoga. <br></br> Loading chats
-            </p></div> : <div className='flex flex-col'> <LiveChat sid={sid} /></div>}
+            </p></div> : <div className='flex flex-col h-full'> <LiveChat sid={sid} /></div>}
         </div>
       </main>
     </div>
