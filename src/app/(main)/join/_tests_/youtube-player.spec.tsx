@@ -174,7 +174,7 @@ describe('YouTubePlayer', () => {
     // Verify unmute prompt is visible again at the bottom after subsequent manual mute
     const subsequentPrompt = screen.getByTestId('unmute-prompt');
     expect(subsequentPrompt).toBeDefined();
-    expect(subsequentPrompt.className).toContain('bottom-24');
+    expect(subsequentPrompt.className).toContain('bottom-8');
   });
 
   it('does not toggle mute/unmute when dragging on the video area', () => {

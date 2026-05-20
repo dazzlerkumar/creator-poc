@@ -1,6 +1,6 @@
 import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { AudienceStage } from '../_components/AudienceStage';
+import { AudienceStage } from '../_components/audience-stage';
 
 vi.mock('next/dynamic', () => ({
   default: () => {
@@ -82,7 +82,7 @@ describe('AudienceStage', () => {
 
   it('transitions from loading state and triggers setTimeout to load chat', () => {
     render(<AudienceStage sid="test-session" />);
-    
+
     act(() => {
       vi.advanceTimersByTime(3000);
     });

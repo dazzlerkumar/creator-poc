@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { JoinLoading } from '@/components/auth/JoinLoading';
-import { AudienceStage } from '@/app/(main)/join/_components/AudienceStage';
+import { AudienceStage } from '@/app/(main)/join/_components/audience-stage';
 
 function JoinPageContent() {
   return <AudienceStage sid={"123"} />
