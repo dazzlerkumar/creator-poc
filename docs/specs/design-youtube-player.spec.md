@@ -31,11 +31,12 @@ Define interface, behavior, and testing strategy for YouTubePlayer component. Au
 - **REQ-008**: Touchscreen zoom capability must allow scaling via double-finger pinch gestures (pinch out to zoom in, pinch in to zoom out) between 1.0x and 3.0x.
 - **REQ-009**: Touchscreen panning capability must support single-finger touch dragging.
 - **REQ-010**: Gesture isolation must prevent native browser page scroll and page zoom during active touchscreen gestures using non-passive touch listeners.
-- **REQ-011**: System must support direct play/pause toggling via transparent click overlay button.
+- **REQ-011**: System must support direct mute/unmute toggling via transparent click overlay button.
 - **CON-001**: Video must remain contained within designated layout boundaries during zoom actions.
 - **CON-002**: Zoom factor limits must span between 1.0x minimum and 3.0x maximum.
 - **CON-003**: Video must not pan beyond layout edges.
 - **GUD-001**: UI buttons use consistent Lucide icon set.
+- **GUD-002**: Feedback overlay, mute/unmute prompts and control button use light theme (white/gray background, dark icons) for elder-friendly accessibility.
 
 ## 4. Interfaces & Data Contracts
 
@@ -71,8 +72,8 @@ interface ZoomState {
 - **AC-008**: Given video scaled at 1.0x, When user drags mouse, Then no offset occurs.
 - **AC-009**: Given player rendered on touchscreen, When user pinches out with two fingers, Then scale of video iframe increases up to 3.0x limit.
 - **AC-010**: Given zoomed video player, When user drags one finger over video area, Then zoomed view translates to follow touch movement without scrolling parent webpage.
-- **AC-011**: Given video playback active, When user clicks or taps transparent cover overlay button, Then video pauses or plays.
-- **AC-012**: Given zoomed video, When user drags finger to pan, Then touch release does not trigger play/pause state change.
+- **AC-011**: Given video playback active, When user clicks or taps transparent cover overlay button, Then video mutes or unmutes.
+- **AC-012**: Given zoomed video, When user drags finger to pan, Then touch release does not trigger mute/unmute state change.
 
 ## 6. Test Automation Strategy
 

@@ -69,12 +69,12 @@ describe('YouTubePlayer', () => {
     expect(screen.queryByTestId('loading-overlay')).toBeNull();
   });
 
-  it('unmutes video player on load', () => {
+  it('mutes video player on load to allow autoplay', () => {
     render(<YouTubePlayer videoId={TEST_VIDEO_ID} />);
     act(() => {
       capturedEvents.onReady?.({ target: mockPlayerInstance });
     });
-    expect(mockPlayerInstance.unMute).toHaveBeenCalled();
+    expect(mockPlayerInstance.mute).toHaveBeenCalled();
   });
 
   it('performs zoom actions', () => {
@@ -149,25 +149,35 @@ describe('YouTubePlayer', () => {
     expect(window.location.reload).toHaveBeenCalled();
   });
 
-  it('toggles play/pause when clicking the transparent video overlay button', () => {
+  it('toggles mute/unmute when clicking the transparent video overlay button', () => {
     render(<YouTubePlayer videoId={TEST_VIDEO_ID} />);
     act(() => {
       capturedEvents.onReady?.({ target: mockPlayerInstance });
     });
 
+    // Verify unmute prompt is initially shown in the center because it is muted on first load
+    const initialPrompt = screen.getByTestId('unmute-prompt');
+    expect(initialPrompt).toBeDefined();
+    expect(initialPrompt.className).toContain('top-1/2');
+
     const overlayButton = screen.getByTestId('video-click-trigger');
     fireEvent.click(overlayButton);
-    expect(mockPlayerInstance.playVideo).toHaveBeenCalled();
+    expect(mockPlayerInstance.unMute).toHaveBeenCalled();
+    expect(screen.getByTestId('volume-feedback')).toBeDefined();
 
-    act(() => {
-      capturedEvents.onStateChange?.({ data: 1 });
-    });
+    // Verify unmute prompt is hidden after unmuting
+    expect(screen.queryByTestId('unmute-prompt')).toBeNull();
 
     fireEvent.click(overlayButton);
-    expect(mockPlayerInstance.pauseVideo).toHaveBeenCalled();
+    expect(mockPlayerInstance.mute).toHaveBeenCalledTimes(2); // Setup + toggle
+
+    // Verify unmute prompt is visible again at the bottom after subsequent manual mute
+    const subsequentPrompt = screen.getByTestId('unmute-prompt');
+    expect(subsequentPrompt).toBeDefined();
+    expect(subsequentPrompt.className).toContain('bottom-24');
   });
 
-  it('does not toggle play/pause when dragging on the video area', () => {
+  it('does not toggle mute/unmute when dragging on the video area', () => {
     render(<YouTubePlayer videoId={TEST_VIDEO_ID} />);
     act(() => {
       capturedEvents.onReady?.({ target: mockPlayerInstance });
@@ -184,8 +194,8 @@ describe('YouTubePlayer', () => {
     fireEvent.mouseUp(container);
     fireEvent.click(overlayButton);
 
-    expect(mockPlayerInstance.playVideo).not.toHaveBeenCalled();
-    expect(mockPlayerInstance.pauseVideo).not.toHaveBeenCalled();
+    expect(mockPlayerInstance.unMute).not.toHaveBeenCalled();
+    expect(mockPlayerInstance.mute).toHaveBeenCalledTimes(1); // Only setup
   });
 
   it('handles touchscreen single-finger touch dragging when zoomed', () => {

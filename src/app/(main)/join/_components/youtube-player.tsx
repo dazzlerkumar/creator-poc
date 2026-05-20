@@ -56,7 +56,7 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const { isChatVisible, toggleChat } = useUIStore();
 
   const [scale, setScale] = useState(1);
@@ -68,6 +68,27 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
   const touchStartScaleRef = useRef(1);
   const touchStartPosRef = useRef({ x: 0, y: 0 });
   const [error, setError] = useState(false);
+  const [showVolumeFeedback, setShowVolumeFeedback] = useState<'mute' | 'unmute' | null>(null);
+  const [hasUnmutedOnce, setHasUnmutedOnce] = useState(false);
+  const feedbackTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const triggerVolumeFeedback = (type: 'mute' | 'unmute') => {
+    if (feedbackTimeoutRef.current) {
+      clearTimeout(feedbackTimeoutRef.current);
+    }
+    setShowVolumeFeedback(type);
+    feedbackTimeoutRef.current = setTimeout(() => {
+      setShowVolumeFeedback(null);
+    }, 900);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current) {
+        clearTimeout(feedbackTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let internalPlayer: YouTubePlayerInstance | null = null;
@@ -103,12 +124,12 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
             controls: 0,
             origin: window.location.origin,
             autoplay: 1,
-            mute: 0,
+            mute: 1,
           },
           events: {
             onReady: (event: { target: YouTubePlayerInstance }) => {
               playerInstanceRef.current = event.target;
-              event.target.unMute();
+              event.target.mute();
               setIsPlayerReady(true);
             },
             onStateChange: (event: { data: number }) => {
@@ -148,9 +169,12 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
     if (isMuted) {
       player.unMute();
       setIsMuted(false);
+      triggerVolumeFeedback('unmute');
+      setHasUnmutedOnce(true);
     } else {
       player.mute();
       setIsMuted(true);
+      triggerVolumeFeedback('mute');
     }
   };
 
@@ -264,7 +288,7 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
       hasMovedRef.current = false;
       return;
     }
-    handlePlayPause();
+    handleMuteToggle();
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -294,14 +318,14 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
       const t = e.touches[0]!;
       const nextX = t.clientX - dragStartRef.current.x;
       const nextY = t.clientY - dragStartRef.current.y;
-      
+
       const dx = t.clientX - touchStartPosRef.current.x;
       const dy = t.clientY - touchStartPosRef.current.y;
       if (Math.hypot(dx, dy) > 5) {
         hasMovedRef.current = true;
       }
       setOffset({ x: nextX, y: nextY });
-      
+
       if (e.cancelable) {
         e.preventDefault();
       }
@@ -315,7 +339,7 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
       if (newScale === 1) {
         setOffset({ x: 0, y: 0 });
       }
-      
+
       if (e.cancelable) {
         e.preventDefault();
       }
@@ -387,102 +411,56 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
       >
         <div ref={playerRef} className="w-full h-full pointer-events-none" />
       </div>
-
-
-
-      <div
-        className={cn(
-          "absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 flex flex-col justify-end p-6",
-          !isPlaying && "bg-black/20",
-          "opacity-0 group-hover:opacity-100 z-10"
-        )}
-        data-testid="player-controls"
-      >
-        <button
-          onClick={handleOverlayClick}
-          className="w-full h-full bg-transparent border-0 cursor-pointer z-0"
-          aria-label={isPlaying ? "Pause" : "Play"}
-          data-testid="video-click-trigger"
-        />
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={handlePlayPause}
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
-              aria-label={isPlaying ? "Pause" : "Play"}
-            >
-              {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
-            </button>
-
-            <button
-              onClick={handleMuteToggle}
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
-              aria-label={isMuted ? "Unmute" : "Mute"}
-            >
-              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleZoomOut}
-              data-testid="zoom-out-button"
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
-              aria-label="Zoom Out"
-            >
-              <ZoomOut size={20} />
-            </button>
-            <button
-              onClick={handleResetZoom}
-              data-testid="zoom-reset-button"
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white px-4 text-sm font-medium flex items-center gap-1.5 cursor-pointer"
-              aria-label="Reset Zoom"
-            >
-              <RotateCcw size={16} />
-              <span>Reset</span>
-            </button>
-            <button
-              onClick={handleZoomIn}
-              data-testid="zoom-in-button"
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
-              aria-label="Zoom In"
-            >
-              <ZoomIn size={20} />
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button
-              onClick={toggleChat}
-              className={cn(
-                "p-3 rounded-full backdrop-blur-md transition-all active:scale-95 text-white flex items-center gap-2 px-4 cursor-pointer",
-                isChatVisible ? "bg-yoga-blue/40 border border-yoga-blue/50" : "bg-white/10 hover:bg-white/20"
-              )}
-              data-testid="chat-toggle-button"
-              aria-label="Toggle Chat"
-            >
-              <MessageSquare size={20} />
-              <span className="text-sm font-medium">{isChatVisible ? "Hide Chat" : "Show Chat"}</span>
-            </button>
-
-            <button
-              onClick={handleFullscreen}
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
-              data-testid="fullscreen-button"
-              aria-label="Toggle Fullscreen"
-            >
-              {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
-            </button>
-          </div>
+      {isPlayerReady && isMuted && (
+        <MuteButtonsUI hasUnmutedOnce={hasUnmutedOnce} />
+      )}
+      <OverlayControls
+        isPlaying={isPlaying}
+        isMuted={isMuted}
+        handleOverlayClick={handleOverlayClick}
+        handlePlayPause={handlePlayPause}
+        handleMuteToggle={handleMuteToggle}
+        handleZoomOut={handleZoomOut}
+        handleResetZoom={handleResetZoom}
+        handleZoomIn={handleZoomIn}
+        toggleChat={toggleChat}
+        isChatVisible={isChatVisible}
+        handleFullscreen={handleFullscreen}
+        isFullscreen={isFullscreen}
+      />
+      {showVolumeFeedback && (
+        <div
+          data-testid="volume-feedback"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none p-6 rounded-full bg-white/90 backdrop-blur-md border border-gray-300 flex items-center justify-center transition-all duration-300 animate-pulse"
+        >
+          {showVolumeFeedback === 'unmute' ? (
+            <Volume2 size={40} className="text-black" />
+          ) : (
+            <VolumeX size={40} className="text-black" />
+          )}
         </div>
-      </div>
+      )}
+
+
+
+      {/* Mute/Unmute control button */}
+      <button
+        onClick={handleMuteToggle}
+        className="p-3 rounded-full bg-gray-200 hover:bg-gray-300 backdrop-blur-md transition-all active:scale-95 text-black cursor-pointer"
+        aria-label={isMuted ? "Unmute" : "Mute"}
+      >
+        {isMuted ? <VolumeX size={20} className="text-black" /> : <Volume2 size={20} className="text-black" />}
+      </button>
 
       {!isPlayerReady && !error && (
         <div
           data-testid="loading-overlay"
-          className="absolute inset-0 flex items-center justify-center bg-zinc-900 animate-pulse z-20"
+          className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900 animate-pulse z-20 gap-2"
         >
-          <div className="w-12 h-12 border-4 border-yoga-blue/30 border-t-yoga-blue rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+          <p className="text-white/80 text-xs font-medium uppercase tracking-[0.15em]">
+            1.2K Watching Now
+          </p>
         </div>
       )}
 
@@ -503,4 +481,153 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
       )}
     </div>
   );
+}
+
+
+const MuteButtonsUI = ({
+  hasUnmutedOnce,
+}: {
+  hasUnmutedOnce: boolean;
+}) => {
+  if (hasUnmutedOnce) {
+    return (
+      <div
+        data-testid="unmute-prompt"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex md:hidden items-center gap-2 px-4 py-2.5 rounded-full bg-white/85 backdrop-blur-md border border-gray-300 shadow-lg animate-pulse select-none text-center"
+      >
+        <VolumeX size={16} className="text-black" />
+        <span className="text-black text-[10px] font-bold tracking-[0.15em] uppercase">
+          Tap to Unmute
+        </span>
+      </div>
+    )
+  }
+  return (
+    <div
+      data-testid="unmute-prompt"
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none flex flex-col items-center gap-2 px-6 py-5 rounded-2xl bg-white/70 backdrop-blur-sm border border-gray-300 shadow-2xl transition-all duration-300 select-none text-center"
+    >
+      <div className="w-18 aspect-square flex items-center justify-center text-black">
+        <VolumeX size={38} className="text-black" />
+      </div>
+      <span className="text-black text-xs font-semibold tracking-[0.2em] uppercase">
+        Tap to Unmute
+      </span>
+    </div>
+  )
+}
+
+const OverlayControls = ({
+  isPlaying,
+  isMuted,
+  handleOverlayClick,
+  handlePlayPause,
+  handleMuteToggle,
+  handleZoomOut,
+  handleResetZoom,
+  handleZoomIn,
+  toggleChat,
+  isChatVisible,
+  handleFullscreen,
+  isFullscreen,
+}: {
+  isPlaying: boolean;
+  isMuted: boolean;
+  handleOverlayClick: () => void;
+  handlePlayPause: () => void;
+  handleMuteToggle: () => void;
+  handleZoomOut: () => void;
+  handleResetZoom: () => void;
+  handleZoomIn: () => void;
+  toggleChat: () => void;
+  isChatVisible: boolean;
+  handleFullscreen: () => void;
+  isFullscreen: boolean;
+}) => {
+  return (<div
+    className={cn(
+      "absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 flex flex-col justify-end p-6 ",
+      !isPlaying && "bg-black/20",
+      "opacity-0 group-hover:opacity-100 z-10"
+    )}
+    data-testid="player-controls"
+  >
+    <button
+      onClick={handleOverlayClick}
+      className="w-full h-full bg-transparent border-0 cursor-pointer z-0"
+      aria-label={isMuted ? "Unmute" : "Mute"}
+      data-testid="video-click-trigger"
+    />
+    <div className="flex items-center justify-between w-full hidden md:flex">
+      <div className="flex items-center gap-4">
+        <button
+          onClick={handlePlayPause}
+          className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
+          aria-label={isPlaying ? "Pause" : "Play"}
+        >
+          {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
+        </button>
+
+        <button
+          onClick={handleMuteToggle}
+          className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
+          aria-label={isMuted ? "Unmute" : "Mute"}
+        >
+          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+        </button>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <button
+          onClick={handleZoomOut}
+          data-testid="zoom-out-button"
+          className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
+          aria-label="Zoom Out"
+        >
+          <ZoomOut size={20} />
+        </button>
+        <button
+          onClick={handleResetZoom}
+          data-testid="zoom-reset-button"
+          className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white px-4 text-sm font-medium flex items-center gap-1.5 cursor-pointer"
+          aria-label="Reset Zoom"
+        >
+          <RotateCcw size={16} />
+          <span>Reset</span>
+        </button>
+        <button
+          onClick={handleZoomIn}
+          data-testid="zoom-in-button"
+          className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
+          aria-label="Zoom In"
+        >
+          <ZoomIn size={20} />
+        </button>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <button
+          onClick={toggleChat}
+          className={cn(
+            "p-3 rounded-full backdrop-blur-md transition-all active:scale-95 text-white flex items-center gap-2 px-4 cursor-pointer",
+            isChatVisible ? "bg-yoga-blue/40 border border-yoga-blue/50" : "bg-white/10 hover:bg-white/20"
+          )}
+          data-testid="chat-toggle-button"
+          aria-label="Toggle Chat"
+        >
+          <MessageSquare size={20} />
+          <span className="text-sm font-medium">{isChatVisible ? "Hide Chat" : "Show Chat"}</span>
+        </button>
+
+        <button
+          onClick={handleFullscreen}
+          className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all active:scale-95 text-white cursor-pointer"
+          data-testid="fullscreen-button"
+          aria-label="Toggle Fullscreen"
+        >
+          {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
+        </button>
+      </div>
+    </div>
+  </div>)
 }
