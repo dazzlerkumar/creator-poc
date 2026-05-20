@@ -124,7 +124,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
                   Pay
                 </button>
               </div>
-              <LiveChat />
+              <LiveChat sid={sid} />
             </>
           )}
         </div>

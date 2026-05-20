@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import { Send, Shield, Crown, ChevronDown, MessageSquare, Pin } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLiveChat } from '@/hooks/use-live-chat';
 
 export interface ChatMessage {
   id: string;
@@ -14,31 +15,10 @@ export interface ChatMessage {
   isPinned?: boolean;
 }
 
-const DEFAULT_MOCK_MESSAGES: ChatMessage[] = [
-  {
-    id: 'msg-1',
-    authorName: 'Saurabh Bothra',
-    authorAvatarColor: 'from-amber-500 to-yellow-500',
-    messageText: 'Namaste Ji, Welcome to the live yoga flow session! Find a comfortable space and grab your mat.',
-    timestamp: new Date(Date.now() - 300000).toISOString(),
-    role: 'owner',
-    isPinned: false
-  }
-];
-const PINNED_MESSAGE = {
-  id: 'msg-2',
-  authorName: 'Saurabh Bothra',
-  authorAvatarColor: 'from-amber-500 to-yellow-500',
-  messageText: 'Keep your spine straight. Pinning this message',
-  timestamp: new Date(Date.now() - 250000).toISOString(),
-  role: 'owner'
-};
-
 const QUICK_EMOJIS = ['👍', '❤️', '😂', '🧘‍♀️', '🧘‍♂️', '🙌', '✨'];
-const CHAT_LOCAL_STORAGE_KEY = 'habuild_live_messages';
 
-export function LiveChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+export function LiveChat({ sid }: { sid: string }) {
+  const { messages, pinnedMessage, isLoading, sendMessage } = useLiveChat(sid);
   const [inputText, setInputText] = useState('');
   const [showScrollBanner, setShowScrollBanner] = useState(false);
 
@@ -47,34 +27,18 @@ export function LiveChat() {
 
   const scrollToBottom = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo({
-        top: scrollContainerRef.current.scrollHeight,
-        behavior: 'smooth'
-      });
+      if (typeof scrollContainerRef.current.scrollTo === 'function') {
+        scrollContainerRef.current.scrollTo({
+          top: scrollContainerRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      } else {
+        scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+      }
       setShowScrollBanner(false);
       shouldAutoScrollRef.current = true;
     }
   };
-
-  useEffect(() => {
-    const saved = localStorage.getItem(CHAT_LOCAL_STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setTimeout(() => setMessages(parsed), 0);
-      } catch {
-        setTimeout(() => setMessages(DEFAULT_MOCK_MESSAGES), 0);
-      }
-    } else {
-      setTimeout(() => setMessages(DEFAULT_MOCK_MESSAGES), 0);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (messages.length > 0) {
-      localStorage.setItem(CHAT_LOCAL_STORAGE_KEY, JSON.stringify(messages));
-    }
-  }, [messages]);
 
   useEffect(() => {
     if (shouldAutoScrollRef.current) {
@@ -100,18 +64,9 @@ export function LiveChat() {
     e?.preventDefault();
     if (!inputText.trim()) return;
 
-    const newMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      authorName: 'You',
-      authorAvatarColor: 'from-blue-500 to-emerald-500',
-      messageText: inputText.trim().substring(0, 200),
-      timestamp: new Date().toISOString(),
-      role: 'viewer'
-    };
-
-    shouldAutoScrollRef.current = true;
-    setMessages(prev => [...prev, newMsg]);
+    sendMessage(inputText.trim().substring(0, 200));
     setInputText('');
+    shouldAutoScrollRef.current = true;
   };
 
   const appendEmoji = (emoji: string) => {
@@ -129,7 +84,7 @@ export function LiveChat() {
         </div>
       </div>
 
-      {PINNED_MESSAGE && (
+      {pinnedMessage && (
         <div className="flex items-start justify-between gap-3 px-4 py-3 bg-primary/10 border-b border-primary/20 animate-in slide-in-from-top duration-300 select-none">
           <div className="flex gap-3">
             <div>
@@ -139,11 +94,12 @@ export function LiveChat() {
             </div>
             <div className="text-xs leading-relaxed">
               <div className="flex items-center gap-1.5 font-bold text-primary mb-0.5">
-                {PINNED_MESSAGE.authorName}
-                <Crown size={11} className="text-amber-600 fill-amber-600" />
+                {pinnedMessage.authorName}
+                {pinnedMessage.role === 'owner' && <Crown size={11} className="text-amber-600 fill-amber-600" />}
+                {pinnedMessage.role === 'moderator' && <Shield size={11} className="text-emerald-700 fill-emerald-700" />}
               </div>
               <p className="text-foreground/90 font-medium break-words max-w-[210px]">
-                {PINNED_MESSAGE.messageText}
+                {pinnedMessage.messageText}
               </p>
             </div>
           </div>
@@ -151,7 +107,11 @@ export function LiveChat() {
       )}
 
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3.5 bg-background relative min-h-0" ref={scrollContainerRef} onScroll={handleScroll}>
-        {messages.length === 0 ? (
+        {isLoading ? (
+          <div className="h-full flex items-center justify-center text-muted-foreground">
+            <p className="text-sm italic">Loading chat...</p>
+          </div>
+        ) : messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
             <MessageSquare size={32} className="opacity-40 animate-bounce duration-1000" />
             <p className="text-sm italic">Welcome to the stream. Say something!</p>
