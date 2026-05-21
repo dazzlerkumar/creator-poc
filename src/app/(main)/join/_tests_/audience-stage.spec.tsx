@@ -21,7 +21,7 @@ vi.mock('@/hooks/use-fullscreen', () => ({
   useFullscreenLandscape: vi.fn(),
 }));
 
-vi.mock('@/components/live-chat', () => ({
+vi.mock('@/app/(main)/join/_components/live-chat', () => ({
   LiveChat: ({ sid }: { sid: string }) => <div data-testid="mock-live-chat">Mock Live Chat {sid}</div>,
 }));
 

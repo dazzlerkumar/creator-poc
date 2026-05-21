@@ -207,9 +207,16 @@ export function LiveChat({ sid }: { sid: string }) {
             maxLength={200}
           />
 
-          {inputText.length > 0 && (
-            <span className="text-[10px] text-muted-foreground/60 font-bold select-none shrink-0">
-              {inputText.length}/200
+          {inputText.length > 150 && (
+            <span
+              className={cn(
+                "text-sm font-mono select-none shrink-0 transition-colors",
+                inputText.length >= 180
+                  ? "text-destructive font-bold"
+                  : "text-muted-foreground/60",
+              )}
+            >
+              {200 - inputText.length}
             </span>
           )}
 
