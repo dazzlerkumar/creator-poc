@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-
-type PaymentStatus = 'idle' | 'processing' | 'success' | 'failed';
+import { PaymentStatus } from '@/types/payment';
 
 interface PaymentState {
   isPaymentOpen: boolean;
@@ -18,7 +17,7 @@ interface PaymentState {
 
 const INITIAL_STATE = {
   isPaymentOpen: false,
-  status: 'idle' as PaymentStatus,
+  status: PaymentStatus.IDLE,
   orderId: null,
   paymentId: null,
   errorMessage: null,
@@ -26,10 +25,10 @@ const INITIAL_STATE = {
 
 export const usePaymentStore = create<PaymentState>((set) => ({
   ...INITIAL_STATE,
-  openPayment: () => set({ isPaymentOpen: true, status: 'idle', errorMessage: null }),
+  openPayment: () => set({ isPaymentOpen: true, status: PaymentStatus.IDLE, errorMessage: null }),
   closePayment: () => set(INITIAL_STATE),
-  setProcessing: (orderId) => set({ status: 'processing', orderId }),
-  setSuccess: (paymentId) => set({ status: 'success', paymentId, errorMessage: null }),
-  setFailed: (error) => set({ status: 'failed', errorMessage: error }),
+  setProcessing: (orderId) => set({ status: PaymentStatus.PROCESSING, orderId }),
+  setSuccess: (paymentId) => set({ status: PaymentStatus.SUCCESS, paymentId, errorMessage: null }),
+  setFailed: (error) => set({ status: PaymentStatus.FAILED, errorMessage: error }),
   reset: () => set(INITIAL_STATE),
 }));
