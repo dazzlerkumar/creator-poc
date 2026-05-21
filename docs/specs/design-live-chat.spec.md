@@ -42,6 +42,11 @@ Establish styling guidelines, HTML tag hierarchy, CSS classes, dynamic states, a
   - Text input must be un-bordered with no focus ring, styled using bg-transparent border-none focus:ring-0 text-foreground flex-1 text-base md:text-xs placeholder:text-muted-foreground/40 p-0 outline-none.
   - Submit button must scale down on click, styled using flex items-center justify-center text-primary active:scale-95 disabled:opacity-40 transition-transform shrink-0 cursor-pointer containing a Send symbol.
 - **REQ-012 (Color Variable Mapping)**: The layout, borders, text colors, and interactive elements must map specifically to primary (var(--primary)), secondary (var(--secondary)), black, and white color variables defined in src/app/globals.css.
+- **REQ-013 (Character Limit)**: Message length limited to 200 characters. Input field must enforce maxLength of 200. Display remaining character count when length exceeds 150.
+- **REQ-014 (Slow Mode)**: Enforce 300-second countdown cooldown between message submissions. Disable submission, display timer during cooldown. (hold)
+- **REQ-015 (URL Blocker)**: Block message submission if text contains links/URLs. Match HTTP/HTTPS protocols or typical domain extensions.
+- **REQ-016 (HTML Stripping)**: Prohibit HTML tags. Strip HTML elements before submission.
+- **REQ-017 (Plain Text Only)**: Restrict message input to plain text. Prohibit/strip special characters. Allow alphanumeric, standard spaces, basic punctuation.
 - **CON-001 (Boundary Isolation)**: Message list scrolling must not trigger scroll actions on outer body containers during scroll limits.
 - **CON-002 (Height Management)**: Overflow spacing at bottom of message list must match height of input container dynamically (using showEmojis state to switch between pb-34 and pb-20) to prevent message obstruction.
 - **GUD-001 (Visual Theme)**: Component must preserve white/black backgrounds, primary theme colors (text-primary), secondary theme colors (text-secondary), and contrasting variant typography matching the src/app/globals.css color definitions to maximize visual clarity.
@@ -79,6 +84,11 @@ interface ChatMessage {
 - **AC-006**: Given user clicks submit action button, Then submit icon container performs scaling micro-animation down to 95% scale factor.
 - **AC-007**: Given user clicks the Smile toggle button, When the quick emojis panel is hidden, Then the quick emojis panel becomes visible and the message list bottom padding switches to pb-34.
 - **AC-008**: Given user clicks the Smile toggle button, When the quick emojis panel is visible, Then the quick emojis panel becomes hidden and the message list bottom padding switches to pb-20.
+- **AC-009**: Given message text input, When user types message, Then character limit prevents exceeding 200 characters.
+- **AC-010**: Given message submitted, When slow mode is active, Then user must wait 300 seconds before next submission. Submit action disabled, display countdown.
+- **AC-011**: Given input text containing URL, When submitting, Then message submission blocked.
+- **AC-012**: Given input text containing HTML, When submitting, Then HTML elements stripped.
+- **AC-013**: Given input text containing special characters, When submitting, Then special characters stripped.
 
 ## 6. Test Automation Strategy
 
@@ -91,6 +101,11 @@ interface ChatMessage {
   - Active submission scaling click checks.
   - Time formatting and conditional color applications.
   - Toggle states of quick emojis drawer on Smile button clicks.
+  - Character limit validation checking behavior at boundary of 200 characters.
+  - Slow mode throttle timer behavior ensuring 300-second lock.
+  - Link/URL content checking rejecting typical URL patterns.
+  - HTML content stripping verification.
+  - Special character filtering restricting input to alphanumeric and basic punctuation.
 
 ## 7. Rationale & Context
 
@@ -126,11 +141,39 @@ import { cn } from '@/lib/utils';
 export function LiveChat({ sid }: LiveChatProps) {
   const [inputText, setInputText] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  const cleanText = (text: string) => {
+    const noHtml = text.replace(/<[^>]*>/g, '');
+    const plainText = noHtml.replace(/[^a-zA-Z0-9\s.,?!]/g, '');
+    return plainText;
+  };
+
+  const hasUrl = (text: string) => {
+    const urlPattern = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.[a-zA-Z]{2,})/i;
+    return urlPattern.test(text);
+  };
 
   const handleSend = (e: FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (cooldown > 0) return;
+
+    const sanitized = cleanText(inputText).trim();
+    if (!sanitized) return;
+    if (hasUrl(sanitized)) return;
+    if (sanitized.length > 200) return;
+
     setInputText('');
+    setCooldown(300);
+    const interval = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
   return (
@@ -198,13 +241,31 @@ export function LiveChat({ sid }: LiveChatProps) {
           </button>
           <input 
             className="bg-transparent border-none focus:ring-0 text-foreground flex-1 text-base md:text-xs placeholder:text-muted-foreground/40 p-0 outline-none" 
-            placeholder="Send a message..." 
+            placeholder={cooldown > 0 ? `Slow mode active: wait ${cooldown}s` : "Send a message..."}
             type="text"
+            maxLength={200}
+            disabled={cooldown > 0}
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e) => {
+              const cleaned = cleanText(e.target.value);
+              setInputText(cleaned);
+            }}
           />
-          <button type="submit" className="flex items-center justify-center text-primary active:scale-95 transition-transform shrink-0 cursor-pointer">
-            <Send className="w-5 h-5" />
+          {inputText.length > 150 && (
+            <span className="text-[10px] text-muted-foreground/60 select-none font-mono">
+              {200 - inputText.length}
+            </span>
+          )}
+          <button 
+            type="submit" 
+            disabled={cooldown > 0 || !inputText.trim() || hasUrl(inputText)} 
+            className="flex items-center justify-center text-primary active:scale-95 disabled:opacity-40 transition-transform shrink-0 cursor-pointer"
+          >
+            {cooldown > 0 ? (
+              <span className="text-[11px] font-bold font-mono">{cooldown}s</span>
+            ) : (
+              <Send className="w-5 h-5" />
+            )}
           </button>
         </form>
       </div>
@@ -220,6 +281,11 @@ export function LiveChat({ sid }: LiveChatProps) {
 - **VAL-003**: Check that moderator username styles to text-primary while viewer styles to text-foreground.
 - **VAL-004**: Verify keyboard focus moves background to card background and adds border tint on the input section.
 - **VAL-005**: Check that clicking the Smile toggle button switches the quick emojis visibility state and the bottom padding correctly.
+- **VAL-006**: Verify input restricts maximum length to 200 characters.
+- **VAL-007**: Verify 300-second slow mode timer blocks consecutive message submissions within cooldown.
+- **VAL-008**: Confirm message submission is blocked when input contains URL patterns.
+- **VAL-009**: Confirm HTML tags are stripped from input text.
+- **VAL-010**: Confirm special characters are stripped from input text, leaving alphanumeric characters and standard punctuation.
 
 ## 11. Related Specifications / Further Reading
 

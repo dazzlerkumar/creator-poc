@@ -3,7 +3,7 @@ import { useChannel } from '@/hooks/use-channel';
 import { RingBuffer } from '@/lib/ring-buffer';
 import { getRecentChat } from '@/api/chat';
 import { creator_stage } from '@/lib/proto';
-import { ChatMessage } from '@/components/live-chat';
+import { ChatMessage } from '@/app/(main)/join/_components/live-chat';
 import { PublicationContext } from 'centrifuge/build/protobuf';
 
 const AVATAR_GRADIENTS = [

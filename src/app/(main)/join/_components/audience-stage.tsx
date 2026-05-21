@@ -1,16 +1,18 @@
-'use client';
+"use client";
 
-import { useRef, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-import { useSearchParams } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { LiveChat } from '@/components/live-chat';
-import { useUIStore } from '@/stores/ui-store';
-import Image from 'next/image';
+import { useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { LiveChat } from "@/app/(main)/join/_components/live-chat";
+import { useUIStore } from "@/stores/ui-store";
+import Image from "next/image";
+import { PaymentOverlay } from "@/app/(main)/join/_components/payment-overlay";
+import { MessageSquare } from "lucide-react";
 
 const YouTubePlayer = dynamic(
-  () => import('./youtube-player').then((mod) => mod.YouTubePlayer),
-  { ssr: false }
+  () => import("./youtube-player").then((mod) => mod.YouTubePlayer),
+  { ssr: false },
 );
 
 interface AudienceStageProps {
@@ -19,15 +21,21 @@ interface AudienceStageProps {
 
 export function AudienceStage({ sid }: AudienceStageProps) {
   const searchParams = useSearchParams();
-  const videoId = searchParams.get('v') || 'F1bQwUOh5Hs';
+  const videoId = searchParams.get("v") || "xLC-PdO9sfs";
 
-  const { isChatVisible, isChatLoading, setChatLoading } = useUIStore();
+  const {
+    isChatVisible,
+    isChatLoading,
+    setChatLoading,
+    showPayment,
+    setShowPayment,
+  } = useUIStore();
   const stageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setChatLoading(false);
-    }, 3000);
+    }, 1500);
     return () => clearTimeout(timer);
   }, [setChatLoading]);
   return (
@@ -39,39 +47,54 @@ export function AudienceStage({ sid }: AudienceStageProps) {
       {/* Main Content Canvas */}
       <main className="flex-1 flex flex-col md:flex-row landscape:flex-row min-h-0 overflow-hidden transition-all duration-300">
         {/* Video Region */}
-        <div className={cn(
-          "relative flex items-center justify-center bg-zinc-950 transition-all duration-300",
-          isChatVisible
-            ? "h-[35%] shrink-0 md:h-full md:flex-1 landscape:h-full landscape:flex-1"
-            : "h-full flex-1"
-        )}>
-
-          <YouTubePlayer
-            videoId={videoId}
-          />
-
+        <div
+          className={cn(
+            "relative flex items-center justify-center bg-zinc-950 transition-all duration-300",
+            isChatVisible
+              ? "h-[35%] shrink-0 md:h-full md:flex-1 landscape:h-full landscape:flex-1"
+              : "h-full flex-1",
+          )}
+        >
+          <YouTubePlayer videoId={videoId} />
         </div>
 
         {/* Live Chat sidebar and Payment container - rendered always to load connection immediately */}
-        <div className={cn(
-          "flex w-full md:w-[20%] landscape:w-[28%] shrink-0 border-l border-white/10 bg-stone-200 backdrop-blur-xl flex-col transition-all duration-300",
-          isChatVisible
-            ? "h-[65%] md:h-full landscape:h-full"
-            : "hidden"
-        )}>
-          {isChatLoading ? <div className='flex-grow flex flex-col gap-4 items-center justify-center p-gutter'>
-            <div className='flex items-center justify-center animate-pulse'>
-
-              <Image
-                src="/logo.png"
-                alt="logo"
-                height={64}
-                width={64}
-              />
+        <div
+          className={cn(
+            "flex w-full md:w-[20%] landscape:w-[28%] shrink-0  bg-stone-200 backdrop-blur-xl flex-col transition-all duration-300",
+            isChatVisible ? "h-[65%] md:h-full landscape:h-full" : "hidden",
+          )}
+        >
+          {isChatLoading ? (
+            <div className="flex-grow flex flex-col gap-4 items-center justify-center p-gutter">
+              <div className="flex items-center justify-center animate-pulse">
+                <Image src="/logo.png" alt="logo" height={64} width={64} />
+              </div>
+              <p className="text-gray-800 text-center opacity-70 leading-relaxed">
+                Experience the calmness of morning yoga. <br></br> Loading chats
+              </p>
             </div>
-            <p className="text-gray-800 text-center opacity-70 leading-relaxed">
-              Experience the calmness of morning yoga. <br></br> Loading chats
-            </p></div> : <div className='flex flex-col h-full'> <LiveChat sid={sid} /></div>}
+          ) : (
+            <div className="flex flex-col h-full">
+              <div className="px-5 py-2 border-b border-border flex justify-between items-center bg-card select-none">
+                <div className="flex items-center gap-2.5">
+                  <MessageSquare className="w-5 h-5 text-primary" />
+                  <h2 className="text-sm font-bold text-foreground tracking-tight uppercase">
+                    Live Chat
+                  </h2>
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_6px_rgba(34,197,94,0.5)]"></span>
+                </div>
+                <button
+                  onClick={() => setShowPayment(!showPayment)}
+                  className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
+                >
+                  Pay
+                </button>
+              </div>
+              {showPayment && <PaymentOverlay />}
+              <LiveChat sid={sid} />
+            </div>
+          )}
         </div>
       </main>
     </div>

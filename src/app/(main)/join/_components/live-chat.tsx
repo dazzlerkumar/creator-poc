@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef, FormEvent } from 'react';
-import { ChevronDown, MessageSquare, Pin, Send, MoreVertical, Smile, ArrowDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useLiveChat } from '@/hooks/use-live-chat';
+import { useState, useEffect, useRef, FormEvent } from "react";
+import { MessageSquare, Pin, Send, Smile, ArrowDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useLiveChat } from "@/hooks/use-live-chat";
 
 export interface ChatMessage {
   id: string;
@@ -11,17 +11,15 @@ export interface ChatMessage {
   authorAvatarColor: string;
   messageText: string;
   timestamp: string;
-  role: 'viewer' | 'moderator' | 'owner';
+  role: "viewer" | "moderator" | "owner";
   isPinned?: boolean;
 }
 
-
-
-const QUICK_EMOJIS = ['👍', '❤️', '😂', '🧘‍♀️', '🧘‍♂️', '🙌', '✨'];
+const QUICK_EMOJIS = ["👍", "❤️", "😂", "🧘‍♀️", "🧘‍♂️", "🙌", "✨"];
 
 export function LiveChat({ sid }: { sid: string }) {
   const { messages, pinnedMessage, isLoading, sendMessage } = useLiveChat(sid);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [showScrollBanner, setShowScrollBanner] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
 
@@ -30,13 +28,14 @@ export function LiveChat({ sid }: { sid: string }) {
 
   const scrollToBottom = () => {
     if (scrollContainerRef.current) {
-      if (typeof scrollContainerRef.current.scrollTo === 'function') {
+      if (typeof scrollContainerRef.current.scrollTo === "function") {
         scrollContainerRef.current.scrollTo({
           top: scrollContainerRef.current.scrollHeight,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       } else {
-        scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+        scrollContainerRef.current.scrollTop =
+          scrollContainerRef.current.scrollHeight;
       }
       setShowScrollBanner(false);
       shouldAutoScrollRef.current = true;
@@ -51,7 +50,8 @@ export function LiveChat({ sid }: { sid: string }) {
 
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+    const { scrollTop, scrollHeight, clientHeight } =
+      scrollContainerRef.current;
     const isAtBottom = scrollHeight - scrollTop - clientHeight < 60;
 
     if (isAtBottom) {
@@ -68,29 +68,21 @@ export function LiveChat({ sid }: { sid: string }) {
     if (!inputText.trim()) return;
 
     sendMessage(inputText.trim().substring(0, 200));
-    setInputText('');
+    setInputText("");
     shouldAutoScrollRef.current = true;
   };
 
   const appendEmoji = (emoji: string) => {
     if (inputText.length + emoji.length <= 200) {
-      setInputText(prev => prev + emoji);
+      setInputText((prev) => prev + emoji);
     }
   };
 
   return (
-    <section className="flex-grow flex flex-col bg-card dark:bg-background overflow-hidden relative h-full min-h-0" id="chat-section">
-      <div className="px-5 py-2 border-b border-border flex justify-between items-center bg-card select-none">
-        <div className="flex items-center gap-2.5">
-          <MessageSquare className="w-5 h-5 text-primary" />
-          <h2 className="text-sm font-bold text-foreground tracking-tight uppercase">Live Chat</h2>
-          <span className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_6px_rgba(34,197,94,0.5)]"></span>
-        </div>
-        <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors text-muted-foreground">
-          <MoreVertical className="w-5 h-5" />
-        </button>
-      </div>
-
+    <section
+      className="flex-grow flex flex-col bg-card dark:bg-background overflow-hidden relative h-full min-h-0"
+      id="chat-section"
+    >
       {pinnedMessage && (
         <div className="flex items-start justify-between gap-3 px-5 py-3 bg-primary/10 border-b border-border animate-in slide-in-from-top duration-300 select-none">
           <div className="flex gap-3">
@@ -112,7 +104,7 @@ export function LiveChat({ sid }: { sid: string }) {
       <div
         className={cn(
           "flex-grow p-4 space-y-5 overflow-y-auto relative min-h-0",
-          showEmojis ? "pb-34" : "pb-26"
+          showEmojis ? "pb-34" : "pb-26",
         )}
         ref={scrollContainerRef}
         onScroll={handleScroll}
@@ -123,20 +115,33 @@ export function LiveChat({ sid }: { sid: string }) {
           </div>
         ) : messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-muted-foreground/40 gap-2">
-            <MessageSquare size={32} className="opacity-40 animate-bounce duration-1000" />
-            <p className="text-sm italic">Welcome to the stream. Say something!</p>
+            <MessageSquare
+              size={32}
+              className="opacity-40 animate-bounce duration-1000"
+            />
+            <p className="text-sm italic">
+              Welcome to the stream. Say something!
+            </p>
           </div>
         ) : (
           messages.map((msg) => (
             <div key={msg.id} className="flex items-start gap-3 text-sm">
               <div className="text-[11px] text-muted-foreground/60 font-medium pt-1 w-8 select-none">
-                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
+                {new Date(msg.timestamp).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })}
               </div>
               <div className="flex-1 min-w-0">
-                <span className={cn(
-                  "text-xs font-bold mr-1.5 transition-colors",
-                  msg.role === 'moderator' ? "text-primary" : "text-foreground"
-                )}>
+                <span
+                  className={cn(
+                    "text-xs font-bold mr-1.5 transition-colors",
+                    msg.role === "moderator"
+                      ? "text-primary"
+                      : "text-foreground",
+                  )}
+                >
                   {msg.authorName}:
                 </span>
                 <span className="text-sm text-muted-foreground break-words">
@@ -153,7 +158,7 @@ export function LiveChat({ sid }: { sid: string }) {
           onClick={scrollToBottom}
           className={cn(
             "absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-primary hover:brightness-95 border border-border rounded-full text-xs font-bold text-primary-foreground shadow-lg flex items-center gap-2 select-none active:scale-95 transition-all animate-bounce",
-            showEmojis ? "bottom-[130px]" : "bottom-[90px]"
+            showEmojis ? "bottom-[130px]" : "bottom-[90px]",
           )}
         >
           <ArrowDown size={14} />
@@ -183,11 +188,11 @@ export function LiveChat({ sid }: { sid: string }) {
         >
           <button
             type="button"
-            onClick={() => setShowEmojis(prev => !prev)}
+            onClick={() => setShowEmojis((prev) => !prev)}
             aria-label="Toggle emoji picker"
             className={cn(
               "hover:text-primary transition-colors shrink-0 flex items-center justify-center cursor-pointer",
-              showEmojis ? "text-primary" : "text-muted-foreground"
+              showEmojis ? "text-primary" : "text-muted-foreground",
             )}
           >
             <Smile className="w-5.5 h-5.5" />

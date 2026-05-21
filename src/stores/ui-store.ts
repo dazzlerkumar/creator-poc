@@ -6,6 +6,8 @@ interface UIState {
   setChatVisible: (visible: boolean) => void;
   isChatLoading: boolean;
   setChatLoading: (visible: boolean) => void;
+  showPayment: boolean;
+  setShowPayment: (visible: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -14,4 +16,6 @@ export const useUIStore = create<UIState>((set) => ({
   isChatVisible: true,
   toggleChat: () => set((state) => ({ isChatVisible: !state.isChatVisible })),
   setChatVisible: (visible) => set({ isChatVisible: visible }),
+  showPayment: false,
+  setShowPayment: (visible) => set({ showPayment: visible }),
 }));
