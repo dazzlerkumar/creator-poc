@@ -32,7 +32,7 @@ export function useRazorpay() {
         currency: config.currency,
         name: config.productName,
         description: config.description,
-        order_id: order.orderId,
+        ...(order.orderId.startsWith('order_mock_') ? {} : { order_id: order.orderId }),
         handler: async (response) => {
           try {
             const result = await verifyPayment({
@@ -44,7 +44,7 @@ export function useRazorpay() {
             if (result.verified) {
               setSuccess(response.razorpay_payment_id);
             } else {
-              setFailed('Payment verification failed');
+              setFailed('Payment verification failed'); 
             }
           } catch {
             setFailed('Payment verification failed');
@@ -67,6 +67,7 @@ export function useRazorpay() {
       rzpRef.current = rzp;
       rzp.open();
     } catch (error) {
+      console.log("error", error)
       setFailed(error instanceof Error ? error.message : 'Payment initiation failed');
     }
   }, [setProcessing, setSuccess, setFailed]);

@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useUIStore } from '@/stores/ui-store';
+import { usePaymentStore } from '@/stores/payment-store';
+import { PaymentStatus } from '@/types/payment';
 import { Maximize, Minimize, MessageSquare, Play, Pause, RotateCcw, Volume2, VolumeX, ZoomIn, ZoomOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -58,6 +60,20 @@ export function YouTubePlayer({ videoId, className, onStateChange }: YouTubePlay
   const playerRef = useRef<HTMLDivElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const { isChatVisible, toggleChat } = useUIStore();
+  const paymentStatus = usePaymentStore((state) => state.status);
+  const wasProcessingRef = useRef(false);
+
+  useEffect(() => {
+    if (paymentStatus === PaymentStatus.PROCESSING) {
+      wasProcessingRef.current = true;
+    } else if (wasProcessingRef.current && (paymentStatus === PaymentStatus.SUCCESS || paymentStatus === PaymentStatus.FAILED || paymentStatus === PaymentStatus.IDLE)) {
+      wasProcessingRef.current = false;
+      const player = playerInstanceRef.current;
+      if (player) {
+        player.playVideo();
+      }
+    }
+  }, [paymentStatus]);
 
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });

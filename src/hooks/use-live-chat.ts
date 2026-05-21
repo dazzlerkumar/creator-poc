@@ -1,28 +1,85 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useChannel } from '@/hooks/use-channel';
-import { RingBuffer } from '@/lib/ring-buffer';
-import { getRecentChat } from '@/api/chat';
-import { creator_stage } from '@/lib/proto';
-import { ChatMessage } from '@/app/(main)/join/_components/live-chat';
-import { PublicationContext } from 'centrifuge/build/protobuf';
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useChannel } from "@/hooks/use-channel";
+import { RingBuffer } from "@/lib/ring-buffer";
+// import { getRecentChat } from '@/api/chat';
+import { creator_stage } from "@/lib/proto";
+import { ChatMessage } from "@/app/(main)/join/_components/live-chat";
+import { PublicationContext } from "centrifuge/build/protobuf";
 
 const AVATAR_GRADIENTS = [
-  'from-blue-500 to-indigo-500',
-  'from-purple-500 to-pink-500',
-  'from-rose-500 to-orange-500',
-  'from-teal-500 to-emerald-500',
-  'from-cyan-500 to-blue-500',
+  "from-blue-500 to-indigo-500",
+  "from-purple-500 to-pink-500",
+  "from-rose-500 to-orange-500",
+  "from-teal-500 to-emerald-500",
+  "from-cyan-500 to-blue-500",
 ];
 const DUMMY_MESSAGES: ChatMessage[] = [
-  { id: '1', authorName: 'John Doe', authorAvatarColor: 'bg-red-500', messageText: 'Hello Saurabh Ji!', timestamp: new Date().toISOString(), role: 'viewer' },
-  { id: '2', authorName: 'Jane Smith', authorAvatarColor: 'bg-blue-500', messageText: 'Nice to see you all!', timestamp: new Date().toISOString(), role: 'viewer' },
-  { id: '3', authorName: 'Saurabh', authorAvatarColor: 'bg-green-500', messageText: 'Welcome to the stream!', timestamp: new Date().toISOString(), role: 'moderator' },
-  { id: '4', authorName: 'John Doe', authorAvatarColor: 'bg-red-500', messageText: 'This is a test message.', timestamp: new Date().toISOString(), role: 'viewer' },
-  { id: '5', authorName: 'Jane Smith', authorAvatarColor: 'bg-blue-500', messageText: 'Looking forward to the yoga session.', timestamp: new Date().toISOString(), role: 'viewer' },
-  { id: '6', authorName: 'Saurabh', authorAvatarColor: 'bg-green-500', messageText: 'The session will start in 5 minutes.', timestamp: new Date().toISOString(), role: 'moderator' },
-  { id: '7', authorName: 'Saurabh', authorAvatarColor: 'bg-green-500', messageText: 'The session will start in 5 minutes.', timestamp: new Date().toISOString(), role: 'moderator' },
-  { id: '8', authorName: 'Jane Smith', authorAvatarColor: 'bg-blue-500', messageText: 'This is a very long message. It should wrap around the container. Let us see how it works. If it breaks the layout, we will fix it later.', timestamp: new Date().toISOString(), role: 'viewer' },
-]
+  {
+    id: "1",
+    authorName: "John Doe",
+    authorAvatarColor: "bg-red-500",
+    messageText: "Hello Saurabh Ji!",
+    timestamp: new Date().toISOString(),
+    role: "viewer",
+  },
+  {
+    id: "2",
+    authorName: "Jane Smith",
+    authorAvatarColor: "bg-blue-500",
+    messageText: "Nice to see you all!",
+    timestamp: new Date().toISOString(),
+    role: "viewer",
+  },
+  {
+    id: "3",
+    authorName: "Saurabh",
+    authorAvatarColor: "bg-green-500",
+    messageText: "Welcome to the stream!",
+    timestamp: new Date().toISOString(),
+    role: "moderator",
+  },
+  {
+    id: "4",
+    authorName: "John Doe",
+    authorAvatarColor: "bg-red-500",
+    messageText: "This is a test message.",
+    timestamp: new Date().toISOString(),
+    role: "viewer",
+  },
+  {
+    id: "5",
+    authorName: "Jane Smith",
+    authorAvatarColor: "bg-blue-500",
+    messageText: "Looking forward to the yoga session.",
+    timestamp: new Date().toISOString(),
+    role: "viewer",
+  },
+  {
+    id: "6",
+    authorName: "Saurabh",
+    authorAvatarColor: "bg-green-500",
+    messageText: "The session will start in 5 minutes.",
+    timestamp: new Date().toISOString(),
+    role: "moderator",
+  },
+  {
+    id: "7",
+    authorName: "Saurabh",
+    authorAvatarColor: "bg-green-500",
+    messageText: "The session will start in 5 minutes.",
+    timestamp: new Date().toISOString(),
+    role: "moderator",
+  },
+  {
+    id: "8",
+    authorName: "Jane Smith",
+    authorAvatarColor: "bg-blue-500",
+    messageText:
+      "This is a very long message. It should wrap around the container. Let us see how it works. If it breaks the layout, we will fix it later.",
+    timestamp: new Date().toISOString(),
+    role: "viewer",
+  },
+];
 interface FlexibleRawChatMessage {
   id?: string;
   video_broadcast_id?: string;
@@ -41,8 +98,9 @@ interface FlexibleRawChatMessage {
 }
 
 function getAvatarColor(role: number | string, name: string): string {
-  if (role === 1 || role === 'ROLE_CREATOR') return 'from-amber-500 to-yellow-500';
-  if (role === 2 || role === 'ROLE_TEAM') return 'from-emerald-500 to-teal-500';
+  if (role === 1 || role === "ROLE_CREATOR")
+    return "from-amber-500 to-yellow-500";
+  if (role === 2 || role === "ROLE_TEAM") return "from-emerald-500 to-teal-500";
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
@@ -52,30 +110,33 @@ function getAvatarColor(role: number | string, name: string): string {
 }
 
 function mapToUiMessage(raw: FlexibleRawChatMessage): ChatMessage {
-  const body = raw.body ?? raw.messageText ?? '';
-  const displayName = raw.displayName ?? raw.display_name ?? raw.authorName ?? 'Unknown';
+  const body = raw.body ?? raw.messageText ?? "";
+  const displayName =
+    raw.displayName ?? raw.display_name ?? raw.authorName ?? "Unknown";
   const role = raw.role ?? 3;
   const id = raw.id ?? `msg-${Date.now()}-${Math.random()}`;
   const pinned = raw.pinned ?? raw.isPinned ?? false;
 
-  let roleStr: 'viewer' | 'moderator' | 'owner' = 'viewer';
-  if (role === 1 || role === 'ROLE_CREATOR') {
-    roleStr = 'owner';
-  } else if (role === 2 || role === 'ROLE_TEAM') {
-    roleStr = 'moderator';
+  let roleStr: "viewer" | "moderator" | "owner" = "viewer";
+  if (role === 1 || role === "ROLE_CREATOR") {
+    roleStr = "owner";
+  } else if (role === 2 || role === "ROLE_TEAM") {
+    roleStr = "moderator";
   }
 
   let timestampStr = new Date().toISOString();
   const sentAt = raw.sentAt ?? raw.sent_at;
   if (sentAt) {
-    if (typeof sentAt === 'string') {
+    if (typeof sentAt === "string") {
       timestampStr = sentAt;
-    } else if (typeof sentAt === 'number') {
+    } else if (typeof sentAt === "number") {
       timestampStr = new Date(sentAt).toISOString();
-    } else if (typeof sentAt === 'object') {
+    } else if (typeof sentAt === "object") {
       const seconds = sentAt.seconds ?? 0;
       const nanos = sentAt.nanos ?? 0;
-      timestampStr = new Date(seconds * 1000 + Math.floor(nanos / 1000000)).toISOString();
+      timestampStr = new Date(
+        seconds * 1000 + Math.floor(nanos / 1000000),
+      ).toISOString();
     }
   } else if (raw.timestamp) {
     timestampStr = raw.timestamp;
@@ -96,7 +157,7 @@ export function useLiveChat(sessionId: string) {
   const [prevSessionId, setPrevSessionId] = useState(sessionId);
   const [messages, setMessages] = useState<ChatMessage[]>(DUMMY_MESSAGES);
   const [pinnedMessage, setPinnedMessage] = useState<ChatMessage | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (sessionId !== prevSessionId) {
     setPrevSessionId(sessionId);
@@ -107,32 +168,12 @@ export function useLiveChat(sessionId: string) {
 
   const bufferRef = useRef(new RingBuffer<ChatMessage>(500));
   const flushScheduledRef = useRef(false);
-
-  // Fetch initial chat history
-  useEffect(() => {
-    if (!sessionId) return;
-    getRecentChat(sessionId)
-      .then((res) => {
-        const mappedMsgs = (res.messages || []).map((m) => mapToUiMessage(m as FlexibleRawChatMessage));
-        setMessages(mappedMsgs.slice(-200));
-        if (res.pinned_message) {
-          setPinnedMessage(mapToUiMessage(res.pinned_message as FlexibleRawChatMessage));
-        } else {
-          setPinnedMessage(null);
-        }
-      })
-      .catch((err) => {
-        console.error('Failed to load recent chat:', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [sessionId]);
-
   const handlePublication = useCallback((ctx: PublicationContext) => {
     try {
       if (!ctx.data) return;
-      const decoded = creator_stage.realtime.v1.ChatMessage.decode(new Uint8Array(ctx.data));
+      const decoded = creator_stage.realtime.v1.ChatMessage.decode(
+        new Uint8Array(ctx.data),
+      );
       const uiMsg = mapToUiMessage(decoded as FlexibleRawChatMessage);
 
       if (uiMsg.isPinned) {
@@ -155,7 +196,7 @@ export function useLiveChat(sessionId: string) {
         });
       }
     } catch (err) {
-      console.error('Error handling live chat message:', err);
+      console.error("Error handling live chat message:", err);
     }
   }, []);
 
@@ -164,15 +205,21 @@ export function useLiveChat(sessionId: string) {
     onPublication: handlePublication,
   });
 
-  const sendMessage = useCallback(async (text: string) => {
-    if (!subscription) {
-      console.warn('Cannot send message: no active subscription');
-      return;
-    }
-    const request = creator_stage.realtime.v1.ChatPublishRequest.create({ body: text });
-    const bytes = creator_stage.realtime.v1.ChatPublishRequest.encode(request).finish();
-    await subscription.publish(bytes);
-  }, [subscription]);
+  const sendMessage = useCallback(
+    async (text: string) => {
+      if (!subscription) {
+        console.warn("Cannot send message: no active subscription");
+        return;
+      }
+      const request = creator_stage.realtime.v1.ChatPublishRequest.create({
+        body: text,
+      });
+      const bytes =
+        creator_stage.realtime.v1.ChatPublishRequest.encode(request).finish();
+      await subscription.publish(bytes);
+    },
+    [subscription],
+  );
 
   return {
     messages,
