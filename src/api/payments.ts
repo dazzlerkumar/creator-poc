@@ -1,5 +1,5 @@
 import { PAYMENT_ENDPOINTS } from '@/config/endpoints';
-import { client } from './client';
+import { clientApi } from '@/lib/api-client';
 
 interface CreateOrderResponse {
   orderId: string;
@@ -29,12 +29,7 @@ export async function createOrder(amount: number, currency: string): Promise<Cre
     };
   }
 
-  // TODO: Remove cast when client body type is fixed
-  return client<CreateOrderResponse>(PAYMENT_ENDPOINTS.CREATE_ORDER, {
-    body: JSON.stringify({ amount, currency }),
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return clientApi.post<CreateOrderResponse>(PAYMENT_ENDPOINTS.CREATE_ORDER, { amount, currency });
 }
 
 export async function verifyPayment(payload: VerifyPaymentPayload): Promise<VerifyPaymentResponse> {
@@ -43,9 +38,5 @@ export async function verifyPayment(payload: VerifyPaymentPayload): Promise<Veri
     return { verified: true };
   }
 
-  return client<VerifyPaymentResponse>(PAYMENT_ENDPOINTS.VERIFY, {
-    body: JSON.stringify(payload),
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return clientApi.post<VerifyPaymentResponse>(PAYMENT_ENDPOINTS.VERIFY, payload);
 }

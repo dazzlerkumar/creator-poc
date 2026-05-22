@@ -1,5 +1,5 @@
-import { clientApi } from '@/lib/api-client';
-import { UserRole, useAuthStore } from '../stores/auth-store';
+import { clientApi } from "@/lib/api-client";
+import { UserRole, useAuthStore } from "../stores/auth-store";
 
 export interface AuthTokenResponse {
   jwt: string;
@@ -14,11 +14,15 @@ export interface GetTokenParams {
 }
 
 export async function login(identityToken: string): Promise<AuthTokenResponse> {
-  return clientApi.post<AuthTokenResponse>('/api/auth/login', { identity_token: identityToken });
+  return clientApi.post<AuthTokenResponse>("/api/auth/login", {
+    identity_token: identityToken,
+  });
 }
 
-export async function getToken(params: GetTokenParams): Promise<AuthTokenResponse> {
-  return clientApi.post<AuthTokenResponse>('/api/auth/token', {
+export async function getToken(
+  params: GetTokenParams,
+): Promise<AuthTokenResponse> {
+  return clientApi.post<AuthTokenResponse>("/api/auth/token", {
     session_id: params.sessionId,
     invite_token: params.inviteToken,
     identity_token: params.identityToken,
@@ -31,5 +35,5 @@ export const authApi = {
   logout: () => {
     // Basic logout implementation for now
     useAuthStore.getState().clearToken();
-  }
+  },
 };

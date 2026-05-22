@@ -1,4 +1,4 @@
-import { client } from './client';
+import { clientApi } from '@/lib/api-client';
 
 export interface RawChatMessage {
   id: string;
@@ -18,7 +18,7 @@ export interface ChatRecentResponse {
 }
 
 export async function getRecentChat(sessionId: string): Promise<ChatRecentResponse> {
-  return client<ChatRecentResponse>(`/api/sessions/${sessionId}/chat/recent`);
+  return clientApi.get<ChatRecentResponse>(`/api/sessions/${sessionId}/chat/recent`);
 }
 
 export const chatApi = {
