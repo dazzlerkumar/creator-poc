@@ -1,9 +1,11 @@
 # ADR-001: Next.js Static Export on AWS S3 + CloudFront
 
 ## Status
+
 Accepted
 
 ## Date
+
 2026-05-19
 
 ## Context
@@ -25,6 +27,7 @@ No Dockerfile. Deployment = build → sync to S3 → invalidate CloudFront cache
 ## Consequences
 
 ### Positive
+
 - Low cost (~$1–5/month)
 - No server to manage or patch
 - Global CDN via CloudFront
@@ -32,6 +35,7 @@ No Dockerfile. Deployment = build → sync to S3 → invalidate CloudFront cache
 - Auto-scales
 
 ### Trade-offs
+
 - No Next.js server features (see Constraints)
 - All routes must be known at build time
 - Dynamic data requires client-side calls to separate backend
@@ -42,19 +46,19 @@ No Dockerfile. Deployment = build → sync to S3 → invalidate CloudFront cache
 
 `output: 'export'` disables:
 
-| Feature | Status | Reason |
-|---|---|---|
-| API Routes (`/api/*`) | ❌ | Needs Node.js server |
-| Server Actions | ❌ | Needs Node.js server |
-| Middleware | ❌ | Runs on server/edge |
-| ISR / `revalidate` | ❌ | Needs runtime |
-| `next/headers`, `cookies()` | ❌ | Server-only APIs |
-| Dynamic routes without `generateStaticParams` | ❌ | No runtime to resolve |
-| `next/image` optimization | ⚠️ | Use `unoptimized: true` |
-| Static routes | ✅ | Pre-rendered at build |
-| Dynamic routes with `generateStaticParams` | ✅ | Pre-rendered at build |
-| Client-side navigation (`<Link>`, `router.push`) | ✅ | Runs in browser |
-| Client-side data fetching | ✅ | Runs in browser |
+| Feature                                          | Status | Reason                  |
+| ------------------------------------------------ | ------ | ----------------------- |
+| API Routes (`/api/*`)                            | ❌     | Needs Node.js server    |
+| Server Actions                                   | ❌     | Needs Node.js server    |
+| Middleware                                       | ❌     | Runs on server/edge     |
+| ISR / `revalidate`                               | ❌     | Needs runtime           |
+| `next/headers`, `cookies()`                      | ❌     | Server-only APIs        |
+| Dynamic routes without `generateStaticParams`    | ❌     | No runtime to resolve   |
+| `next/image` optimization                        | ⚠️     | Use `unoptimized: true` |
+| Static routes                                    | ✅     | Pre-rendered at build   |
+| Dynamic routes with `generateStaticParams`       | ✅     | Pre-rendered at build   |
+| Client-side navigation (`<Link>`, `router.push`) | ✅     | Runs in browser         |
+| Client-side data fetching                        | ✅     | Runs in browser         |
 
 ---
 
@@ -79,14 +83,14 @@ S3 Bucket (HTML/JS/CSS)
 ```js
 // next.config.js
 const nextConfig = {
-  output: 'export',
+  output: "export",
   trailingSlash: true, // generates /about/index.html — cleaner on S3
   images: {
     unoptimized: true, // required for static export
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
 
 `trailingSlash: true` generates folder-style paths (`/about/index.html`). S3 serves these natively — less URL rewriting needed.
@@ -111,10 +115,12 @@ aws s3 sync out/ s3://your-site-name --delete
 ### 4. CloudFront
 
 **Create OAC:**
+
 - Console → CloudFront → Origin Access Control → Create
 - Origin type: S3, Signing: Sign requests
 
 **Create Distribution:**
+
 - Origin: S3 bucket
 - Origin access: OAC above
 - Default root object: `index.html`
@@ -149,9 +155,9 @@ aws s3 sync out/ s3://your-site-name --delete
 CloudFront → Error Pages:
 
 | HTTP Error | Response Path | Response Code |
-|---|---|---|
-| 403 | `/index.html` | 200 |
-| 404 | `/index.html` | 200 |
+| ---------- | ------------- | ------------- |
+| 403        | `/index.html` | 200           |
+| 404        | `/index.html` | 200           |
 
 Falls back to `index.html` for all unresolved paths. Next.js client router takes over. Downside: all routes serve same HTML initially.
 
@@ -170,11 +176,11 @@ function handler(event) {
   }
 
   // Add trailing slash
-  if (!uri.endsWith('/')) {
-    uri = uri + '/';
+  if (!uri.endsWith("/")) {
+    uri = uri + "/";
   }
 
-  request.uri = uri + 'index.html';
+  request.uri = uri + "index.html";
   return request;
 }
 ```
@@ -192,6 +198,7 @@ aws acm request-certificate \
 CloudFront: add alternate domain + attach cert.
 
 DNS:
+
 ```
 yourdomain.com  CNAME  d1234abcd.cloudfront.net
 ```
@@ -255,7 +262,7 @@ Fix: export all paths at build time:
 // app/blog/[slug]/page.tsx
 export async function generateStaticParams() {
   const posts = await fetchAllPosts();
-  return posts.map(post => ({ slug: post.slug }));
+  return posts.map((post) => ({ slug: post.slug }));
 }
 ```
 
@@ -297,7 +304,7 @@ Fix: prefix with `NEXT_PUBLIC_` — inlined into JS bundle during `npm run build
 
 ```bash
 # .env.production
-NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+NEXT_PUBLIC_BACKEND_URL=https://api.yourdomain.com
 ```
 
 `NEXT_PUBLIC_` vars are embedded in client bundle — visible to anyone. Don't put secrets here.
@@ -325,6 +332,7 @@ npm run build && npx serve out
 `npx serve` resolves `/about` → `about/index.html` — mirrors CloudFront behaviour.
 
 Add to `package.json`:
+
 ```json
 "preview": "npm run build && npx serve out"
 ```
