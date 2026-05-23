@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // @ts-ignore - Next.js 15+ runtime supports this at top level but types may lag
   allowedDevOrigins: ['192.168.29.126']
 };
 
