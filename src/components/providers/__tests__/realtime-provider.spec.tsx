@@ -1,211 +1,112 @@
 import { render, screen, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
-import React, { ReactElement } from 'react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import React from 'react';
 import { RealtimeProvider } from '@/components/providers/realtime-provider';
-import { useAuthStore } from '@/stores/auth-store';
 import { useRealtimeStore } from '@/stores/realtime-store';
-import { centrifugeClient } from '@/lib/centrifuge-client';
 import { ConnectionStatus } from '@/types/realtime';
-import type { Centrifuge } from 'centrifuge/build/protobuf';
-
-vi.mock('@/stores/auth-store', () => ({
-  useAuthStore: vi.fn(),
-}));
 
 vi.mock('@/stores/realtime-store', () => ({
   useRealtimeStore: vi.fn(),
 }));
 
-vi.mock('@/lib/centrifuge-client', () => ({
-  centrifugeClient: {
-    create: vi.fn(),
-    destroy: vi.fn(),
-    get: vi.fn(),
-  },
-}));
-
-interface MockCentrifuge {
-  state: string;
-  on: Mock<(event: string, callback: (...args: unknown[]) => void) => void>;
-  connect: Mock<() => void>;
-  disconnect: Mock<() => void>;
-}
-
 describe('RealtimeProvider', () => {
-  let mockClient: MockCentrifuge;
-  let listeners: Record<string, ((...args: unknown[]) => void)[]>;
-  let setConnectionStatusMock: Mock<(status: ConnectionStatus) => void>;
-  let resetMock: Mock<() => void>;
-
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
-    listeners = {};
-
-    mockClient = {
-      state: 'disconnected',
-      on: vi.fn((event: string, callback: (...args: unknown[]) => void) => {
-        if (!listeners[event]) {
-          listeners[event] = [];
-        }
-        listeners[event].push(callback);
-      }),
-      connect: vi.fn(),
-      disconnect: vi.fn(),
-    };
-
-    vi.mocked(centrifugeClient.create).mockReturnValue(mockClient as unknown as Centrifuge);
-    vi.mocked(centrifugeClient.get).mockReturnValue(mockClient as unknown as Centrifuge);
-
-    setConnectionStatusMock = vi.fn();
-    resetMock = vi.fn();
-
-    vi.mocked(useRealtimeStore).mockReturnValue({
-      setConnectionStatus: setConnectionStatusMock,
-      reset: resetMock,
-    } as unknown as ReturnType<typeof useRealtimeStore>);
   });
 
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  const triggerEvent = (event: string, ...args: unknown[]) => {
-    act(() => {
-      if (listeners[event]) {
-        listeners[event].forEach((cb) => cb(...args));
-      }
+  // Helper to mock the Zustand store's selected state
+  const mockStore = (status: ConnectionStatus) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    vi.mocked(useRealtimeStore).mockImplementation((selector: any) => {
+      const state = { connectionStatus: status };
+      return selector(state);
     });
   };
 
-  it('connects when JWT is set', async () => {
-    vi.mocked(useAuthStore).mockReturnValue('fake-jwt-token' as unknown as ReturnType<typeof useAuthStore>);
-
-    await act(async () => {
-      render(
-        <RealtimeProvider>
-          <div data-testid="child">Child Content</div>
-        </RealtimeProvider>
-      );
-    });
-
-    expect(centrifugeClient.create).toHaveBeenCalledWith('fake-jwt-token');
-    expect(mockClient.connect).toHaveBeenCalled();
+  it('renders children correctly', () => {
+    mockStore(ConnectionStatus.CONNECTING);
+    render(
+      <RealtimeProvider>
+        <div data-testid="child">Child Content</div>
+      </RealtimeProvider>
+    );
     expect(screen.getByTestId('child')).toBeInTheDocument();
   });
 
-  it('destroys client and resets store on unmount', async () => {
-    vi.mocked(useAuthStore).mockReturnValue('fake-jwt-token' as unknown as ReturnType<typeof useAuthStore>);
+  it('shows disconnect banner after 2 seconds of being disconnected', () => {
+    mockStore(ConnectionStatus.DISCONNECTED);
+    render(<RealtimeProvider><div /></RealtimeProvider>);
 
-    let unmount: () => void;
-    await act(async () => {
-      const rendered = render(
-        <RealtimeProvider>
-          <div data-testid="child">Child Content</div>
-        </RealtimeProvider>
-      );
-      unmount = rendered.unmount;
-    });
-
-    await act(async () => {
-      unmount();
-    });
-
-    expect(centrifugeClient.destroy).toHaveBeenCalled();
-    expect(resetMock).toHaveBeenCalled();
-  });
-
-  it('destroys client and resets store when token is cleared/removed', async () => {
-    vi.mocked(useAuthStore).mockReturnValue(null as unknown as ReturnType<typeof useAuthStore>);
-
-    let rerender: (ui: ReactElement) => void;
-    await act(async () => {
-      const rendered = render(
-        <RealtimeProvider>
-          <div data-testid="child">Child Content</div>
-        </RealtimeProvider>
-      );
-      rerender = rendered.rerender;
-    });
-
-    expect(centrifugeClient.destroy).toHaveBeenCalled();
-    expect(resetMock).toHaveBeenCalled();
-
-    vi.clearAllMocks();
-
-    vi.mocked(useAuthStore).mockReturnValue('fake-jwt-token' as unknown as ReturnType<typeof useAuthStore>);
-    await act(async () => {
-      rerender(
-        <RealtimeProvider>
-          <div data-testid="child">Child Content</div>
-        </RealtimeProvider>
-      );
-    });
-    expect(centrifugeClient.create).toHaveBeenCalledWith('fake-jwt-token');
-
-    vi.clearAllMocks();
-
-    vi.mocked(useAuthStore).mockReturnValue(null as unknown as ReturnType<typeof useAuthStore>);
-    await act(async () => {
-      rerender(
-        <RealtimeProvider>
-          <div data-testid="child">Child Content</div>
-        </RealtimeProvider>
-      );
-    });
-    expect(centrifugeClient.destroy).toHaveBeenCalled();
-    expect(resetMock).toHaveBeenCalled();
-  });
-
-  it('updates connectionStatus in store when Centrifuge state changes', async () => {
-    vi.mocked(useAuthStore).mockReturnValue('fake-jwt-token' as unknown as ReturnType<typeof useAuthStore>);
-
-    await act(async () => {
-      render(
-        <RealtimeProvider>
-          <div data-testid="child">Child Content</div>
-        </RealtimeProvider>
-      );
-    });
-
-    triggerEvent('connecting');
-    expect(setConnectionStatusMock).toHaveBeenCalledWith('connecting');
-
-    triggerEvent('connected');
-    expect(setConnectionStatusMock).toHaveBeenCalledWith('connected');
-
-    triggerEvent('disconnected');
-    expect(setConnectionStatusMock).toHaveBeenCalledWith('disconnected');
-  });
-
-  it('displays reconnect banner when connection stays disconnected for more than 2 seconds', async () => {
-    vi.mocked(useAuthStore).mockReturnValue('fake-jwt-token' as unknown as ReturnType<typeof useAuthStore>);
-
-    await act(async () => {
-      render(
-        <RealtimeProvider>
-          <div data-testid="child">Child</div>
-        </RealtimeProvider>
-      );
-    });
-
-    expect(screen.queryByText(/Connection lost/i)).not.toBeInTheDocument();
-
-    mockClient.state = 'disconnected';
-    triggerEvent('state');
+    expect(screen.queryByText(/Connection lost\. Reconnecting\.\.\./i)).not.toBeInTheDocument();
 
     act(() => {
-      vi.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(2000);
     });
-    expect(screen.queryByText(/Connection lost/i)).not.toBeInTheDocument();
+
+    const banner = screen.getByText(/Connection lost\. Reconnecting\.\.\./i);
+    expect(banner).toBeInTheDocument();
+    expect(banner).toHaveClass('bg-destructive');
+  });
+
+  it('shows connected banner after 2 seconds of being connected', () => {
+    mockStore(ConnectionStatus.CONNECTED);
+    render(<RealtimeProvider><div /></RealtimeProvider>);
+
+    expect(screen.queryByText(/Connected/i)).not.toBeInTheDocument();
 
     act(() => {
-      vi.advanceTimersByTime(1100);
+      vi.advanceTimersByTime(2000);
+    });
+
+    const banner = screen.getByText('Connected');
+    expect(banner).toBeInTheDocument();
+    expect(banner).toHaveClass('bg-green-500');
+  });
+
+  it('shows connection denied banner after 2 seconds of being denied', () => {
+    mockStore(ConnectionStatus.DENIED);
+    render(<RealtimeProvider><div /></RealtimeProvider>);
+
+    expect(screen.queryByText(/Connection denied/i)).not.toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    const banner = screen.getByText('Connection denied');
+    expect(banner).toBeInTheDocument();
+    expect(banner).toHaveClass('bg-destructive');
+  });
+
+  it('hides banner immediately when status is connecting (or any other status)', () => {
+    // First render with disconnected to show the banner
+    let currentStatus = ConnectionStatus.DISCONNECTED;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    vi.mocked(useRealtimeStore).mockImplementation((selector: any) => {
+      return selector({ connectionStatus: currentStatus });
+    });
+
+    const { rerender } = render(<RealtimeProvider><div /></RealtimeProvider>);
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
     });
     expect(screen.getByText(/Connection lost/i)).toBeInTheDocument();
 
-    mockClient.state = 'connected';
-    triggerEvent('state');
+    // Now change to connecting
+    currentStatus = ConnectionStatus.CONNECTING;
+    rerender(<RealtimeProvider><div /></RealtimeProvider>);
+
+    act(() => {
+      // It uses a 0ms timeout to hide
+      vi.advanceTimersByTime(0);
+    });
+
     expect(screen.queryByText(/Connection lost/i)).not.toBeInTheDocument();
   });
 });

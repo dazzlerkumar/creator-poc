@@ -1,62 +1,51 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useAuthStore } from '@/stores/auth-store';
-import { useRealtimeStore } from '@/stores/realtime-store';
-import { centrifugeClient } from '@/lib/centrifuge-client';
-import { ConnectionStatus } from '@/types/realtime';
+import React, { useEffect, useState } from "react";
+import { useRealtimeStore } from "@/stores/realtime-store";
+import { ConnectionStatus } from "@/types/realtime";
 
 export function RealtimeProvider({ children }: { children: React.ReactNode }) {
-  const jwt = useAuthStore((state) => state.jwt);
-  const { setConnectionStatus, reset } = useRealtimeStore();
+  const connectionStatus = useRealtimeStore((state) => state.connectionStatus);
   const [showBanner, setShowBanner] = useState(false);
+  const [bannerText, setBannerText] = useState(
+    "Connection lost. Reconnecting...",
+  );
 
   useEffect(() => {
-    if (!jwt) {
-      centrifugeClient.destroy();
-      reset();
-      return;
-    }
-
-    const client = centrifugeClient.create(jwt);
-
-    client.on('connecting', () => setConnectionStatus(ConnectionStatus.CONNECTING));
-    client.on('connected', () => {
-      setConnectionStatus(ConnectionStatus.CONNECTED);
-      setShowBanner(false);
-    });
-    client.on('disconnected', () => {
-      setConnectionStatus(ConnectionStatus.DISCONNECTED);
-    });
-
-    client.connect();
-
     let bannerTimer: NodeJS.Timeout;
-    const handleStateChange = () => {
-      if (client.state === 'disconnected') {
-        bannerTimer = setTimeout(() => {
-          if (client.state === 'disconnected') setShowBanner(true);
-        }, 2000);
-      } else {
-        clearTimeout(bannerTimer);
+    if (connectionStatus === ConnectionStatus.DISCONNECTED) {
+      bannerTimer = setTimeout(() => {
+        setShowBanner(true);
+      }, 2000);
+    } else if (connectionStatus === ConnectionStatus.CONNECTED) {
+      bannerTimer = setTimeout(() => {
+        setShowBanner(true);
+        setBannerText("Connected");
+      }, 2000);
+    } else if (connectionStatus === ConnectionStatus.DENIED) {
+      bannerTimer = setTimeout(() => {
+        setShowBanner(true);
+        setBannerText("Connection denied");
+      }, 2000);
+    } else {
+      bannerTimer = setTimeout(() => {
         setShowBanner(false);
-      }
-    };
-
-    client.on('state', handleStateChange);
-
-    return () => {
-      clearTimeout(bannerTimer);
-      centrifugeClient.destroy();
-      reset();
-    };
-  }, [jwt, setConnectionStatus, reset]);
+      }, 0);
+    }
+    return () => clearTimeout(bannerTimer);
+  }, [connectionStatus]);
 
   return (
     <>
       {showBanner && (
-        <div className="bg-destructive text-destructive-foreground text-center py-2 text-xs font-semibold select-none">
-          Connection lost. Reconnecting...
+        <div
+          className={`text-destructive-foreground text-center py-2 text-xs font-semibold select-none ${
+            connectionStatus === ConnectionStatus.CONNECTED
+              ? "bg-green-500"
+              : "bg-destructive"
+          }`}
+        >
+          {bannerText}
         </div>
       )}
       {children}
