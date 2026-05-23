@@ -1,5 +1,7 @@
 export const channels = {
-  chat: (sid: string) => `session:${sid}:chat`,
-  activity: (sid: string) => `session:${sid}:activity`,
-  analytics: (sid: string) => `session:${sid}:analytics`,
+  chat: (sid: string) => `video_broadcast:${sid}:chat`,
+  broadcast: (sid: string) => `video_broadcast:${sid}:broadcast`,
+  dm: (sid: string, userId: string) => `video_broadcast:${sid}:dm:${userId}`,
+  activity: (sid: string) => `video_broadcast:${sid}:activity`,
+  analytics: (sid: string) => `video_broadcast:${sid}:analytics`,
 } as const;

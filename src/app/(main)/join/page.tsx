@@ -5,7 +5,8 @@ import { JoinLoading } from '@/components/auth/JoinLoading';
 import { AudienceStage } from '@/app/(main)/join/_components/audience-stage';
 
 function JoinPageContent() {
-  return <AudienceStage sid={"123"} />
+  const videoBroadcastId = "4uPEuX"
+  return <AudienceStage sid={videoBroadcastId} />
 }
 
 export default function JoinPage() {

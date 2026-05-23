@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef, FormEvent } from "react";
-import { MessageSquare, Pin, Send, Smile, ArrowDown } from "lucide-react";
+import { MessageSquare, Pin, Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLiveChat } from "@/hooks/use-live-chat";
 
 export interface ChatMessage {
   id: string;
   authorName: string;
-  authorAvatarColor: string;
   messageText: string;
   timestamp: string;
   role: "viewer" | "moderator" | "owner";
   isPinned?: boolean;
+  isDm?: boolean;
 }
 
 const QUICK_EMOJIS = ["👍", "❤️", "😂", "🧘‍♀️", "🧘‍♂️", "🙌", "✨"];
@@ -125,8 +125,15 @@ export function LiveChat({ sid }: { sid: string }) {
           </div>
         ) : (
           messages.map((msg) => (
-            <div key={msg.id} className="flex items-start gap-3 text-sm">
-              <div className="text-[11px] text-muted-foreground/60 font-medium pt-1 w-8 select-none">
+            <div
+              key={msg.id}
+              className={cn(
+                "flex items-start gap-3 text-sm",
+                msg.isDm &&
+                "pl-3 border-l-2 border-primary bg-primary/5 rounded-r-lg py-1.5 -mx-1 px-2",
+              )}
+            >
+              <div className="text-[11px] text-muted-foreground/60 font-medium pt-1 w-8 select-none shrink-0">
                 {new Date(msg.timestamp).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
@@ -137,16 +144,22 @@ export function LiveChat({ sid }: { sid: string }) {
                 <span
                   className={cn(
                     "text-xs font-bold mr-1.5 transition-colors",
-                    msg.role === "moderator"
-                      ? "text-primary"
+                    msg.role === "owner"
+                      ? "text-secondary"
                       : "text-foreground",
                   )}
                 >
-                  {msg.authorName}:
+                  {msg.role === "owner" ? <><span className="text-md">Saurabh</span> <Crown size={10} fill="text-yellow-500" /></> : msg.authorName}:
                 </span>
                 <span className="text-sm text-muted-foreground break-words">
                   {msg.messageText}
                 </span>
+                {msg.isDm && (
+                  <span className="inline-flex items-center gap-0.5 ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/15 text-primary select-none align-middle">
+                    <Mail size={9} />
+                    DM
+                  </span>
+                )}
               </div>
             </div>
           ))

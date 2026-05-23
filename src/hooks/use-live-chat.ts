@@ -1,85 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useChannel } from "@/hooks/use-channel";
 import { RingBuffer } from "@/lib/ring-buffer";
-// import { getRecentChat } from '@/api/chat';
 import { creator_stage } from "@/lib/proto";
 import { ChatMessage } from "@/app/(main)/join/_components/live-chat";
 import { PublicationContext } from "centrifuge/build/protobuf";
-
-const AVATAR_GRADIENTS = [
-  "from-blue-500 to-indigo-500",
-  "from-purple-500 to-pink-500",
-  "from-rose-500 to-orange-500",
-  "from-teal-500 to-emerald-500",
-  "from-cyan-500 to-blue-500",
-];
-const DUMMY_MESSAGES: ChatMessage[] = [
-  {
-    id: "1",
-    authorName: "John Doe",
-    authorAvatarColor: "bg-red-500",
-    messageText: "Hello Saurabh Ji!",
-    timestamp: new Date().toISOString(),
-    role: "viewer",
-  },
-  {
-    id: "2",
-    authorName: "Jane Smith",
-    authorAvatarColor: "bg-blue-500",
-    messageText: "Nice to see you all!",
-    timestamp: new Date().toISOString(),
-    role: "viewer",
-  },
-  {
-    id: "3",
-    authorName: "Saurabh",
-    authorAvatarColor: "bg-green-500",
-    messageText: "Welcome to the stream!",
-    timestamp: new Date().toISOString(),
-    role: "moderator",
-  },
-  {
-    id: "4",
-    authorName: "John Doe",
-    authorAvatarColor: "bg-red-500",
-    messageText: "This is a test message.",
-    timestamp: new Date().toISOString(),
-    role: "viewer",
-  },
-  {
-    id: "5",
-    authorName: "Jane Smith",
-    authorAvatarColor: "bg-blue-500",
-    messageText: "Looking forward to the yoga session.",
-    timestamp: new Date().toISOString(),
-    role: "viewer",
-  },
-  {
-    id: "6",
-    authorName: "Saurabh",
-    authorAvatarColor: "bg-green-500",
-    messageText: "The session will start in 5 minutes.",
-    timestamp: new Date().toISOString(),
-    role: "moderator",
-  },
-  {
-    id: "7",
-    authorName: "Saurabh",
-    authorAvatarColor: "bg-green-500",
-    messageText: "The session will start in 5 minutes.",
-    timestamp: new Date().toISOString(),
-    role: "moderator",
-  },
-  {
-    id: "8",
-    authorName: "Jane Smith",
-    authorAvatarColor: "bg-blue-500",
-    messageText:
-      "This is a very long message. It should wrap around the container. Let us see how it works. If it breaks the layout, we will fix it later.",
-    timestamp: new Date().toISOString(),
-    role: "viewer",
-  },
-];
+import { centrifugeClient } from "@/lib/centrifuge-client";
+import { useRealtimeStore } from "@/stores/realtime-store";
+import { channels } from "@/config/channels";
+import { ConnectionStatus } from "@/types/realtime";
 interface FlexibleRawChatMessage {
   id?: string;
   video_broadcast_id?: string;
@@ -97,19 +25,7 @@ interface FlexibleRawChatMessage {
   timestamp?: string;
 }
 
-function getAvatarColor(role: number | string, name: string): string {
-  if (role === 1 || role === "ROLE_CREATOR")
-    return "from-amber-500 to-yellow-500";
-  if (role === 2 || role === "ROLE_TEAM") return "from-emerald-500 to-teal-500";
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const index = Math.abs(hash) % AVATAR_GRADIENTS.length;
-  return AVATAR_GRADIENTS[index]!;
-}
-
-function mapToUiMessage(raw: FlexibleRawChatMessage): ChatMessage {
+function mapToUiMessage(raw: FlexibleRawChatMessage, isDm = false): ChatMessage {
   const body = raw.body ?? raw.messageText ?? "";
   const displayName =
     raw.displayName ?? raw.display_name ?? raw.authorName ?? "Unknown";
@@ -145,19 +61,22 @@ function mapToUiMessage(raw: FlexibleRawChatMessage): ChatMessage {
   return {
     id,
     authorName: displayName,
-    authorAvatarColor: getAvatarColor(role, displayName),
     messageText: body,
     timestamp: timestampStr,
     role: roleStr,
     isPinned: pinned,
+    isDm,
   };
 }
 
-export function useLiveChat(sessionId: string) {
+export function useLiveChat(sessionId = "4uPEuX") {
   const [prevSessionId, setPrevSessionId] = useState(sessionId);
-  const [messages, setMessages] = useState<ChatMessage[]>(DUMMY_MESSAGES);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [pinnedMessage, setPinnedMessage] = useState<ChatMessage | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const setConnectionStatus = useRealtimeStore(
+    (state) => state.setConnectionStatus,
+  );
 
   if (sessionId !== prevSessionId) {
     setPrevSessionId(sessionId);
@@ -166,59 +85,192 @@ export function useLiveChat(sessionId: string) {
     setPinnedMessage(null);
   }
 
+  // Ensure Centrifuge is instantiated for this sessionId
+  centrifugeClient.createAudience({
+    videoBroadcastId: sessionId,
+    userId: "2",
+    displayName: "Deepak",
+  });
+
+  useEffect(() => {
+    if (!sessionId) return;
+    const client = centrifugeClient.get();
+    if (!client) return;
+
+    const handleConnecting = () =>
+      setConnectionStatus(ConnectionStatus.CONNECTING);
+    const handleConnected = () =>
+      setConnectionStatus(ConnectionStatus.CONNECTED);
+    const handleDisconnected = () =>
+      setConnectionStatus(ConnectionStatus.DISCONNECTED);
+
+    client.on("connecting", handleConnecting);
+    client.on("connected", handleConnected);
+    client.on("disconnected", handleDisconnected);
+
+    client.connect();
+
+    return () => {
+      client.removeListener("connecting", handleConnecting);
+      client.removeListener("connected", handleConnected);
+      client.removeListener("disconnected", handleDisconnected);
+    };
+  }, [sessionId, setConnectionStatus]);
+
   const bufferRef = useRef(new RingBuffer<ChatMessage>(500));
   const flushScheduledRef = useRef(false);
   const handlePublication = useCallback((ctx: PublicationContext) => {
     try {
-      if (!ctx.data) return;
-      const decoded = creator_stage.realtime.v1.ChatMessage.decode(
-        new Uint8Array(ctx.data),
-      );
-      const uiMsg = mapToUiMessage(decoded as FlexibleRawChatMessage);
-
-      if (uiMsg.isPinned) {
-        setPinnedMessage(uiMsg);
+      if (!ctx.data) {
+        console.warn("Received empty publication data", ctx);
+        return;
       }
 
-      bufferRef.current.push(uiMsg);
+      console.log("[broadcast] raw publication:", ctx.data);
 
-      if (!flushScheduledRef.current) {
-        flushScheduledRef.current = true;
-        requestAnimationFrame(() => {
-          flushScheduledRef.current = false;
-          const drained = bufferRef.current.drain();
-          if (drained.length > 0) {
-            setMessages((prev) => {
-              const next = [...prev, ...drained];
-              return next.slice(-200);
+      // The :broadcast channel carries two distinct wire formats:
+      // 1. Binary Uint8Array → protobuf ChatMessage (creator/team chat lines)
+      // 2. Plain object with kind="activity" → JSON gateway envelope for ActivityEvent (pin/unpin/CTA/quiz)
+      if (ctx.data instanceof Uint8Array || ArrayBuffer.isView(ctx.data)) {
+        const bytes = ctx.data instanceof Uint8Array
+          ? ctx.data
+          : new Uint8Array((ctx.data as ArrayBufferView).buffer, (ctx.data as ArrayBufferView).byteOffset, (ctx.data as ArrayBufferView).byteLength);
+
+        try {
+          const decoded = creator_stage.realtime.v1.ChatMessage.decode(bytes);
+
+          console.log("Decoded Broadcast:", decoded);
+
+          const uiMsg = mapToUiMessage(decoded as FlexibleRawChatMessage);
+          console.log("UI Broadcast:", uiMsg);
+          bufferRef.current.push(uiMsg);
+
+          if (!flushScheduledRef.current) {
+            flushScheduledRef.current = true;
+            requestAnimationFrame(() => {
+              flushScheduledRef.current = false;
+              const drained = bufferRef.current.drain();
+              if (drained.length > 0) {
+                setMessages((prev) => {
+                  const next = [...prev, ...drained];
+                  return next.slice(-200);
+                });
+                setIsLoading(false);
+              }
             });
           }
-        });
+        } catch {
+          // Not a ChatMessage — try ActivityEvent (pin/unpin/CTA/quiz)
+          try {
+            const activity = creator_stage.realtime.v1.ActivityEvent.decode(bytes);
+            console.log("Decoded ActivityEvent:", activity);
+
+            if (activity.body === "pin" && activity.pin) {
+              setPinnedMessage(mapToUiMessage(activity.pin as FlexibleRawChatMessage));
+            } else if (activity.body === "unpin") {
+              setPinnedMessage(null);
+            }
+          } catch (activityErr) {
+            console.warn("Unknown binary publication on :broadcast — not ChatMessage or ActivityEvent", activityErr);
+          }
+        }
+      } else if (typeof ctx.data === "object" && ctx.data !== null && "kind" in ctx.data && (ctx.data as Record<string, unknown>).kind === "activity") {
+        // ActivityEvent envelope — handle pin/unpin/CTA
+        const envelope = ctx.data as { kind: string; payload: Record<string, unknown> };
+        console.log("Received ActivityEvent envelope:", envelope);
+
+        try {
+          const activity = creator_stage.realtime.v1.ActivityEvent.decode(
+            creator_stage.realtime.v1.ActivityEvent.encode(
+              creator_stage.realtime.v1.ActivityEvent.fromObject(envelope.payload),
+            ).finish(),
+          );
+
+          if (activity.body === "pin" && activity.pin) {
+            const pinnedUiMsg = mapToUiMessage(activity.pin as FlexibleRawChatMessage);
+            setPinnedMessage(pinnedUiMsg);
+          } else if (activity.body === "unpin") {
+            setPinnedMessage(null);
+          }
+        } catch (activityErr) {
+          console.warn("Failed to process ActivityEvent:", activityErr);
+        }
+      } else {
+        console.warn("Unknown publication format on :broadcast", ctx.data);
       }
     } catch (err) {
-      console.error("Error handling live chat message:", err);
+      console.error("Error handling broadcast publication:", err);
     }
   }, []);
 
-  const channelName = sessionId ? `session:${sessionId}:chat` : null;
-  const { subscription } = useChannel(channelName, {
+  const handleDmPublication = useCallback((ctx: PublicationContext) => {
+    try {
+      if (!ctx.data || !(ctx.data instanceof Uint8Array || ArrayBuffer.isView(ctx.data))) {
+        console.warn("Unexpected DM publication format", ctx.data);
+        return;
+      }
+      console.log("[dm] raw publication:", ctx.data);
+      const bytes = ctx.data instanceof Uint8Array
+        ? ctx.data
+        : new Uint8Array((ctx.data as ArrayBufferView).buffer, (ctx.data as ArrayBufferView).byteOffset, (ctx.data as ArrayBufferView).byteLength);
+      const decoded = creator_stage.realtime.v1.ChatMessage.decode(bytes);
+      console.log("DM decoded:", decoded)
+      const uiMsg = { ...mapToUiMessage(decoded as FlexibleRawChatMessage), isDm: true };
+      console.log("UI DM decoded:", uiMsg)
+      setMessages((prev) => [...prev, uiMsg].slice(-200));
+    } catch (err) {
+      console.error("Error handling DM publication:", err);
+    }
+  }, []);
+
+
+  const { state: broadcastState } = useChannel(channels.broadcast(sessionId), {
     onPublication: handlePublication,
   });
 
+  const { subscription: chatSub } = useChannel(channels.chat(sessionId));
+  useChannel(channels.dm(sessionId, "2"), { onPublication: handleDmPublication });
+
+  useEffect(() => {
+    if (broadcastState === "subscribed") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsLoading(false);
+    }
+  }, [broadcastState]);
+
   const sendMessage = useCallback(
     async (text: string) => {
-      if (!subscription) {
-        console.warn("Cannot send message: no active subscription");
+      if (!chatSub) {
+        console.warn("Cannot send message: no active chat subscription");
         return;
       }
+
+      const localMsg: ChatMessage = {
+        id: `local-${Date.now()}-${Math.random()}`,
+        authorName: "You",
+        messageText: text,
+        timestamp: new Date().toISOString(),
+        role: "viewer",
+      };
+
+      setMessages((prev) => {
+        const next = [...prev, localMsg];
+        return next.slice(-200);
+      });
+
       const request = creator_stage.realtime.v1.ChatPublishRequest.create({
         body: text,
       });
       const bytes =
         creator_stage.realtime.v1.ChatPublishRequest.encode(request).finish();
-      await subscription.publish(bytes);
+
+      try {
+        await chatSub.publish(bytes);
+      } catch (err) {
+        console.error("Failed to publish message:", err);
+      }
     },
-    [subscription],
+    [chatSub],
   );
 
   return {

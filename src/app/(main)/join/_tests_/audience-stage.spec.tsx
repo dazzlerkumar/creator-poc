@@ -26,7 +26,8 @@ vi.mock('@/app/(main)/join/_components/live-chat', () => ({
 }));
 
 vi.mock('next/image', () => ({
-  default: (props: Record<string, unknown>) => <img {...props} />,
+  // eslint-disable-next-line @next/next/no-img-element
+  default: (props: Record<string, unknown>) => <img alt="" {...props} />,
 }));
 
 const mockSetChatLoading = vi.fn();
