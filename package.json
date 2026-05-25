@@ -16,9 +16,11 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@base-ui/react": "^1.5.0",
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.100.9",
     "centrifuge": "^5.5.3",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "js-cookie": "^3.0.5",
     "lucide-react": "^1.14.0",
