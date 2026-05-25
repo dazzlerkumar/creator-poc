@@ -5,7 +5,7 @@ import { JoinLoading } from '@/components/auth/JoinLoading';
 import { AudienceStage } from '@/app/(main)/join/_components/audience-stage';
 
 function JoinPageContent() {
-  const videoBroadcastId = "4uPEuX"
+  const videoBroadcastId = "4uPEuX" // TODO:  Video id will be given by backend
   return <AudienceStage sid={videoBroadcastId} />
 }
 

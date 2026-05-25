@@ -32,10 +32,11 @@ export function AudienceStage({ sid }: AudienceStageProps) {
   } = useUIStore();
   const stageRef = useRef<HTMLDivElement>(null);
 
+  //TODO: WILL BE REPLACED - for now just for showing loading state
   useEffect(() => {
     const timer = setTimeout(() => {
       setChatLoading(false);
-    }, 1500);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [setChatLoading]);
   return (
@@ -75,7 +76,7 @@ export function AudienceStage({ sid }: AudienceStageProps) {
               </p>
             </div>
           ) : (
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full bg-background">
               <div className="px-5 py-2 border-b border-border flex justify-between items-center bg-card select-none">
                 <div className="flex items-center gap-2.5">
                   <MessageSquare className="w-5 h-5 text-primary" />

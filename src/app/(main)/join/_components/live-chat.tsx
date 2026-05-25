@@ -80,7 +80,7 @@ export function LiveChat({ sid }: { sid: string }) {
 
   return (
     <section
-      className="flex-grow flex flex-col bg-card dark:bg-background overflow-hidden relative h-full min-h-0"
+      className="flex-grow flex flex-col bg-background overflow-hidden relative h-full min-h-0"
       id="chat-section"
     >
       {pinnedMessage && (

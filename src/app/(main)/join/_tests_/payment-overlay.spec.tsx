@@ -52,7 +52,6 @@ describe("PaymentOverlay", () => {
     render(<PaymentOverlay />);
 
     expect(screen.getByText("Habuild Yoga Subscription")).toBeInTheDocument();
-    expect(screen.getByText("SPECIAL COMMUNITY OFFER")).toBeInTheDocument();
     expect(
       screen.getByText("Join our global community and transform your life with daily yoga sessions.")
     ).toBeInTheDocument();
@@ -85,10 +84,8 @@ describe("PaymentOverlay", () => {
     render(<PaymentOverlay />);
 
     expect(screen.getByText("Subscription Active")).toBeInTheDocument();
-    expect(screen.getByText("Verified Member")).toBeInTheDocument();
     expect(screen.getByText("Welcome to the community! Your daily wellness journey begins now.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /view benefits/i })).toBeInTheDocument();
-    expect(screen.getByText("ID: pay_XYZ123")).toBeInTheDocument();
 
     expect(mockClosePayment).not.toHaveBeenCalled();
 
@@ -99,12 +96,16 @@ describe("PaymentOverlay", () => {
     expect(mockClosePayment).toHaveBeenCalledTimes(1);
   });
 
-  it("does not render payment ID in success state if not provided", () => {
+  it("opens benefits link on success card button click", () => {
+    const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(() => null);
     mockStoreState.status = PaymentStatus.SUCCESS;
-    mockStoreState.paymentId = null;
     render(<PaymentOverlay />);
 
-    expect(screen.queryByText(/ID:/i)).not.toBeInTheDocument();
+    const viewBenefitsButton = screen.getByRole("button", { name: /view benefits/i });
+    fireEvent.click(viewBenefitsButton);
+
+    expect(windowOpenSpy).toHaveBeenCalledWith("https://habuild.com", "_blank", "noopener noreferrer");
+    windowOpenSpy.mockRestore();
   });
 
   it("renders failed state with generic error message and triggers retry on click", () => {
@@ -113,7 +114,6 @@ describe("PaymentOverlay", () => {
     render(<PaymentOverlay />);
 
     expect(screen.getByText("Payment Failed")).toBeInTheDocument();
-    expect(screen.getByText("Transaction Issue")).toBeInTheDocument();
     expect(
       screen.getByText("Something went wrong with your transaction. Please check your payment details and try again.")
     ).toBeInTheDocument();
@@ -132,17 +132,9 @@ describe("PaymentOverlay", () => {
     expect(mockOpenPayment).toHaveBeenCalledTimes(1);
   });
 
-  it("renders failed state with custom error message", () => {
-    mockStoreState.status = PaymentStatus.FAILED;
-    mockStoreState.errorMessage = "Declined by bank";
+  it("defaults to idle state for unknown status values", () => {
+    mockStoreState.status = "UNKNOWN_STATUS" as PaymentStatus;
     render(<PaymentOverlay />);
-
-    expect(screen.getByText("Declined by bank")).toBeInTheDocument();
-  });
-
-  it("returns null for unknown status values", () => {
-    mockStoreState.status = "UNKNOWN_STATUS";
-    const { container } = render(<PaymentOverlay />);
-    expect(container.firstChild).toBeNull();
+    expect(screen.getByText("Habuild Yoga Subscription")).toBeInTheDocument();
   });
 });

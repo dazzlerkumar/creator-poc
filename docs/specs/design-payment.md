@@ -17,6 +17,7 @@ Defines requirements, constraints, interfaces, visual styling for multi-state pa
 ## 2. Definitions
 
 - **Idle state**: Base component state showing product details, special offer, pay now call to action.
+- **Processing state**: Displayed while order is being created and payment is active, showing a loading indicator.
 - **Success state**: Displayed after payment verification, showing active subscription details, community entry message.
 - **Failed state**: Displayed upon payment error, showing diagnostic information, retry action.
 - **Lucide React**: Vector icon library for React applications.
@@ -25,10 +26,11 @@ Defines requirements, constraints, interfaces, visual styling for multi-state pa
 ## 3. Requirements, Constraints & Guidelines
 
 ### Requirements
-- **REQ-001**: Support three visual states: Initial (Idle), Paid (Success), Failed.
+- **REQ-001**: Support four visual states: Initial (Idle), Processing, Paid (Success), Failed.
 - **REQ-002**: Initial state must render yoga branding, price summary, call to action.
-- **REQ-003**: Paid state must render active confirmation, verified badge, benefit details access.
-- **REQ-004**: Failed state must render error details, primary retry action.
+- **REQ-003**: Processing state must render a loading indicator and processing message.
+- **REQ-004**: Paid state must render active confirmation, verified badge, benefit details access.
+- **REQ-005**: Failed state must render error details, primary retry action.
 - **REQ-005**: Use Lucide React icons instead of Google Material Symbols.
 - **REQ-006**: Apply project design tokens (primary, secondary colors, specific font families).
 
@@ -43,19 +45,21 @@ Defines requirements, constraints, interfaces, visual styling for multi-state pa
 
 ## 4. Interfaces & Data Contracts
 
-State mapping from `usePaymentStore` state:
+State mapping from `usePaymentStore` state using `PaymentStatus` enum:
 
 | Store Status | Active View | Main Action |
 | --- | --- | --- |
-| `idle` | `InitialState` | Triggers `initiatePayment` |
-| `success` | `SuccessState` | Opens benefits dashboard / modal |
-| `failed` | `FailedState` | Resets status, triggers retry |
+| `IDLE` | `InitialState` | Triggers `initiatePayment` |
+| `PROCESSING` | `ProcessingState` | Waits for Razorpay response |
+| `SUCCESS` | `SuccessState` | Opens benefits dashboard / modal |
+| `FAILED` | `FailedState` | Resets status, triggers retry |
 
 ### Lucide Icon Mappings
 
-- Brand/Yoga: `Sparkles` or `Activity`
+- Brand/Yoga: custom SVG `YogaIcon`
 - Success Circle: `CheckCircle2`
 - Error Alert: `AlertCircle`
+- Loading: `Loader2`
 - Retry Loop: `RefreshCw`
 - Star Benefit: `Star`
 - Arrow Action: `ArrowRight`
@@ -93,11 +97,16 @@ export function PaymentOverlay() {
   const { status, paymentId, errorMessage, closePayment, reset } = usePaymentStore();
   const { initiatePayment } = useRazorpay();
 
+  if (status === PaymentStatus.PROCESSING) {
+    return <ProcessingState />;
+  }
+
+  const currentConfig = cardConfig[status as Exclude<PaymentStatus, PaymentStatus.PROCESSING>];
+  if (!currentConfig) return null;
+
   return (
-    <div className="shrink-0 z-10 shadow-sm w-full font-sans">
-      {status === 'idle' && <InitialState onPay={handlePay} />}
-      {status === 'success' && <PaidState paymentId={paymentId} />}
-      {status === 'failed' && <FailedState error={errorMessage} onRetry={handleRetry} />}
+    <div className="h-55 shrink-0">
+      <PaymentCard {...currentConfig} />
     </div>
   );
 }
@@ -111,5 +120,5 @@ export function PaymentOverlay() {
 
 ## 11. Related Specifications / Further Reading
 
-- [payment-overlay.tsx](file:///Users/deepak/TechPix/creator-stage-frontend/src/components/payment-overlay.tsx)
-- [globals.css](file:///Users/deepak/TechPix/creator-stage-frontend/src/app/globals.css)
+- [payment-overlay.tsx](file:///Users/deepak/TechPix/audience-stage-frontend/src/app/(main)/join/_components/payment-overlay.tsx)
+- [globals.css](file:///Users/deepak/TechPix/audience-stage-frontend/src/app/globals.css)

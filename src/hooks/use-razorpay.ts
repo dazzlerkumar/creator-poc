@@ -4,7 +4,9 @@ import { useCallback, useRef } from "react";
 import { loadRazorpayScript } from "@/lib/razorpay";
 import { createOrder, verifyPayment } from "@/api/payments";
 import { usePaymentStore } from "@/stores/payment-store";
+import LocalStorageService from "@/lib/local-storage";
 import type { RazorpayInstance, RazorpayOptions } from "@/types/razorpay.d";
+import { PAYMENT_DONE } from "@/lib/constants";
 
 const RAZORPAY_KEY =
   process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_PLACEHOLDER";
@@ -46,6 +48,7 @@ export function useRazorpay() {
               });
 
               if (result.verified) {
+                LocalStorageService.set(PAYMENT_DONE, true);
                 setSuccess(response.razorpay_payment_id);
               } else {
                 setFailed("Payment verification failed");
