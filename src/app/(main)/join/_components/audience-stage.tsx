@@ -8,6 +8,7 @@ import { LiveChat } from "@/app/(main)/join/_components/live-chat";
 import { useUIStore } from "@/stores/ui-store";
 import Image from "next/image";
 import { PaymentOverlay } from "@/app/(main)/join/_components/payment-overlay";
+import { QuizOverlay } from "@/app/(main)/join/_components/quiz-overlay";
 import { MessageSquare } from "lucide-react";
 
 const YouTubePlayer = dynamic(
@@ -92,8 +93,11 @@ export function AudienceStage({ sid }: AudienceStageProps) {
                   Pay
                 </button>
               </div>
-              {showPayment && <PaymentOverlay />}
-              <LiveChat sid={sid} />
+              <div className="flex-1 overflow-y-auto">
+                {showPayment && <PaymentOverlay />}
+                <QuizOverlay sid={sid} />
+                <LiveChat sid={sid} />
+              </div>
             </div>
           )}
         </div>
