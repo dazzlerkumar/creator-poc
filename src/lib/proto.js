@@ -2660,6 +2660,1776 @@ export const creator_stage = $root.creator_stage = (() => {
                 return AnalyticsHeartbeat;
             })();
 
+            v1.AudienceChatMessage = (function() {
+
+                /**
+                 * Properties of an AudienceChatMessage.
+                 * @typedef {Object} creator_stage.realtime.v1.AudienceChatMessage.$Properties
+                 * @property {string|null} [id] AudienceChatMessage id
+                 * @property {google.protobuf.Timestamp.$Properties|null} [sentAt] AudienceChatMessage sentAt
+                 * @property {string|null} [videoBroadcastId] AudienceChatMessage videoBroadcastId
+                 * @property {string|null} [userId] AudienceChatMessage userId
+                 * @property {creator_stage.realtime.v1.Role|null} [role] AudienceChatMessage role
+                 * @property {string|null} [displayName] AudienceChatMessage displayName
+                 * @property {string|null} [body] AudienceChatMessage body
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+
+                /**
+                 * Properties of an AudienceChatMessage.
+                 * @memberof creator_stage.realtime.v1
+                 * @interface IAudienceChatMessage
+                 * @augments creator_stage.realtime.v1.AudienceChatMessage.$Properties
+                 * @deprecated Use creator_stage.realtime.v1.AudienceChatMessage.$Properties instead.
+                 */
+
+                /**
+                 * Shape of an AudienceChatMessage.
+                 * @typedef {creator_stage.realtime.v1.AudienceChatMessage.$Properties} creator_stage.realtime.v1.AudienceChatMessage.$Shape
+                 */
+
+                /**
+                 * Constructs a new AudienceChatMessage.
+                 * @memberof creator_stage.realtime.v1
+                 * @classdesc Represents an AudienceChatMessage.
+                 * @constructor
+                 * @param {creator_stage.realtime.v1.AudienceChatMessage.$Properties=} [properties] Properties to set
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+                function AudienceChatMessage(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AudienceChatMessage id.
+                 * @member {string} id
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 */
+                AudienceChatMessage.prototype.id = "";
+
+                /**
+                 * AudienceChatMessage sentAt.
+                 * @member {google.protobuf.Timestamp.$Properties|null|undefined} sentAt
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 */
+                AudienceChatMessage.prototype.sentAt = null;
+
+                /**
+                 * AudienceChatMessage videoBroadcastId.
+                 * @member {string} videoBroadcastId
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 */
+                AudienceChatMessage.prototype.videoBroadcastId = "";
+
+                /**
+                 * AudienceChatMessage userId.
+                 * @member {string} userId
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 */
+                AudienceChatMessage.prototype.userId = "";
+
+                /**
+                 * AudienceChatMessage role.
+                 * @member {creator_stage.realtime.v1.Role} role
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 */
+                AudienceChatMessage.prototype.role = 0;
+
+                /**
+                 * AudienceChatMessage displayName.
+                 * @member {string} displayName
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 */
+                AudienceChatMessage.prototype.displayName = "";
+
+                /**
+                 * AudienceChatMessage body.
+                 * @member {string} body
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 */
+                AudienceChatMessage.prototype.body = "";
+
+                /**
+                 * Creates a new AudienceChatMessage instance using the specified properties.
+                 * @function create
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatMessage.$Properties=} [properties] Properties to set
+                 * @returns {creator_stage.realtime.v1.AudienceChatMessage} AudienceChatMessage instance
+                 * @type {{
+                 *   (properties: creator_stage.realtime.v1.AudienceChatMessage.$Shape): creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape;
+                 *   (properties?: creator_stage.realtime.v1.AudienceChatMessage.$Properties): creator_stage.realtime.v1.AudienceChatMessage;
+                 * }}
+                 */
+                AudienceChatMessage.create = function create(properties) {
+                    return new AudienceChatMessage(properties);
+                };
+
+                /**
+                 * Encodes the specified AudienceChatMessage message. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatMessage.verify|verify} messages.
+                 * @function encode
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatMessage.$Properties} message AudienceChatMessage message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceChatMessage.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+                    if (message.sentAt != null && Object.hasOwnProperty.call(message, "sentAt"))
+                        $root.google.protobuf.Timestamp.encode(message.sentAt, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.videoBroadcastId != null && Object.hasOwnProperty.call(message, "videoBroadcastId"))
+                        writer.uint32(/* id 3, wireType 2 =*/26).string(message.videoBroadcastId);
+                    if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
+                        writer.uint32(/* id 4, wireType 2 =*/34).string(message.userId);
+                    if (message.role != null && Object.hasOwnProperty.call(message, "role"))
+                        writer.uint32(/* id 5, wireType 0 =*/40).int32(message.role);
+                    if (message.displayName != null && Object.hasOwnProperty.call(message, "displayName"))
+                        writer.uint32(/* id 6, wireType 2 =*/50).string(message.displayName);
+                    if (message.body != null && Object.hasOwnProperty.call(message, "body"))
+                        writer.uint32(/* id 7, wireType 2 =*/58).string(message.body);
+                    if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
+                        for (let i = 0; i < message.$unknowns.length; ++i)
+                            writer.raw(message.$unknowns[i]);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified AudienceChatMessage message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatMessage.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatMessage.$Properties} message AudienceChatMessage message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceChatMessage.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes an AudienceChatMessage message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape} AudienceChatMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceChatMessage.decode = function decode(reader, length, _end, _depth, _target) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $Reader.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.creator_stage.realtime.v1.AudienceChatMessage(), value;
+                    while (reader.pos < end) {
+                        let start = reader.pos;
+                        let tag = reader.tag();
+                        if (tag === _end) {
+                            _end = undefined;
+                            break;
+                        }
+                        let wireType = tag & 7;
+                        switch (tag >>>= 3) {
+                        case 1: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.id = value;
+                                else
+                                    delete message.id;
+                                continue;
+                            }
+                        case 2: {
+                                if (wireType !== 2)
+                                    break;
+                                message.sentAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32(), undefined, _depth + 1, message.sentAt);
+                                continue;
+                            }
+                        case 3: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.videoBroadcastId = value;
+                                else
+                                    delete message.videoBroadcastId;
+                                continue;
+                            }
+                        case 4: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.userId = value;
+                                else
+                                    delete message.userId;
+                                continue;
+                            }
+                        case 5: {
+                                if (wireType !== 0)
+                                    break;
+                                if (value = reader.int32())
+                                    message.role = value;
+                                else
+                                    delete message.role;
+                                continue;
+                            }
+                        case 6: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.displayName = value;
+                                else
+                                    delete message.displayName;
+                                continue;
+                            }
+                        case 7: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.body = value;
+                                else
+                                    delete message.body;
+                                continue;
+                            }
+                        }
+                        reader.skipType(wireType, _depth, tag);
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                    if (_end !== undefined)
+                        throw Error("missing end group");
+                    return message;
+                };
+
+                /**
+                 * Decodes an AudienceChatMessage message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape} AudienceChatMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceChatMessage.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies an AudienceChatMessage message.
+                 * @function verify
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AudienceChatMessage.verify = function verify(message, _depth) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        return "max depth exceeded";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.sentAt != null && message.hasOwnProperty("sentAt")) {
+                        let error = $root.google.protobuf.Timestamp.verify(message.sentAt, _depth + 1);
+                        if (error)
+                            return "sentAt." + error;
+                    }
+                    if (message.videoBroadcastId != null && message.hasOwnProperty("videoBroadcastId"))
+                        if (!$util.isString(message.videoBroadcastId))
+                            return "videoBroadcastId: string expected";
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        if (!$util.isString(message.userId))
+                            return "userId: string expected";
+                    if (message.role != null && message.hasOwnProperty("role"))
+                        switch (message.role) {
+                        default:
+                            return "role: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            break;
+                        }
+                    if (message.displayName != null && message.hasOwnProperty("displayName"))
+                        if (!$util.isString(message.displayName))
+                            return "displayName: string expected";
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        if (!$util.isString(message.body))
+                            return "body: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AudienceChatMessage message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {creator_stage.realtime.v1.AudienceChatMessage} AudienceChatMessage
+                 */
+                AudienceChatMessage.fromObject = function fromObject(object, _depth) {
+                    if (object instanceof $root.creator_stage.realtime.v1.AudienceChatMessage)
+                        return object;
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let message = new $root.creator_stage.realtime.v1.AudienceChatMessage();
+                    if (object.id != null)
+                        if (typeof object.id !== "string" || object.id.length)
+                            message.id = String(object.id);
+                    if (object.sentAt != null) {
+                        if (typeof object.sentAt !== "object")
+                            throw TypeError(".creator_stage.realtime.v1.AudienceChatMessage.sentAt: object expected");
+                        message.sentAt = $root.google.protobuf.Timestamp.fromObject(object.sentAt, _depth + 1);
+                    }
+                    if (object.videoBroadcastId != null)
+                        if (typeof object.videoBroadcastId !== "string" || object.videoBroadcastId.length)
+                            message.videoBroadcastId = String(object.videoBroadcastId);
+                    if (object.userId != null)
+                        if (typeof object.userId !== "string" || object.userId.length)
+                            message.userId = String(object.userId);
+                    if (object.role !== 0 && (typeof object.role !== "string" || $root.creator_stage.realtime.v1.Role[object.role] !== 0))
+                        switch (object.role) {
+                        default:
+                            if (typeof object.role === "number") {
+                                message.role = object.role;
+                                break;
+                            }
+                            break;
+                        case "ROLE_UNSPECIFIED":
+                        case 0:
+                            message.role = 0;
+                            break;
+                        case "ROLE_CREATOR":
+                        case 1:
+                            message.role = 1;
+                            break;
+                        case "ROLE_TEAM":
+                        case 2:
+                            message.role = 2;
+                            break;
+                        case "ROLE_AUDIENCE":
+                        case 3:
+                            message.role = 3;
+                            break;
+                        }
+                    if (object.displayName != null)
+                        if (typeof object.displayName !== "string" || object.displayName.length)
+                            message.displayName = String(object.displayName);
+                    if (object.body != null)
+                        if (typeof object.body !== "string" || object.body.length)
+                            message.body = String(object.body);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AudienceChatMessage message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatMessage} message AudienceChatMessage
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AudienceChatMessage.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.sentAt = null;
+                        object.videoBroadcastId = "";
+                        object.userId = "";
+                        object.role = options.enums === String ? "ROLE_UNSPECIFIED" : 0;
+                        object.displayName = "";
+                        object.body = "";
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.sentAt != null && message.hasOwnProperty("sentAt"))
+                        object.sentAt = $root.google.protobuf.Timestamp.toObject(message.sentAt, options);
+                    if (message.videoBroadcastId != null && message.hasOwnProperty("videoBroadcastId"))
+                        object.videoBroadcastId = message.videoBroadcastId;
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        object.userId = message.userId;
+                    if (message.role != null && message.hasOwnProperty("role"))
+                        object.role = options.enums === String ? $root.creator_stage.realtime.v1.Role[message.role] === undefined ? message.role : $root.creator_stage.realtime.v1.Role[message.role] : message.role;
+                    if (message.displayName != null && message.hasOwnProperty("displayName"))
+                        object.displayName = message.displayName;
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        object.body = message.body;
+                    return object;
+                };
+
+                /**
+                 * Converts this AudienceChatMessage to JSON.
+                 * @function toJSON
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AudienceChatMessage.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the type url for AudienceChatMessage
+                 * @function getTypeUrl
+                 * @memberof creator_stage.realtime.v1.AudienceChatMessage
+                 * @static
+                 * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns {string} The type url
+                 */
+                AudienceChatMessage.getTypeUrl = function getTypeUrl(prefix) {
+                    if (prefix === undefined)
+                        prefix = "type.googleapis.com";
+                    return prefix + "/creator_stage.realtime.v1.AudienceChatMessage";
+                };
+
+                return AudienceChatMessage;
+            })();
+
+            v1.AudienceQuizResponse = (function() {
+
+                /**
+                 * Properties of an AudienceQuizResponse.
+                 * @typedef {Object} creator_stage.realtime.v1.AudienceQuizResponse.$Properties
+                 * @property {string|null} [id] AudienceQuizResponse id
+                 * @property {google.protobuf.Timestamp.$Properties|null} [sentAt] AudienceQuizResponse sentAt
+                 * @property {string|null} [quizId] AudienceQuizResponse quizId
+                 * @property {string|null} [optionId] AudienceQuizResponse optionId
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+
+                /**
+                 * Properties of an AudienceQuizResponse.
+                 * @memberof creator_stage.realtime.v1
+                 * @interface IAudienceQuizResponse
+                 * @augments creator_stage.realtime.v1.AudienceQuizResponse.$Properties
+                 * @deprecated Use creator_stage.realtime.v1.AudienceQuizResponse.$Properties instead.
+                 */
+
+                /**
+                 * Shape of an AudienceQuizResponse.
+                 * @typedef {creator_stage.realtime.v1.AudienceQuizResponse.$Properties} creator_stage.realtime.v1.AudienceQuizResponse.$Shape
+                 */
+
+                /**
+                 * Constructs a new AudienceQuizResponse.
+                 * @memberof creator_stage.realtime.v1
+                 * @classdesc Represents an AudienceQuizResponse.
+                 * @constructor
+                 * @param {creator_stage.realtime.v1.AudienceQuizResponse.$Properties=} [properties] Properties to set
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+                function AudienceQuizResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AudienceQuizResponse id.
+                 * @member {string} id
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @instance
+                 */
+                AudienceQuizResponse.prototype.id = "";
+
+                /**
+                 * AudienceQuizResponse sentAt.
+                 * @member {google.protobuf.Timestamp.$Properties|null|undefined} sentAt
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @instance
+                 */
+                AudienceQuizResponse.prototype.sentAt = null;
+
+                /**
+                 * AudienceQuizResponse quizId.
+                 * @member {string} quizId
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @instance
+                 */
+                AudienceQuizResponse.prototype.quizId = "";
+
+                /**
+                 * AudienceQuizResponse optionId.
+                 * @member {string} optionId
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @instance
+                 */
+                AudienceQuizResponse.prototype.optionId = "";
+
+                /**
+                 * Creates a new AudienceQuizResponse instance using the specified properties.
+                 * @function create
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceQuizResponse.$Properties=} [properties] Properties to set
+                 * @returns {creator_stage.realtime.v1.AudienceQuizResponse} AudienceQuizResponse instance
+                 * @type {{
+                 *   (properties: creator_stage.realtime.v1.AudienceQuizResponse.$Shape): creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape;
+                 *   (properties?: creator_stage.realtime.v1.AudienceQuizResponse.$Properties): creator_stage.realtime.v1.AudienceQuizResponse;
+                 * }}
+                 */
+                AudienceQuizResponse.create = function create(properties) {
+                    return new AudienceQuizResponse(properties);
+                };
+
+                /**
+                 * Encodes the specified AudienceQuizResponse message. Does not implicitly {@link creator_stage.realtime.v1.AudienceQuizResponse.verify|verify} messages.
+                 * @function encode
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceQuizResponse.$Properties} message AudienceQuizResponse message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceQuizResponse.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+                    if (message.sentAt != null && Object.hasOwnProperty.call(message, "sentAt"))
+                        $root.google.protobuf.Timestamp.encode(message.sentAt, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.quizId != null && Object.hasOwnProperty.call(message, "quizId"))
+                        writer.uint32(/* id 3, wireType 2 =*/26).string(message.quizId);
+                    if (message.optionId != null && Object.hasOwnProperty.call(message, "optionId"))
+                        writer.uint32(/* id 4, wireType 2 =*/34).string(message.optionId);
+                    if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
+                        for (let i = 0; i < message.$unknowns.length; ++i)
+                            writer.raw(message.$unknowns[i]);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified AudienceQuizResponse message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceQuizResponse.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceQuizResponse.$Properties} message AudienceQuizResponse message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceQuizResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes an AudienceQuizResponse message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape} AudienceQuizResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceQuizResponse.decode = function decode(reader, length, _end, _depth, _target) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $Reader.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.creator_stage.realtime.v1.AudienceQuizResponse(), value;
+                    while (reader.pos < end) {
+                        let start = reader.pos;
+                        let tag = reader.tag();
+                        if (tag === _end) {
+                            _end = undefined;
+                            break;
+                        }
+                        let wireType = tag & 7;
+                        switch (tag >>>= 3) {
+                        case 1: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.id = value;
+                                else
+                                    delete message.id;
+                                continue;
+                            }
+                        case 2: {
+                                if (wireType !== 2)
+                                    break;
+                                message.sentAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32(), undefined, _depth + 1, message.sentAt);
+                                continue;
+                            }
+                        case 3: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.quizId = value;
+                                else
+                                    delete message.quizId;
+                                continue;
+                            }
+                        case 4: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.optionId = value;
+                                else
+                                    delete message.optionId;
+                                continue;
+                            }
+                        }
+                        reader.skipType(wireType, _depth, tag);
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                    if (_end !== undefined)
+                        throw Error("missing end group");
+                    return message;
+                };
+
+                /**
+                 * Decodes an AudienceQuizResponse message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape} AudienceQuizResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceQuizResponse.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies an AudienceQuizResponse message.
+                 * @function verify
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AudienceQuizResponse.verify = function verify(message, _depth) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        return "max depth exceeded";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.sentAt != null && message.hasOwnProperty("sentAt")) {
+                        let error = $root.google.protobuf.Timestamp.verify(message.sentAt, _depth + 1);
+                        if (error)
+                            return "sentAt." + error;
+                    }
+                    if (message.quizId != null && message.hasOwnProperty("quizId"))
+                        if (!$util.isString(message.quizId))
+                            return "quizId: string expected";
+                    if (message.optionId != null && message.hasOwnProperty("optionId"))
+                        if (!$util.isString(message.optionId))
+                            return "optionId: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AudienceQuizResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {creator_stage.realtime.v1.AudienceQuizResponse} AudienceQuizResponse
+                 */
+                AudienceQuizResponse.fromObject = function fromObject(object, _depth) {
+                    if (object instanceof $root.creator_stage.realtime.v1.AudienceQuizResponse)
+                        return object;
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let message = new $root.creator_stage.realtime.v1.AudienceQuizResponse();
+                    if (object.id != null)
+                        if (typeof object.id !== "string" || object.id.length)
+                            message.id = String(object.id);
+                    if (object.sentAt != null) {
+                        if (typeof object.sentAt !== "object")
+                            throw TypeError(".creator_stage.realtime.v1.AudienceQuizResponse.sentAt: object expected");
+                        message.sentAt = $root.google.protobuf.Timestamp.fromObject(object.sentAt, _depth + 1);
+                    }
+                    if (object.quizId != null)
+                        if (typeof object.quizId !== "string" || object.quizId.length)
+                            message.quizId = String(object.quizId);
+                    if (object.optionId != null)
+                        if (typeof object.optionId !== "string" || object.optionId.length)
+                            message.optionId = String(object.optionId);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AudienceQuizResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceQuizResponse} message AudienceQuizResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AudienceQuizResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.sentAt = null;
+                        object.quizId = "";
+                        object.optionId = "";
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.sentAt != null && message.hasOwnProperty("sentAt"))
+                        object.sentAt = $root.google.protobuf.Timestamp.toObject(message.sentAt, options);
+                    if (message.quizId != null && message.hasOwnProperty("quizId"))
+                        object.quizId = message.quizId;
+                    if (message.optionId != null && message.hasOwnProperty("optionId"))
+                        object.optionId = message.optionId;
+                    return object;
+                };
+
+                /**
+                 * Converts this AudienceQuizResponse to JSON.
+                 * @function toJSON
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AudienceQuizResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the type url for AudienceQuizResponse
+                 * @function getTypeUrl
+                 * @memberof creator_stage.realtime.v1.AudienceQuizResponse
+                 * @static
+                 * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns {string} The type url
+                 */
+                AudienceQuizResponse.getTypeUrl = function getTypeUrl(prefix) {
+                    if (prefix === undefined)
+                        prefix = "type.googleapis.com";
+                    return prefix + "/creator_stage.realtime.v1.AudienceQuizResponse";
+                };
+
+                return AudienceQuizResponse;
+            })();
+
+            /**
+             * AudienceMessageType enum.
+             * @name creator_stage.realtime.v1.AudienceMessageType
+             * @enum {number}
+             * @property {number} TYPE_AUDIENCE_MESSAGE=0 TYPE_AUDIENCE_MESSAGE value
+             * @property {number} TYPE_POLL_RESPONSE=1 TYPE_POLL_RESPONSE value
+             */
+            v1.AudienceMessageType = (function() {
+                const valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "TYPE_AUDIENCE_MESSAGE"] = 0;
+                values[valuesById[1] = "TYPE_POLL_RESPONSE"] = 1;
+                return values;
+            })();
+
+            v1.AudienceChatEvents = (function() {
+
+                /**
+                 * Properties of an AudienceChatEvents.
+                 * @typedef {Object} creator_stage.realtime.v1.AudienceChatEvents.$Properties
+                 * @property {creator_stage.realtime.v1.AudienceMessageType|null} [type] AudienceChatEvents type
+                 * @property {creator_stage.realtime.v1.AudienceChatMessage.$Properties|null} [chatMessage] AudienceChatEvents chatMessage
+                 * @property {creator_stage.realtime.v1.AudienceQuizResponse.$Properties|null} [quizResponse] AudienceChatEvents quizResponse
+                 * @property {"chatMessage"|"quizResponse"} [body] AudienceChatEvents body
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+
+                /**
+                 * Properties of an AudienceChatEvents.
+                 * @memberof creator_stage.realtime.v1
+                 * @interface IAudienceChatEvents
+                 * @augments creator_stage.realtime.v1.AudienceChatEvents.$Properties
+                 * @deprecated Use creator_stage.realtime.v1.AudienceChatEvents.$Properties instead.
+                 */
+
+                /**
+                 * Narrowed shape of an AudienceChatEvents.
+                 * @typedef {{
+                 *   type?: creator_stage.realtime.v1.AudienceMessageType|null;
+                 *   chatMessage?: creator_stage.realtime.v1.AudienceChatMessage.$Shape|null;
+                 *   quizResponse?: creator_stage.realtime.v1.AudienceQuizResponse.$Shape|null;
+                 *   $unknowns?: Array.<Uint8Array>;
+                 * } & (
+                 *   ({ body?: undefined; chatMessage?: null; quizResponse?: null }|{ body?: "chatMessage"; chatMessage: creator_stage.realtime.v1.AudienceChatMessage.$Shape; quizResponse?: null }|{ body?: "quizResponse"; chatMessage?: null; quizResponse: creator_stage.realtime.v1.AudienceQuizResponse.$Shape })
+                 * )} creator_stage.realtime.v1.AudienceChatEvents.$Shape
+                 */
+
+                /**
+                 * Constructs a new AudienceChatEvents.
+                 * @memberof creator_stage.realtime.v1
+                 * @classdesc Represents an AudienceChatEvents.
+                 * @constructor
+                 * @param {creator_stage.realtime.v1.AudienceChatEvents.$Properties=} [properties] Properties to set
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+                function AudienceChatEvents(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AudienceChatEvents type.
+                 * @member {creator_stage.realtime.v1.AudienceMessageType} type
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @instance
+                 */
+                AudienceChatEvents.prototype.type = 0;
+
+                /**
+                 * AudienceChatEvents chatMessage.
+                 * @member {creator_stage.realtime.v1.AudienceChatMessage.$Properties|null|undefined} chatMessage
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @instance
+                 */
+                AudienceChatEvents.prototype.chatMessage = null;
+
+                /**
+                 * AudienceChatEvents quizResponse.
+                 * @member {creator_stage.realtime.v1.AudienceQuizResponse.$Properties|null|undefined} quizResponse
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @instance
+                 */
+                AudienceChatEvents.prototype.quizResponse = null;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * AudienceChatEvents body.
+                 * @member {"chatMessage"|"quizResponse"|undefined} body
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @instance
+                 */
+                Object.defineProperty(AudienceChatEvents.prototype, "body", {
+                    get: $util.oneOfGetter($oneOfFields = ["chatMessage", "quizResponse"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Creates a new AudienceChatEvents instance using the specified properties.
+                 * @function create
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatEvents.$Properties=} [properties] Properties to set
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvents} AudienceChatEvents instance
+                 * @type {{
+                 *   (properties: creator_stage.realtime.v1.AudienceChatEvents.$Shape): creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape;
+                 *   (properties?: creator_stage.realtime.v1.AudienceChatEvents.$Properties): creator_stage.realtime.v1.AudienceChatEvents;
+                 * }}
+                 */
+                AudienceChatEvents.create = function create(properties) {
+                    return new AudienceChatEvents(properties);
+                };
+
+                /**
+                 * Encodes the specified AudienceChatEvents message. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvents.verify|verify} messages.
+                 * @function encode
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatEvents.$Properties} message AudienceChatEvents message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceChatEvents.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+                    if (message.chatMessage != null && Object.hasOwnProperty.call(message, "chatMessage"))
+                        $root.creator_stage.realtime.v1.AudienceChatMessage.encode(message.chatMessage, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
+                    if (message.quizResponse != null && Object.hasOwnProperty.call(message, "quizResponse"))
+                        $root.creator_stage.realtime.v1.AudienceQuizResponse.encode(message.quizResponse, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
+                    if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
+                        for (let i = 0; i < message.$unknowns.length; ++i)
+                            writer.raw(message.$unknowns[i]);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified AudienceChatEvents message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvents.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatEvents.$Properties} message AudienceChatEvents message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceChatEvents.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes an AudienceChatEvents message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape} AudienceChatEvents
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceChatEvents.decode = function decode(reader, length, _end, _depth, _target) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $Reader.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.creator_stage.realtime.v1.AudienceChatEvents(), value;
+                    while (reader.pos < end) {
+                        let start = reader.pos;
+                        let tag = reader.tag();
+                        if (tag === _end) {
+                            _end = undefined;
+                            break;
+                        }
+                        let wireType = tag & 7;
+                        switch (tag >>>= 3) {
+                        case 1: {
+                                if (wireType !== 0)
+                                    break;
+                                if (value = reader.int32())
+                                    message.type = value;
+                                else
+                                    delete message.type;
+                                continue;
+                            }
+                        case 10: {
+                                if (wireType !== 2)
+                                    break;
+                                message.chatMessage = $root.creator_stage.realtime.v1.AudienceChatMessage.decode(reader, reader.uint32(), undefined, _depth + 1, message.chatMessage);
+                                message.body = "chatMessage";
+                                continue;
+                            }
+                        case 11: {
+                                if (wireType !== 2)
+                                    break;
+                                message.quizResponse = $root.creator_stage.realtime.v1.AudienceQuizResponse.decode(reader, reader.uint32(), undefined, _depth + 1, message.quizResponse);
+                                message.body = "quizResponse";
+                                continue;
+                            }
+                        }
+                        reader.skipType(wireType, _depth, tag);
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                    if (_end !== undefined)
+                        throw Error("missing end group");
+                    return message;
+                };
+
+                /**
+                 * Decodes an AudienceChatEvents message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape} AudienceChatEvents
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceChatEvents.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies an AudienceChatEvents message.
+                 * @function verify
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AudienceChatEvents.verify = function verify(message, _depth) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        return "max depth exceeded";
+                    let properties = {};
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        switch (message.type) {
+                        default:
+                            return "type: enum value expected";
+                        case 0:
+                        case 1:
+                            break;
+                        }
+                    if (message.chatMessage != null && message.hasOwnProperty("chatMessage")) {
+                        properties.body = 1;
+                        {
+                            let error = $root.creator_stage.realtime.v1.AudienceChatMessage.verify(message.chatMessage, _depth + 1);
+                            if (error)
+                                return "chatMessage." + error;
+                        }
+                    }
+                    if (message.quizResponse != null && message.hasOwnProperty("quizResponse")) {
+                        if (properties.body === 1)
+                            return "body: multiple values";
+                        properties.body = 1;
+                        {
+                            let error = $root.creator_stage.realtime.v1.AudienceQuizResponse.verify(message.quizResponse, _depth + 1);
+                            if (error)
+                                return "quizResponse." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an AudienceChatEvents message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvents} AudienceChatEvents
+                 */
+                AudienceChatEvents.fromObject = function fromObject(object, _depth) {
+                    if (object instanceof $root.creator_stage.realtime.v1.AudienceChatEvents)
+                        return object;
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let message = new $root.creator_stage.realtime.v1.AudienceChatEvents();
+                    if (object.type !== 0 && (typeof object.type !== "string" || $root.creator_stage.realtime.v1.AudienceMessageType[object.type] !== 0))
+                        switch (object.type) {
+                        default:
+                            if (typeof object.type === "number") {
+                                message.type = object.type;
+                                break;
+                            }
+                            break;
+                        case "TYPE_AUDIENCE_MESSAGE":
+                        case 0:
+                            message.type = 0;
+                            break;
+                        case "TYPE_POLL_RESPONSE":
+                        case 1:
+                            message.type = 1;
+                            break;
+                        }
+                    if (object.chatMessage != null) {
+                        if (typeof object.chatMessage !== "object")
+                            throw TypeError(".creator_stage.realtime.v1.AudienceChatEvents.chatMessage: object expected");
+                        message.chatMessage = $root.creator_stage.realtime.v1.AudienceChatMessage.fromObject(object.chatMessage, _depth + 1);
+                    }
+                    if (object.quizResponse != null) {
+                        if (typeof object.quizResponse !== "object")
+                            throw TypeError(".creator_stage.realtime.v1.AudienceChatEvents.quizResponse: object expected");
+                        message.quizResponse = $root.creator_stage.realtime.v1.AudienceQuizResponse.fromObject(object.quizResponse, _depth + 1);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AudienceChatEvents message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceChatEvents} message AudienceChatEvents
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AudienceChatEvents.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.type = options.enums === String ? "TYPE_AUDIENCE_MESSAGE" : 0;
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = options.enums === String ? $root.creator_stage.realtime.v1.AudienceMessageType[message.type] === undefined ? message.type : $root.creator_stage.realtime.v1.AudienceMessageType[message.type] : message.type;
+                    if (message.chatMessage != null && message.hasOwnProperty("chatMessage")) {
+                        object.chatMessage = $root.creator_stage.realtime.v1.AudienceChatMessage.toObject(message.chatMessage, options);
+                        if (options.oneofs)
+                            object.body = "chatMessage";
+                    }
+                    if (message.quizResponse != null && message.hasOwnProperty("quizResponse")) {
+                        object.quizResponse = $root.creator_stage.realtime.v1.AudienceQuizResponse.toObject(message.quizResponse, options);
+                        if (options.oneofs)
+                            object.body = "quizResponse";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this AudienceChatEvents to JSON.
+                 * @function toJSON
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AudienceChatEvents.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the type url for AudienceChatEvents
+                 * @function getTypeUrl
+                 * @memberof creator_stage.realtime.v1.AudienceChatEvents
+                 * @static
+                 * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns {string} The type url
+                 */
+                AudienceChatEvents.getTypeUrl = function getTypeUrl(prefix) {
+                    if (prefix === undefined)
+                        prefix = "type.googleapis.com";
+                    return prefix + "/creator_stage.realtime.v1.AudienceChatEvents";
+                };
+
+                return AudienceChatEvents;
+            })();
+
+            v1.AudienceBatchedChatMessages = (function() {
+
+                /**
+                 * Properties of an AudienceBatchedChatMessages.
+                 * @typedef {Object} creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties
+                 * @property {number|null} [liveActiveConnections] AudienceBatchedChatMessages liveActiveConnections
+                 * @property {Array.<creator_stage.realtime.v1.AudienceChatMessage.$Properties>|null} [messages] AudienceBatchedChatMessages messages
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+
+                /**
+                 * Properties of an AudienceBatchedChatMessages.
+                 * @memberof creator_stage.realtime.v1
+                 * @interface IAudienceBatchedChatMessages
+                 * @augments creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties
+                 * @deprecated Use creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties instead.
+                 */
+
+                /**
+                 * Shape of an AudienceBatchedChatMessages.
+                 * @typedef {creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties} creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape
+                 */
+
+                /**
+                 * Constructs a new AudienceBatchedChatMessages.
+                 * @memberof creator_stage.realtime.v1
+                 * @classdesc Represents an AudienceBatchedChatMessages.
+                 * @constructor
+                 * @param {creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties=} [properties] Properties to set
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+                function AudienceBatchedChatMessages(properties) {
+                    this.messages = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AudienceBatchedChatMessages liveActiveConnections.
+                 * @member {number} liveActiveConnections
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @instance
+                 */
+                AudienceBatchedChatMessages.prototype.liveActiveConnections = 0;
+
+                /**
+                 * AudienceBatchedChatMessages messages.
+                 * @member {Array.<creator_stage.realtime.v1.AudienceChatMessage.$Properties>} messages
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @instance
+                 */
+                AudienceBatchedChatMessages.prototype.messages = $util.emptyArray;
+
+                /**
+                 * Creates a new AudienceBatchedChatMessages instance using the specified properties.
+                 * @function create
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties=} [properties] Properties to set
+                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages} AudienceBatchedChatMessages instance
+                 * @type {{
+                 *   (properties: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape): creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape;
+                 *   (properties?: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties): creator_stage.realtime.v1.AudienceBatchedChatMessages;
+                 * }}
+                 */
+                AudienceBatchedChatMessages.create = function create(properties) {
+                    return new AudienceBatchedChatMessages(properties);
+                };
+
+                /**
+                 * Encodes the specified AudienceBatchedChatMessages message. Does not implicitly {@link creator_stage.realtime.v1.AudienceBatchedChatMessages.verify|verify} messages.
+                 * @function encode
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties} message AudienceBatchedChatMessages message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceBatchedChatMessages.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.liveActiveConnections != null && Object.hasOwnProperty.call(message, "liveActiveConnections"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.liveActiveConnections);
+                    if (message.messages != null && message.messages.length)
+                        for (let i = 0; i < message.messages.length; ++i)
+                            $root.creator_stage.realtime.v1.AudienceChatMessage.encode(message.messages[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
+                        for (let i = 0; i < message.$unknowns.length; ++i)
+                            writer.raw(message.$unknowns[i]);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified AudienceBatchedChatMessages message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceBatchedChatMessages.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties} message AudienceBatchedChatMessages message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceBatchedChatMessages.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes an AudienceBatchedChatMessages message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape} AudienceBatchedChatMessages
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceBatchedChatMessages.decode = function decode(reader, length, _end, _depth, _target) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $Reader.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.creator_stage.realtime.v1.AudienceBatchedChatMessages(), value;
+                    while (reader.pos < end) {
+                        let start = reader.pos;
+                        let tag = reader.tag();
+                        if (tag === _end) {
+                            _end = undefined;
+                            break;
+                        }
+                        let wireType = tag & 7;
+                        switch (tag >>>= 3) {
+                        case 1: {
+                                if (wireType !== 0)
+                                    break;
+                                if (value = reader.uint32())
+                                    message.liveActiveConnections = value;
+                                else
+                                    delete message.liveActiveConnections;
+                                continue;
+                            }
+                        case 2: {
+                                if (wireType !== 2)
+                                    break;
+                                if (!(message.messages && message.messages.length))
+                                    message.messages = [];
+                                message.messages.push($root.creator_stage.realtime.v1.AudienceChatMessage.decode(reader, reader.uint32(), undefined, _depth + 1));
+                                continue;
+                            }
+                        }
+                        reader.skipType(wireType, _depth, tag);
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                    if (_end !== undefined)
+                        throw Error("missing end group");
+                    return message;
+                };
+
+                /**
+                 * Decodes an AudienceBatchedChatMessages message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape} AudienceBatchedChatMessages
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceBatchedChatMessages.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies an AudienceBatchedChatMessages message.
+                 * @function verify
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AudienceBatchedChatMessages.verify = function verify(message, _depth) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        return "max depth exceeded";
+                    if (message.liveActiveConnections != null && message.hasOwnProperty("liveActiveConnections"))
+                        if (!$util.isInteger(message.liveActiveConnections))
+                            return "liveActiveConnections: integer expected";
+                    if (message.messages != null && message.hasOwnProperty("messages")) {
+                        if (!Array.isArray(message.messages))
+                            return "messages: array expected";
+                        for (let i = 0; i < message.messages.length; ++i) {
+                            let error = $root.creator_stage.realtime.v1.AudienceChatMessage.verify(message.messages[i], _depth + 1);
+                            if (error)
+                                return "messages." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an AudienceBatchedChatMessages message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages} AudienceBatchedChatMessages
+                 */
+                AudienceBatchedChatMessages.fromObject = function fromObject(object, _depth) {
+                    if (object instanceof $root.creator_stage.realtime.v1.AudienceBatchedChatMessages)
+                        return object;
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let message = new $root.creator_stage.realtime.v1.AudienceBatchedChatMessages();
+                    if (object.liveActiveConnections != null)
+                        if (Number(object.liveActiveConnections) !== 0)
+                            message.liveActiveConnections = object.liveActiveConnections >>> 0;
+                    if (object.messages) {
+                        if (!Array.isArray(object.messages))
+                            throw TypeError(".creator_stage.realtime.v1.AudienceBatchedChatMessages.messages: array expected");
+                        message.messages = Array(object.messages.length);
+                        for (let i = 0; i < object.messages.length; ++i) {
+                            if (typeof object.messages[i] !== "object")
+                                throw TypeError(".creator_stage.realtime.v1.AudienceBatchedChatMessages.messages: object expected");
+                            message.messages[i] = $root.creator_stage.realtime.v1.AudienceChatMessage.fromObject(object.messages[i], _depth + 1);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AudienceBatchedChatMessages message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceBatchedChatMessages} message AudienceBatchedChatMessages
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AudienceBatchedChatMessages.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.messages = [];
+                    if (options.defaults)
+                        object.liveActiveConnections = 0;
+                    if (message.liveActiveConnections != null && message.hasOwnProperty("liveActiveConnections"))
+                        object.liveActiveConnections = message.liveActiveConnections;
+                    if (message.messages && message.messages.length) {
+                        object.messages = Array(message.messages.length);
+                        for (let j = 0; j < message.messages.length; ++j)
+                            object.messages[j] = $root.creator_stage.realtime.v1.AudienceChatMessage.toObject(message.messages[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this AudienceBatchedChatMessages to JSON.
+                 * @function toJSON
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AudienceBatchedChatMessages.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the type url for AudienceBatchedChatMessages
+                 * @function getTypeUrl
+                 * @memberof creator_stage.realtime.v1.AudienceBatchedChatMessages
+                 * @static
+                 * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns {string} The type url
+                 */
+                AudienceBatchedChatMessages.getTypeUrl = function getTypeUrl(prefix) {
+                    if (prefix === undefined)
+                        prefix = "type.googleapis.com";
+                    return prefix + "/creator_stage.realtime.v1.AudienceBatchedChatMessages";
+                };
+
+                return AudienceBatchedChatMessages;
+            })();
+
+            v1.AudienceConnectData = (function() {
+
+                /**
+                 * Properties of an AudienceConnectData.
+                 * @typedef {Object} creator_stage.realtime.v1.AudienceConnectData.$Properties
+                 * @property {string|null} [videoBroadcastId] AudienceConnectData videoBroadcastId
+                 * @property {string|null} [userId] AudienceConnectData userId
+                 * @property {string|null} [displayName] AudienceConnectData displayName
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+
+                /**
+                 * Properties of an AudienceConnectData.
+                 * @memberof creator_stage.realtime.v1
+                 * @interface IAudienceConnectData
+                 * @augments creator_stage.realtime.v1.AudienceConnectData.$Properties
+                 * @deprecated Use creator_stage.realtime.v1.AudienceConnectData.$Properties instead.
+                 */
+
+                /**
+                 * Shape of an AudienceConnectData.
+                 * @typedef {creator_stage.realtime.v1.AudienceConnectData.$Properties} creator_stage.realtime.v1.AudienceConnectData.$Shape
+                 */
+
+                /**
+                 * Constructs a new AudienceConnectData.
+                 * @memberof creator_stage.realtime.v1
+                 * @classdesc Represents an AudienceConnectData.
+                 * @constructor
+                 * @param {creator_stage.realtime.v1.AudienceConnectData.$Properties=} [properties] Properties to set
+                 * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+                 */
+                function AudienceConnectData(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AudienceConnectData videoBroadcastId.
+                 * @member {string} videoBroadcastId
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @instance
+                 */
+                AudienceConnectData.prototype.videoBroadcastId = "";
+
+                /**
+                 * AudienceConnectData userId.
+                 * @member {string} userId
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @instance
+                 */
+                AudienceConnectData.prototype.userId = "";
+
+                /**
+                 * AudienceConnectData displayName.
+                 * @member {string} displayName
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @instance
+                 */
+                AudienceConnectData.prototype.displayName = "";
+
+                /**
+                 * Creates a new AudienceConnectData instance using the specified properties.
+                 * @function create
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceConnectData.$Properties=} [properties] Properties to set
+                 * @returns {creator_stage.realtime.v1.AudienceConnectData} AudienceConnectData instance
+                 * @type {{
+                 *   (properties: creator_stage.realtime.v1.AudienceConnectData.$Shape): creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape;
+                 *   (properties?: creator_stage.realtime.v1.AudienceConnectData.$Properties): creator_stage.realtime.v1.AudienceConnectData;
+                 * }}
+                 */
+                AudienceConnectData.create = function create(properties) {
+                    return new AudienceConnectData(properties);
+                };
+
+                /**
+                 * Encodes the specified AudienceConnectData message. Does not implicitly {@link creator_stage.realtime.v1.AudienceConnectData.verify|verify} messages.
+                 * @function encode
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceConnectData.$Properties} message AudienceConnectData message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceConnectData.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.videoBroadcastId != null && Object.hasOwnProperty.call(message, "videoBroadcastId"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.videoBroadcastId);
+                    if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
+                        writer.uint32(/* id 2, wireType 2 =*/18).string(message.userId);
+                    if (message.displayName != null && Object.hasOwnProperty.call(message, "displayName"))
+                        writer.uint32(/* id 3, wireType 2 =*/26).string(message.displayName);
+                    if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
+                        for (let i = 0; i < message.$unknowns.length; ++i)
+                            writer.raw(message.$unknowns[i]);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified AudienceConnectData message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceConnectData.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceConnectData.$Properties} message AudienceConnectData message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AudienceConnectData.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes an AudienceConnectData message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape} AudienceConnectData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceConnectData.decode = function decode(reader, length, _end, _depth, _target) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $Reader.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.creator_stage.realtime.v1.AudienceConnectData(), value;
+                    while (reader.pos < end) {
+                        let start = reader.pos;
+                        let tag = reader.tag();
+                        if (tag === _end) {
+                            _end = undefined;
+                            break;
+                        }
+                        let wireType = tag & 7;
+                        switch (tag >>>= 3) {
+                        case 1: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.videoBroadcastId = value;
+                                else
+                                    delete message.videoBroadcastId;
+                                continue;
+                            }
+                        case 2: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.userId = value;
+                                else
+                                    delete message.userId;
+                                continue;
+                            }
+                        case 3: {
+                                if (wireType !== 2)
+                                    break;
+                                if ((value = reader.string()).length)
+                                    message.displayName = value;
+                                else
+                                    delete message.displayName;
+                                continue;
+                            }
+                        }
+                        reader.skipType(wireType, _depth, tag);
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                    if (_end !== undefined)
+                        throw Error("missing end group");
+                    return message;
+                };
+
+                /**
+                 * Decodes an AudienceConnectData message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape} AudienceConnectData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AudienceConnectData.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies an AudienceConnectData message.
+                 * @function verify
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AudienceConnectData.verify = function verify(message, _depth) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        return "max depth exceeded";
+                    if (message.videoBroadcastId != null && message.hasOwnProperty("videoBroadcastId"))
+                        if (!$util.isString(message.videoBroadcastId))
+                            return "videoBroadcastId: string expected";
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        if (!$util.isString(message.userId))
+                            return "userId: string expected";
+                    if (message.displayName != null && message.hasOwnProperty("displayName"))
+                        if (!$util.isString(message.displayName))
+                            return "displayName: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AudienceConnectData message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {creator_stage.realtime.v1.AudienceConnectData} AudienceConnectData
+                 */
+                AudienceConnectData.fromObject = function fromObject(object, _depth) {
+                    if (object instanceof $root.creator_stage.realtime.v1.AudienceConnectData)
+                        return object;
+                    if (_depth === undefined)
+                        _depth = 0;
+                    if (_depth > $util.recursionLimit)
+                        throw Error("max depth exceeded");
+                    let message = new $root.creator_stage.realtime.v1.AudienceConnectData();
+                    if (object.videoBroadcastId != null)
+                        if (typeof object.videoBroadcastId !== "string" || object.videoBroadcastId.length)
+                            message.videoBroadcastId = String(object.videoBroadcastId);
+                    if (object.userId != null)
+                        if (typeof object.userId !== "string" || object.userId.length)
+                            message.userId = String(object.userId);
+                    if (object.displayName != null)
+                        if (typeof object.displayName !== "string" || object.displayName.length)
+                            message.displayName = String(object.displayName);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AudienceConnectData message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {creator_stage.realtime.v1.AudienceConnectData} message AudienceConnectData
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AudienceConnectData.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.videoBroadcastId = "";
+                        object.userId = "";
+                        object.displayName = "";
+                    }
+                    if (message.videoBroadcastId != null && message.hasOwnProperty("videoBroadcastId"))
+                        object.videoBroadcastId = message.videoBroadcastId;
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        object.userId = message.userId;
+                    if (message.displayName != null && message.hasOwnProperty("displayName"))
+                        object.displayName = message.displayName;
+                    return object;
+                };
+
+                /**
+                 * Converts this AudienceConnectData to JSON.
+                 * @function toJSON
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AudienceConnectData.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the type url for AudienceConnectData
+                 * @function getTypeUrl
+                 * @memberof creator_stage.realtime.v1.AudienceConnectData
+                 * @static
+                 * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns {string} The type url
+                 */
+                AudienceConnectData.getTypeUrl = function getTypeUrl(prefix) {
+                    if (prefix === undefined)
+                        prefix = "type.googleapis.com";
+                    return prefix + "/creator_stage.realtime.v1.AudienceConnectData";
+                };
+
+                return AudienceConnectData;
+            })();
+
             return v1;
         })();
 

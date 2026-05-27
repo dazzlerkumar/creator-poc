@@ -22,7 +22,6 @@ describe("LiveChat component", () => {
         {
           id: "msg-1",
           authorName: "Alice",
-          authorAvatarColor: "from-blue-500 to-indigo-500",
           messageText: "Hello from Alice!",
           timestamp: new Date().toISOString(),
           role: "viewer",
@@ -30,7 +29,6 @@ describe("LiveChat component", () => {
         {
           id: "msg-2",
           authorName: "Bob",
-          authorAvatarColor: "from-purple-500 to-pink-500",
           messageText: "Hello from Bob!",
           timestamp: new Date().toISOString(),
           role: "moderator",
@@ -39,7 +37,6 @@ describe("LiveChat component", () => {
       pinnedMessage: {
         id: "msg-3",
         authorName: "Saurabh",
-        authorAvatarColor: "from-amber-500 to-yellow-500",
         messageText: "Welcome everyone!",
         timestamp: new Date().toISOString(),
         role: "owner",

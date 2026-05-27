@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package creator_stage.realtime.v1;
+
+option go_package = "github.com/creator-stage/internal/realtime/proto;realtimepb";
+
+import "google/protobuf/timestamp.proto";
+
+// this is for the direction of audience to creator
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_CREATOR     = 1;
+  ROLE_TEAM        = 2;
+  ROLE_AUDIENCE    = 3;
+}
+
+message AudienceChatMessage {
+  string                    id                 = 1;
+  google.protobuf.Timestamp sent_at   = 2;
+  string                    video_broadcast_id = 3;
+  string                    user_id            = 4;
+  Role                      role               = 5;
+  string                    display_name       = 6;
+  string                    body               = 7;
+}
+
+
+message AudienceQuizResponse {
+  string id = 1;
+  google.protobuf.Timestamp sent_at   = 2;
+  string quiz_id = 3;
+  string option_id = 4;
+
+}
+
+enum AudienceMessageType {
+  TYPE_AUDIENCE_MESSAGE = 0;
+  TYPE_POLL_RESPONSE=1;
+}
+
+
+message AudienceChatEvents {
+  AudienceMessageType                      type = 1;
+
+  oneof body {
+    AudienceChatMessage chat_message         = 10;
+    AudienceQuizResponse   quiz_response =11;
+  }
+}
+
+
+message BatchedChatMessages {
+  uint32 live_active_connections =1;
+  repeated AudienceChatMessage messages = 2;
+
+}
+
+// Client → server in Centrifuge ConnectRequest.data when connecting without JWT.
+message AudienceConnectData {
+  string video_broadcast_id = 1;
+  string user_id = 2;
+  string display_name = 3;
+}

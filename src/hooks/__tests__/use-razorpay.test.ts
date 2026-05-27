@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach, Mock } from 'vitest';
 import { useRazorpay } from '../use-razorpay';
 import { loadRazorpayScript } from '@/lib/razorpay';
 import { createOrder, verifyPayment } from '@/api/payments';
@@ -152,7 +152,7 @@ describe('useRazorpay', () => {
     });
 
     // Extract the handler from the options passed to Razorpay constructor
-    const options = mockRazorpayConstructor.mock.calls[0][0];
+    const options = mockRazorpayConstructor.mock.calls[0]![0];
     const handler = options.handler;
 
     // Simulate handler being called
@@ -186,7 +186,7 @@ describe('useRazorpay', () => {
       await result.current.initiatePayment(paymentConfig);
     });
 
-    const options = mockRazorpayConstructor.mock.calls[0][0];
+    const options = mockRazorpayConstructor.mock.calls[0]![0];
     const handler = options.handler;
 
     await act(async () => {
@@ -213,7 +213,7 @@ describe('useRazorpay', () => {
       await result.current.initiatePayment(paymentConfig);
     });
 
-    const options = mockRazorpayConstructor.mock.calls[0][0];
+    const options = mockRazorpayConstructor.mock.calls[0]![0];
     const handler = options.handler;
 
     await act(async () => {
@@ -239,7 +239,7 @@ describe('useRazorpay', () => {
       await result.current.initiatePayment(paymentConfig);
     });
 
-    const options = mockRazorpayConstructor.mock.calls[0][0];
+    const options = mockRazorpayConstructor.mock.calls[0]![0];
     const ondismiss = options.modal.ondismiss;
 
     act(() => {

@@ -1092,6 +1092,698 @@ export namespace creator_stage {
                 /** Shape of an AnalyticsHeartbeat. */
                 type $Shape = creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties;
             }
+
+            /**
+             * Properties of an AudienceChatMessage.
+             * @deprecated Use creator_stage.realtime.v1.AudienceChatMessage.$Properties instead.
+             */
+            interface IAudienceChatMessage extends creator_stage.realtime.v1.AudienceChatMessage.$Properties {
+            }
+
+            /** Represents an AudienceChatMessage. */
+            class AudienceChatMessage {
+
+                /**
+                 * Constructs a new AudienceChatMessage.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.AudienceChatMessage.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** AudienceChatMessage id. */
+                id: string;
+
+                /** AudienceChatMessage sentAt. */
+                sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                /** AudienceChatMessage videoBroadcastId. */
+                videoBroadcastId: string;
+
+                /** AudienceChatMessage userId. */
+                userId: string;
+
+                /** AudienceChatMessage role. */
+                role: creator_stage.realtime.v1.Role;
+
+                /** AudienceChatMessage displayName. */
+                displayName: string;
+
+                /** AudienceChatMessage body. */
+                body: string;
+
+                /**
+                 * Creates a new AudienceChatMessage instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns AudienceChatMessage instance
+                 */
+                static create(properties: creator_stage.realtime.v1.AudienceChatMessage.$Shape): creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape;
+                static create(properties?: creator_stage.realtime.v1.AudienceChatMessage.$Properties): creator_stage.realtime.v1.AudienceChatMessage;
+
+                /**
+                 * Encodes the specified AudienceChatMessage message. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatMessage.verify|verify} messages.
+                 * @param message AudienceChatMessage message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.AudienceChatMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified AudienceChatMessage message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatMessage.verify|verify} messages.
+                 * @param message AudienceChatMessage message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.AudienceChatMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes an AudienceChatMessage message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape} AudienceChatMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape;
+
+                /**
+                 * Decodes an AudienceChatMessage message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape} AudienceChatMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceChatMessage & creator_stage.realtime.v1.AudienceChatMessage.$Shape;
+
+                /**
+                 * Verifies an AudienceChatMessage message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AudienceChatMessage message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AudienceChatMessage
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceChatMessage;
+
+                /**
+                 * Creates a plain object from an AudienceChatMessage message. Also converts values to other types if specified.
+                 * @param message AudienceChatMessage
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.AudienceChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AudienceChatMessage to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for AudienceChatMessage
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace AudienceChatMessage {
+
+                /** Properties of an AudienceChatMessage. */
+                interface $Properties {
+
+                    /** AudienceChatMessage id */
+                    id?: (string|null);
+
+                    /** AudienceChatMessage sentAt */
+                    sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                    /** AudienceChatMessage videoBroadcastId */
+                    videoBroadcastId?: (string|null);
+
+                    /** AudienceChatMessage userId */
+                    userId?: (string|null);
+
+                    /** AudienceChatMessage role */
+                    role?: (creator_stage.realtime.v1.Role|null);
+
+                    /** AudienceChatMessage displayName */
+                    displayName?: (string|null);
+
+                    /** AudienceChatMessage body */
+                    body?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of an AudienceChatMessage. */
+                type $Shape = creator_stage.realtime.v1.AudienceChatMessage.$Properties;
+            }
+
+            /**
+             * Properties of an AudienceQuizResponse.
+             * @deprecated Use creator_stage.realtime.v1.AudienceQuizResponse.$Properties instead.
+             */
+            interface IAudienceQuizResponse extends creator_stage.realtime.v1.AudienceQuizResponse.$Properties {
+            }
+
+            /** Represents an AudienceQuizResponse. */
+            class AudienceQuizResponse {
+
+                /**
+                 * Constructs a new AudienceQuizResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.AudienceQuizResponse.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** AudienceQuizResponse id. */
+                id: string;
+
+                /** AudienceQuizResponse sentAt. */
+                sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                /** AudienceQuizResponse quizId. */
+                quizId: string;
+
+                /** AudienceQuizResponse optionId. */
+                optionId: string;
+
+                /**
+                 * Creates a new AudienceQuizResponse instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns AudienceQuizResponse instance
+                 */
+                static create(properties: creator_stage.realtime.v1.AudienceQuizResponse.$Shape): creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape;
+                static create(properties?: creator_stage.realtime.v1.AudienceQuizResponse.$Properties): creator_stage.realtime.v1.AudienceQuizResponse;
+
+                /**
+                 * Encodes the specified AudienceQuizResponse message. Does not implicitly {@link creator_stage.realtime.v1.AudienceQuizResponse.verify|verify} messages.
+                 * @param message AudienceQuizResponse message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.AudienceQuizResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified AudienceQuizResponse message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceQuizResponse.verify|verify} messages.
+                 * @param message AudienceQuizResponse message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.AudienceQuizResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes an AudienceQuizResponse message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape} AudienceQuizResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape;
+
+                /**
+                 * Decodes an AudienceQuizResponse message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape} AudienceQuizResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceQuizResponse & creator_stage.realtime.v1.AudienceQuizResponse.$Shape;
+
+                /**
+                 * Verifies an AudienceQuizResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AudienceQuizResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AudienceQuizResponse
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceQuizResponse;
+
+                /**
+                 * Creates a plain object from an AudienceQuizResponse message. Also converts values to other types if specified.
+                 * @param message AudienceQuizResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.AudienceQuizResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AudienceQuizResponse to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for AudienceQuizResponse
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace AudienceQuizResponse {
+
+                /** Properties of an AudienceQuizResponse. */
+                interface $Properties {
+
+                    /** AudienceQuizResponse id */
+                    id?: (string|null);
+
+                    /** AudienceQuizResponse sentAt */
+                    sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                    /** AudienceQuizResponse quizId */
+                    quizId?: (string|null);
+
+                    /** AudienceQuizResponse optionId */
+                    optionId?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of an AudienceQuizResponse. */
+                type $Shape = creator_stage.realtime.v1.AudienceQuizResponse.$Properties;
+            }
+
+            /** AudienceMessageType enum. */
+            enum AudienceMessageType {
+
+                /** TYPE_AUDIENCE_MESSAGE value */
+                TYPE_AUDIENCE_MESSAGE = 0,
+
+                /** TYPE_POLL_RESPONSE value */
+                TYPE_POLL_RESPONSE = 1
+            }
+
+            /**
+             * Properties of an AudienceChatEvents.
+             * @deprecated Use creator_stage.realtime.v1.AudienceChatEvents.$Properties instead.
+             */
+            interface IAudienceChatEvents extends creator_stage.realtime.v1.AudienceChatEvents.$Properties {
+            }
+
+            /** Represents an AudienceChatEvents. */
+            class AudienceChatEvents {
+
+                /**
+                 * Constructs a new AudienceChatEvents.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.AudienceChatEvents.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** AudienceChatEvents type. */
+                type: creator_stage.realtime.v1.AudienceMessageType;
+
+                /** AudienceChatEvents chatMessage. */
+                chatMessage?: (creator_stage.realtime.v1.AudienceChatMessage.$Properties|null);
+
+                /** AudienceChatEvents quizResponse. */
+                quizResponse?: (creator_stage.realtime.v1.AudienceQuizResponse.$Properties|null);
+
+                /** AudienceChatEvents body. */
+                body?: ("chatMessage"|"quizResponse");
+
+                /**
+                 * Creates a new AudienceChatEvents instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns AudienceChatEvents instance
+                 */
+                static create(properties: creator_stage.realtime.v1.AudienceChatEvents.$Shape): creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape;
+                static create(properties?: creator_stage.realtime.v1.AudienceChatEvents.$Properties): creator_stage.realtime.v1.AudienceChatEvents;
+
+                /**
+                 * Encodes the specified AudienceChatEvents message. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvents.verify|verify} messages.
+                 * @param message AudienceChatEvents message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.AudienceChatEvents.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified AudienceChatEvents message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvents.verify|verify} messages.
+                 * @param message AudienceChatEvents message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.AudienceChatEvents.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes an AudienceChatEvents message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape} AudienceChatEvents
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape;
+
+                /**
+                 * Decodes an AudienceChatEvents message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape} AudienceChatEvents
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape;
+
+                /**
+                 * Verifies an AudienceChatEvents message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AudienceChatEvents message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AudienceChatEvents
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceChatEvents;
+
+                /**
+                 * Creates a plain object from an AudienceChatEvents message. Also converts values to other types if specified.
+                 * @param message AudienceChatEvents
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.AudienceChatEvents, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AudienceChatEvents to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for AudienceChatEvents
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace AudienceChatEvents {
+
+                /** Properties of an AudienceChatEvents. */
+                interface $Properties {
+
+                    /** AudienceChatEvents type */
+                    type?: (creator_stage.realtime.v1.AudienceMessageType|null);
+
+                    /** AudienceChatEvents chatMessage */
+                    chatMessage?: (creator_stage.realtime.v1.AudienceChatMessage.$Properties|null);
+
+                    /** AudienceChatEvents quizResponse */
+                    quizResponse?: (creator_stage.realtime.v1.AudienceQuizResponse.$Properties|null);
+
+                    /** AudienceChatEvents body */
+                    body?: ("chatMessage"|"quizResponse");
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Narrowed shape of an AudienceChatEvents. */
+                type $Shape = {
+  type?: creator_stage.realtime.v1.AudienceMessageType|null;
+  chatMessage?: creator_stage.realtime.v1.AudienceChatMessage.$Shape|null;
+  quizResponse?: creator_stage.realtime.v1.AudienceQuizResponse.$Shape|null;
+  $unknowns?: Uint8Array[];
+} & (
+  ({ body?: undefined; chatMessage?: null; quizResponse?: null }|{ body?: "chatMessage"; chatMessage: creator_stage.realtime.v1.AudienceChatMessage.$Shape; quizResponse?: null }|{ body?: "quizResponse"; chatMessage?: null; quizResponse: creator_stage.realtime.v1.AudienceQuizResponse.$Shape })
+);
+            }
+
+            /**
+             * Properties of an AudienceBatchedChatMessages.
+             * @deprecated Use creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties instead.
+             */
+            interface IAudienceBatchedChatMessages extends creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties {
+            }
+
+            /** Represents an AudienceBatchedChatMessages. */
+            class AudienceBatchedChatMessages {
+
+                /**
+                 * Constructs a new AudienceBatchedChatMessages.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** AudienceBatchedChatMessages liveActiveConnections. */
+                liveActiveConnections: number;
+
+                /** AudienceBatchedChatMessages messages. */
+                messages: creator_stage.realtime.v1.AudienceChatMessage.$Properties[];
+
+                /**
+                 * Creates a new AudienceBatchedChatMessages instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns AudienceBatchedChatMessages instance
+                 */
+                static create(properties: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape): creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape;
+                static create(properties?: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties): creator_stage.realtime.v1.AudienceBatchedChatMessages;
+
+                /**
+                 * Encodes the specified AudienceBatchedChatMessages message. Does not implicitly {@link creator_stage.realtime.v1.AudienceBatchedChatMessages.verify|verify} messages.
+                 * @param message AudienceBatchedChatMessages message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified AudienceBatchedChatMessages message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceBatchedChatMessages.verify|verify} messages.
+                 * @param message AudienceBatchedChatMessages message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes an AudienceBatchedChatMessages message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape} AudienceBatchedChatMessages
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape;
+
+                /**
+                 * Decodes an AudienceBatchedChatMessages message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape} AudienceBatchedChatMessages
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape;
+
+                /**
+                 * Verifies an AudienceBatchedChatMessages message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AudienceBatchedChatMessages message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AudienceBatchedChatMessages
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceBatchedChatMessages;
+
+                /**
+                 * Creates a plain object from an AudienceBatchedChatMessages message. Also converts values to other types if specified.
+                 * @param message AudienceBatchedChatMessages
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.AudienceBatchedChatMessages, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AudienceBatchedChatMessages to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for AudienceBatchedChatMessages
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace AudienceBatchedChatMessages {
+
+                /** Properties of an AudienceBatchedChatMessages. */
+                interface $Properties {
+
+                    /** AudienceBatchedChatMessages liveActiveConnections */
+                    liveActiveConnections?: (number|null);
+
+                    /** AudienceBatchedChatMessages messages */
+                    messages?: (creator_stage.realtime.v1.AudienceChatMessage.$Properties[]|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of an AudienceBatchedChatMessages. */
+                type $Shape = creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties;
+            }
+
+            /**
+             * Properties of an AudienceConnectData.
+             * @deprecated Use creator_stage.realtime.v1.AudienceConnectData.$Properties instead.
+             */
+            interface IAudienceConnectData extends creator_stage.realtime.v1.AudienceConnectData.$Properties {
+            }
+
+            /** Represents an AudienceConnectData. */
+            class AudienceConnectData {
+
+                /**
+                 * Constructs a new AudienceConnectData.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.AudienceConnectData.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** AudienceConnectData videoBroadcastId. */
+                videoBroadcastId: string;
+
+                /** AudienceConnectData userId. */
+                userId: string;
+
+                /** AudienceConnectData displayName. */
+                displayName: string;
+
+                /**
+                 * Creates a new AudienceConnectData instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns AudienceConnectData instance
+                 */
+                static create(properties: creator_stage.realtime.v1.AudienceConnectData.$Shape): creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape;
+                static create(properties?: creator_stage.realtime.v1.AudienceConnectData.$Properties): creator_stage.realtime.v1.AudienceConnectData;
+
+                /**
+                 * Encodes the specified AudienceConnectData message. Does not implicitly {@link creator_stage.realtime.v1.AudienceConnectData.verify|verify} messages.
+                 * @param message AudienceConnectData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.AudienceConnectData.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified AudienceConnectData message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceConnectData.verify|verify} messages.
+                 * @param message AudienceConnectData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.AudienceConnectData.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes an AudienceConnectData message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape} AudienceConnectData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape;
+
+                /**
+                 * Decodes an AudienceConnectData message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape} AudienceConnectData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceConnectData & creator_stage.realtime.v1.AudienceConnectData.$Shape;
+
+                /**
+                 * Verifies an AudienceConnectData message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AudienceConnectData message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AudienceConnectData
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceConnectData;
+
+                /**
+                 * Creates a plain object from an AudienceConnectData message. Also converts values to other types if specified.
+                 * @param message AudienceConnectData
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.AudienceConnectData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AudienceConnectData to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for AudienceConnectData
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace AudienceConnectData {
+
+                /** Properties of an AudienceConnectData. */
+                interface $Properties {
+
+                    /** AudienceConnectData videoBroadcastId */
+                    videoBroadcastId?: (string|null);
+
+                    /** AudienceConnectData userId */
+                    userId?: (string|null);
+
+                    /** AudienceConnectData displayName */
+                    displayName?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of an AudienceConnectData. */
+                type $Shape = creator_stage.realtime.v1.AudienceConnectData.$Properties;
+            }
         }
     }
 }
