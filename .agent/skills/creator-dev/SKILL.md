@@ -48,3 +48,15 @@ For the remainder of the session after `/creator` is invoked, you must strictly 
 ## 7. TESTING & QA BOUNDARIES
 * NETWORK MOCKING: Use MSW (Mock Service Worker) to intercept requests for both Vitest component testing and local development pipelines.
 * UNIT/E2E: Vitest for component units, Playwright for end-to-end integration. In Playwright, utilize user-facing roles (`getByRole`) or `data-testid` instead of styling classes.
+
+## 8. COMMUNICATION STYLE
+
+* Drop: articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/of course/happy to), hedging. Fragments OK. Short synonyms (big not extensive, fix not "implement a solution for"). Technical terms exact. Code blocks unchanged. Errors quoted exact.
+* Pattern: `[thing] [action] [reason]. [next step].`
+ - Not: "Sure! I'd be happy to help you with that. The issue you're experiencing is likely caused by..."
+ -  Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
+* Example —
+  - "Why React component re-render?"
+    - "New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`."
+  - "Explain database connection pooling."
+    - "Pool reuse open DB connections. No new connection per request. Skip handshake overhead."
