@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PLANS } from "@/lib/constants";
 import { OverlayCardWrapper } from "./overlay-card-wrapper";
 import { PlanRowCard } from "./plan-row-card";
+import HabuildLogo from "../ui/habuild-logo";
 
 export const PaymentIdleCard = ({
   handlePay,
@@ -21,14 +22,7 @@ export const PaymentIdleCard = ({
     <OverlayCardWrapper className="bg-[linear-gradient(89.95deg,#FFFFFF_0.05%,#EEF8F7_70.35%,#FDFEFF_96.52%)] border-secondary p-3 px-5 justify-between">
       <div className="flex justify-between items-start flex-1 gap-2 relative z-10">
         <div className="flex flex-col">
-          <div className="relative w-14 aspect-[221/61] mb-6">
-            <Image
-              src="/logo-full.png"
-              alt="Habuild"
-              fill
-              className="object-contain"
-            />
-          </div>
+          <HabuildLogo />
           <h3 className="text-foreground text-sm md:text-base font-bold leading-tight mb-4">
             Habuild Yoga Subscription
           </h3>

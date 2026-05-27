@@ -36,7 +36,7 @@ async function handleUnauthorized<T>(
             authApi.logout();
             window.location.href = routePaths.auth.login;
             throw new Error('Session expired');
-        } ``
+        }
     }
 
     return new Promise((resolve, reject) => {
