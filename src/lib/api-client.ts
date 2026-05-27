@@ -6,6 +6,7 @@ import { authApi } from '@/api/auth';
 import { AUTH_ENDPOINTS } from '@/config/endpoints';
 import { COOKIES_EXPIRY } from './constants';
 import { ApiResponse } from '@/interfaces/api';
+import routePaths from "@/config/route-paths.config";
 
 let isRefreshing = false;
 let refreshSubscribers: ((token: string | null) => void)[] = [];
@@ -33,9 +34,9 @@ async function handleUnauthorized<T>(
         } else {
             onRefreshed(null);
             authApi.logout();
-            window.location.href = '/auth/login';
+            window.location.href = routePaths.auth.login;
             throw new Error('Session expired');
-        }
+        } ``
     }
 
     return new Promise((resolve, reject) => {
