@@ -1,4 +1,0 @@
-export enum CookiesKeys {
-    ACCESS_TOKEN = 'access_token',
-    REFRESH_TOKEN = 'refresh_token',
-}

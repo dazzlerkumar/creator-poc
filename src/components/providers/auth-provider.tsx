@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation';
 import { useAuthStore, UserRole } from '../../stores/auth-store';
 import { getToken } from '../../api/auth';
-
+import routePaths from '@/config/route-paths.config';
 interface AuthContextType {
   jwt: string | null;
   role: UserRole;
@@ -21,9 +21,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     clearToken();
     if (role === 'creator') {
-      router.push('/login');
+      router.push(routePaths.base);
     } else {
-      router.push('/join');
+      router.push(routePaths.main.join);
     }
   }, [clearToken, role, router]);
 
@@ -35,12 +35,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // This logic might need refinement based on how the backend handles refresh tokens vs session tokens.
       // For this implementation, we assume getToken can be used to refresh if we have a valid JWT.
       // If the backend requires a specific refresh endpoint, we should update this.
-      
+
       // Since we don't have the sessionId here easily (it might be in the URL), 
       // we might need to extract it from the URL or store it in the auth store.
       // Assuming sessionId is needed for refresh:
       const sessionId = window.location.pathname.split('/').pop() || '';
-      
+
       if (!sessionId) {
         throw new Error('No session ID found for refresh');
       }

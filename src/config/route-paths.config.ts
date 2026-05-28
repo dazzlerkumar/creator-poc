@@ -1,16 +1,12 @@
 interface PathsConfig {
-  auth: {
-    login: string;
-  };
+  base: string;
   main: {
     join: string;
   };
 }
 
 const routePaths: PathsConfig = {
-  auth: {
-    login: '/login',
-  },
+  base: "/",
   main: {
     join: '/join',
   },

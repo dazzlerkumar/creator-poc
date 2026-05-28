@@ -1,10 +1,9 @@
 import Cookies from 'js-cookie';
-import { CookiesKeys } from '@/interfaces/enums';
 import { useAuthStore } from '@/stores/auth-store';
 import { API_VERSION, APP_NAME } from './constants';
 import { authApi } from '@/api/auth';
 import { AUTH_ENDPOINTS } from '@/config/endpoints';
-import { COOKIES_EXPIRY } from './constants';
+import { COOKIES_EXPIRY, COOKIES_KEYS } from './constants';
 import { ApiResponse } from '@/interfaces/api';
 import routePaths from "@/config/route-paths.config";
 
@@ -34,7 +33,7 @@ async function handleUnauthorized<T>(
         } else {
             onRefreshed(null);
             authApi.logout();
-            window.location.href = routePaths.auth.login;
+            window.location.href = routePaths.base;
             throw new Error('Session expired');
         }
     }
@@ -55,7 +54,7 @@ async function handleUnauthorized<T>(
 }
 
 async function refreshToken(): Promise<string | null> {
-    const refreshTokenValue = Cookies.get(CookiesKeys.REFRESH_TOKEN);
+    const refreshTokenValue = Cookies.get(COOKIES_KEYS.REFRESH_TOKEN);
     if (!refreshTokenValue) return null;
 
     try {
@@ -87,10 +86,10 @@ async function refreshToken(): Promise<string | null> {
             sameSite: 'lax' as const,
         };
 
-        Cookies.set(CookiesKeys.ACCESS_TOKEN, accessToken, cookieOptions);
+        Cookies.set(COOKIES_KEYS.ACCESS_TOKEN, accessToken, cookieOptions);
 
         if (newRefreshToken) {
-            Cookies.set(CookiesKeys.REFRESH_TOKEN, newRefreshToken, cookieOptions);
+            Cookies.set(COOKIES_KEYS.REFRESH_TOKEN, newRefreshToken, cookieOptions);
         }
 
         // Sync with useAuthStore
@@ -129,7 +128,7 @@ export async function clientApiRequest<T>(
     };
 
     if (!options.skipAuth) {
-        const token = Cookies.get(CookiesKeys.ACCESS_TOKEN);
+        const token = Cookies.get(COOKIES_KEYS.ACCESS_TOKEN);
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
@@ -177,7 +176,7 @@ export async function clientApiRequestBinary(
     };
 
     if (!options.skipAuth) {
-        const token = Cookies.get(CookiesKeys.ACCESS_TOKEN);
+        const token = Cookies.get(COOKIES_KEYS.ACCESS_TOKEN);
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
