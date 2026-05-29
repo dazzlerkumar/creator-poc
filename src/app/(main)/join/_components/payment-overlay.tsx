@@ -3,8 +3,9 @@
 import { useEffect, useRef } from "react";
 import { usePaymentStore } from "@/stores/payment-store";
 import { useRazorpay } from "@/hooks/use-razorpay";
+import { usePlans } from "@/hooks/use-plans";
 import { PaymentStatus } from "@/types/payment";
-import { PAYMENT_CONFIG, PAYMENT_DONE, PAYMENT_SUCCESS_HIDE_DELAY_MS } from "@/lib/constants";
+import { PAYMENT_CONFIG, PAYMENT_DONE, PAYMENT_SUCCESS_HIDE_DELAY_MS, DEFAULT_REGION_CODE } from "@/lib/constants";
 import LocalStorageService from "@/lib/local-storage";
 import { useUIStore } from "@/stores/ui-store";
 
@@ -13,10 +14,11 @@ import { PaymentSuccessCard } from "@/components/payments/payment-success-card";
 import { PaymentFailCard } from "@/components/payments/payment-fail-card";
 import { ProcessingState } from "@/components/payments/processing-state";
 
-export function PaymentOverlay() {
+export function PaymentOverlay(): React.ReactElement | null {
   const { status, reset, setSuccess } = usePaymentStore();
   const { initiatePayment } = useRazorpay();
   const { setShowPayment } = useUIStore();
+  const { plans, country, isLoading } = usePlans();
   const initialCheckDone = useRef(false);
 
   useEffect(() => {
@@ -37,16 +39,20 @@ export function PaymentOverlay() {
     }
   }, [status, setShowPayment]);
 
-  const handlePay = (amount: number, currency: string) => {
+  const handlePay = (planId: number, amount: number, currency: string): void => {
     initiatePayment({
+      planId,
       amount,
       currency,
+      phoneNumber: "",
+      memberName: "",
+      regionCode: DEFAULT_REGION_CODE,
       productName: PAYMENT_CONFIG.productName,
       description: PAYMENT_CONFIG.description,
     });
   };
 
-  const handleRetry = () => {
+  const handleRetry = (): void => {
     reset();
     setTimeout(() => {
       usePaymentStore.getState().openPayment();
@@ -63,6 +69,11 @@ export function PaymentOverlay() {
     return <PaymentFailCard ctaFunction={handleRetry} />;
   }
   return (
-    <PaymentIdleCard handlePay={handlePay} />
+    <PaymentIdleCard
+      plans={plans}
+      isLoading={isLoading}
+      regionCode={country}
+      handlePay={handlePay}
+    />
   );
 }

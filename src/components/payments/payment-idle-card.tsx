@@ -1,23 +1,54 @@
+"use client";
+
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PLANS } from "@/lib/constants";
 import { OverlayCardWrapper } from "./overlay-card-wrapper";
 import { PlanRowCard } from "./plan-row-card";
 import HabuildLogo from "../ui/habuild-logo";
+import type { ApiPlan } from "@/types/payment";
+import { DEFAULT_REGION_CODE } from "@/lib/constants";
 
-export const PaymentIdleCard = ({
+interface PaymentIdleCardProps {
+  plans: ApiPlan[];
+  isLoading: boolean;
+  regionCode?: string;
+  handlePay: (planId: number, amount: number, currency: string) => void;
+}
+
+function PlanSkeleton(): React.ReactElement {
+  return (
+    <div className="mt-4 rounded-lg p-px animate-pulse" style={{ background: "linear-gradient(90.33deg, var(--secondary) 0.29%, var(--primary) 99.89%)" }}>
+      <div className="rounded-[8px] bg-white/80 px-4 py-3 flex items-center justify-between">
+        <div className="h-4 w-32 bg-gray-200 rounded" />
+        <div className="h-4 w-16 bg-gray-200 rounded" />
+      </div>
+    </div>
+  );
+}
+
+export function PaymentIdleCard({
+  plans,
+  isLoading,
+  regionCode = DEFAULT_REGION_CODE,
   handlePay,
-}: {
-  handlePay: (amount: number, currency: string) => void;
-}) => {
-  const [selectedId, setSelectedId] = useState(PLANS[0]?.id);
+}: PaymentIdleCardProps): React.ReactElement {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
 
-  const selectedPlan = PLANS.find((p) => p.id === selectedId) || PLANS[0];
-  const otherPlans = PLANS.filter((p) => p.id !== selectedId);
+  const defaultPlan = plans.find((p) => p.rank === 1) ?? plans[0];
+  const effectiveSelectedId = selectedId ?? defaultPlan?.id ?? null;
 
+  const selectedPlan = plans.find((p) => p.id === effectiveSelectedId);
+  const otherPlans = plans.filter((p) => p.id !== effectiveSelectedId);
+
+  const handlePayClick = (): void => {
+    if (!selectedPlan) return;
+    const region = selectedPlan.regions[regionCode] ?? Object.values(selectedPlan.regions)[0];
+    if (!region) return;
+    handlePay(selectedPlan.id, region.amount, region.currency);
+  };
   return (
     <OverlayCardWrapper className="bg-[linear-gradient(89.95deg,#FFFFFF_0.05%,#EEF8F7_70.35%,#FDFEFF_96.52%)] border-secondary p-3 px-5 justify-between">
       <div className="flex justify-between items-start flex-1 gap-2 relative z-10">
@@ -42,45 +73,59 @@ export const PaymentIdleCard = ({
         </div>
       </div>
 
-      {/* Selected plan row */}
-      <PlanRowCard plan={selectedPlan} />
+      {isLoading ? (
+        <>
+          <PlanSkeleton />
+          <PlanSkeleton />
+        </>
+      ) : (
+        <>
+          {selectedPlan && (
+            <PlanRowCard plan={selectedPlan} regionCode={regionCode} />
+          )}
 
-      {/* Toggle */}
-      <button
-        type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="mt-2 flex items-center justify-center gap-1 text-xs font-semibold text-primary w-full py-1"
-      >
-        {expanded ? (
-          <>Hide other plans <ChevronUp size={14} /></>
-        ) : (
-          <>View other plans <ChevronDown size={14} /></>
-        )}
-      </button>
+          {otherPlans.length > 0 && (
+            <>
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                className="mt-2 flex items-center justify-center gap-1 text-xs font-semibold text-primary w-full py-1"
+              >
+                {expanded ? (
+                  <>Hide other plans <ChevronUp size={14} /></>
+                ) : (
+                  <>View other plans <ChevronDown size={14} /></>
+                )}
+              </button>
 
-      {/* Other plans */}
-      {expanded && (
-        <div className="flex flex-col">
-          {otherPlans.map((plan) => (
-            <PlanRowCard
-              key={plan.id}
-              plan={plan}
-              onClick={() => {
-                setSelectedId(plan.id);
-                setExpanded(false);
-              }}
-            />
-          ))}
-        </div>
+              {expanded && (
+                <div className="flex flex-col">
+                  {otherPlans.map((plan) => (
+                    <PlanRowCard
+                      key={plan.id}
+                      plan={plan}
+                      regionCode={regionCode}
+                      onClick={() => {
+                        setSelectedId(plan.id);
+                        setExpanded(false);
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+
+          <Button
+            onClick={handlePayClick}
+            variant={"brand"}
+            className="mt-4 h-12"
+            disabled={!selectedPlan}
+          >
+            Pay Now
+          </Button>
+        </>
       )}
-
-      <Button
-        onClick={() => handlePay(selectedPlan?.amount || 0, selectedPlan?.currency || "INR")}
-        variant={"brand"}
-        className="mt-4 h-12"
-      >
-        Pay Now
-      </Button>
     </OverlayCardWrapper>
   );
-};
+}

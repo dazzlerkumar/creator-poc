@@ -1,19 +1,39 @@
-import { Plan } from "@/types/payment";
+"use client";
 
-export const PlanRowCard = ({
+import type { ApiPlan } from "@/types/payment";
+import { DEFAULT_REGION_CODE } from "@/lib/constants";
+import { formatAmount, calculateDiscountPercentage } from "@/utils/payment-utils";
+
+
+export function PlanRowCard({
   plan,
+  regionCode = DEFAULT_REGION_CODE,
   onClick,
 }: {
-  plan: Plan | undefined;
+  plan: ApiPlan;
+  regionCode?: string;
   onClick?: () => void;
-}) => {
+}): React.ReactElement {
+  const region = plan.regions[regionCode] ?? Object.values(plan.regions)[0];
+  if (!region) return <></>;
+
+  const hasDiscount = region.discounted_amount !== null && region.discounted_amount < region.amount;
+  const displayAmount = region.amount / 100
+
   const inner = (
     <div className="rounded-[8px] bg-[linear-gradient(89.95deg,#FFFFFF_0.05%,#EEF8F7_70.35%,#FDFEFF_96.52%)] px-4 py-2 flex items-center justify-between">
-      <span className="text-sm font-semibold text-foreground">{plan?.label}</span>
+      <span className="text-sm font-semibold text-foreground">{plan.name}</span>
       <div className="flex items-center gap-2">
-        <span className="text-sm font-bold text-foreground">{plan?.display}</span>
+        {hasDiscount && (
+          <span className="text-xs text-muted-foreground line-through">
+            {formatAmount(region.discounted_amount!, region.currency)}
+          </span>
+        )}
+        <span className="text-sm font-bold text-foreground">
+          {formatAmount(region.amount, region.currency, true)}
+        </span>
         <span className="text-[10px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-          {plan?.badge}
+          -{calculateDiscountPercentage(region.discounted_amount, displayAmount)}%
         </span>
       </div>
     </div>
@@ -40,4 +60,4 @@ export const PlanRowCard = ({
       {inner}
     </div>
   );
-};
+}
