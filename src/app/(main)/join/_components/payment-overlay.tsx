@@ -44,8 +44,8 @@ export function PaymentOverlay(): React.ReactElement | null {
       planId,
       amount,
       currency,
-      phoneNumber: "",
-      memberName: "",
+      phoneNumber: "+917275044169", // TODO: need to replace with auth response
+      memberName: "Deepak", // TODO: need to replace with auth response
       regionCode: DEFAULT_REGION_CODE,
       productName: PAYMENT_CONFIG.productName,
       description: PAYMENT_CONFIG.description,

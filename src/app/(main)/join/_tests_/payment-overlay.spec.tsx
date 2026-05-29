@@ -2,19 +2,41 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { PaymentOverlay } from "../_components/payment-overlay";
 import { PaymentStatus } from "@/types/payment";
+import type { ApiPlan } from "@/types/payment";
 
 const mockReset = vi.fn();
-const mockClosePayment = vi.fn();
 const mockOpenPayment = vi.fn();
+const mockSetSuccess = vi.fn();
 const mockInitiatePayment = vi.fn();
+const mockSetShowPayment = vi.fn();
 
 const mockStoreState = {
-  status: "idle",
-  paymentId: null as string | null,
+  status: "idle" as string,
+  gatewayPaymentId: null as string | null,
   errorMessage: null as string | null,
-  closePayment: mockClosePayment,
   reset: mockReset,
+  setSuccess: mockSetSuccess,
 };
+
+const mockPlans: ApiPlan[] = [
+  {
+    id: 42,
+    name: "Habuild Premium 3 Months",
+    description: "3 months premium",
+    category: "premium",
+    status: "ACTIVE",
+    rank: 1,
+    base_plan_id: null,
+    features: {},
+    programs: {},
+    metadata: {},
+    is_international: false,
+    country: "IND",
+    regions: {
+      IND: { amount: 99900, discounted_amount: 79900, currency: "INR", gateway_id: 1 },
+    },
+  },
+];
 
 vi.mock("@/stores/payment-store", () => {
   const store = vi.fn(() => mockStoreState);
@@ -34,12 +56,26 @@ vi.mock("@/hooks/use-razorpay", () => ({
   }),
 }));
 
+vi.mock("@/hooks/use-plans", () => ({
+  usePlans: () => ({
+    plans: mockPlans,
+    isLoading: false,
+    error: null,
+  }),
+}));
+
+vi.mock("@/stores/ui-store", () => ({
+  useUIStore: () => ({
+    setShowPayment: mockSetShowPayment,
+  }),
+}));
+
 describe("PaymentOverlay", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
     mockStoreState.status = PaymentStatus.IDLE;
-    mockStoreState.paymentId = null;
+    mockStoreState.gatewayPaymentId = null;
     mockStoreState.errorMessage = null;
   });
 
@@ -62,12 +98,15 @@ describe("PaymentOverlay", () => {
     fireEvent.click(payButton);
 
     expect(mockInitiatePayment).toHaveBeenCalledTimes(1);
-    expect(mockInitiatePayment).toHaveBeenCalledWith({
-      amount: 49900,
-      currency: "INR",
-      productName: "Habuild Live Session",
-      description: "Premium Live Yoga Session Access",
-    });
+    expect(mockInitiatePayment).toHaveBeenCalledWith(
+      expect.objectContaining({
+        planId: 42,
+        amount: 99900,
+        currency: "INR",
+        productName: "Habuild Live Session",
+        description: "Premium Live Yoga Session Access",
+      })
+    );
   });
 
   it("renders processing state", () => {
@@ -80,33 +119,20 @@ describe("PaymentOverlay", () => {
 
   it("renders success state and sets auto-close timer", () => {
     mockStoreState.status = PaymentStatus.SUCCESS;
-    mockStoreState.paymentId = "pay_XYZ123";
+    mockStoreState.gatewayPaymentId = "pay_XYZ123";
     render(<PaymentOverlay />);
 
     expect(screen.getByText("Subscription Active")).toBeInTheDocument();
     expect(screen.getByText("Welcome to the community! Your daily wellness journey begins now.")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /view benefits/i })).toBeInTheDocument();
-
-    expect(mockClosePayment).not.toHaveBeenCalled();
+    expect(mockSetShowPayment).not.toHaveBeenCalled();
 
     act(() => {
-      vi.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(3 * 60 * 1000);
     });
 
-    expect(mockClosePayment).toHaveBeenCalledTimes(1);
+    expect(mockSetShowPayment).toHaveBeenCalledWith(false);
   });
 
-  it("opens benefits link on success card button click", () => {
-    const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(() => null);
-    mockStoreState.status = PaymentStatus.SUCCESS;
-    render(<PaymentOverlay />);
-
-    const viewBenefitsButton = screen.getByRole("button", { name: /view benefits/i });
-    fireEvent.click(viewBenefitsButton);
-
-    expect(windowOpenSpy).toHaveBeenCalledWith("https://habuild.com", "_blank", "noopener noreferrer");
-    windowOpenSpy.mockRestore();
-  });
 
   it("renders failed state with generic error message and triggers retry on click", () => {
     mockStoreState.status = PaymentStatus.FAILED;
