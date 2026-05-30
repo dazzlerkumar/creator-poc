@@ -9,8 +9,7 @@ import { useUIStore } from "@/stores/ui-store";
 import Image from "next/image";
 import { PaymentOverlay } from "@/app/(main)/join/_components/payment-overlay";
 import { QuizOverlay } from "@/app/(main)/join/_components/quiz-overlay";
-import { MessageSquare } from "lucide-react";
-
+import { ChatHeader } from "@/app/(main)/join/_components/chat-header";
 const YouTubePlayer = dynamic(
   () => import("./youtube-player").then((mod) => mod.YouTubePlayer),
   { ssr: false },
@@ -29,9 +28,7 @@ export function AudienceStage({ videoBroadcastId }: AudienceStageProps) {
     isChatLoading,
     setChatLoading,
     showPayment,
-    setShowPayment,
     showQuiz,
-    setShowQuiz
   } = useUIStore();
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -80,29 +77,7 @@ export function AudienceStage({ videoBroadcastId }: AudienceStageProps) {
             </div>
           ) : (
             <div className="flex flex-col h-full bg-background">
-              <div className="px-5 py-2 border-b border-border flex justify-between items-center bg-card select-none">
-                <div className="flex items-center gap-2.5">
-                  <MessageSquare className="w-5 h-5 text-primary" />
-                  <h2 className="text-sm font-bold text-foreground tracking-tight uppercase">
-                    Live Chat
-                  </h2>
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_6px_rgba(34,197,94,0.5)]"></span>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setShowQuiz(!showQuiz)}
-                    className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
-                  >
-                    Quiz
-                  </button>
-                  <button
-                    onClick={() => setShowPayment(!showPayment)}
-                    className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
-                  >
-                    Pay
-                  </button>
-                </div>
-              </div>
+              <ChatHeader />
               <div className="flex-1 overflow-y-auto">
                 {showPayment && <PaymentOverlay />}
                 {showQuiz && <QuizOverlay sid={videoBroadcastId} />}
