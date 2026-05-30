@@ -4,16 +4,9 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 import { MessageSquare, Pin, Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLiveChat } from "@/hooks/use-live-chat";
+import { ChatMessage } from "@/types/chat";
 
-export interface ChatMessage {
-  id: string;
-  authorName: string;
-  messageText: string;
-  timestamp: string;
-  role: "viewer" | "moderator" | "owner";
-  isPinned?: boolean;
-  isDm?: boolean;
-}
+export type { ChatMessage };
 
 const QUICK_EMOJIS = ["👍", "❤️", "😂", "🧘‍♀️", "🧘‍♂️", "🙌", "✨"];
 
@@ -140,16 +133,16 @@ export function LiveChat({ sid }: { sid: string }) {
                   hour12: false,
                 })}
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 flex">
                 <span
                   className={cn(
-                    "text-xs font-bold mr-1.5 transition-colors",
+                    "text-xs font-bold mr-1.5 transition-colors flex gap-1",
                     msg.role === "owner"
                       ? "text-secondary"
                       : "text-foreground",
                   )}
                 >
-                  {msg.role === "owner" ? <><span className="text-md">Saurabh</span> <Crown size={10} fill="text-yellow-500" /></> : msg.authorName}:
+                  {msg.role === "owner" ? <><span className="text-md">Saurabh</span> <Crown size={10} fill="text-yellow-500" stroke="text-yellow-500" /></> : msg.authorName}:
                 </span>
                 <span className="text-sm text-muted-foreground break-words">
                   {msg.messageText}

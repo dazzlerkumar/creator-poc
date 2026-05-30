@@ -5,26 +5,22 @@ describe('Protobuf compilation', () => {
   it('correctly loads and exposes expected schemas', () => {
     expect(creator_stage).toBeDefined();
     
-    const { ChatMessage, ChatPublishRequest, BatchedChatMessages, AnalyticsHeartbeat, ActivityEvent } = creator_stage.realtime.v1;
+    const { AudienceChatEvent, AudienceChatMessage, CreatorChatEvent, BatchedChatMessages } = creator_stage.realtime.v1;
     
-    expect(ChatMessage).toBeDefined();
-    expect(ChatMessage.decode).toBeTypeOf('function');
-    expect(ChatMessage.encode).toBeTypeOf('function');
+    expect(AudienceChatEvent).toBeDefined();
+    expect(AudienceChatEvent.decode).toBeTypeOf('function');
+    expect(AudienceChatEvent.encode).toBeTypeOf('function');
     
-    expect(ChatPublishRequest).toBeDefined();
-    expect(ChatPublishRequest.decode).toBeTypeOf('function');
-    expect(ChatPublishRequest.encode).toBeTypeOf('function');
+    expect(AudienceChatMessage).toBeDefined();
+    expect(AudienceChatMessage.decode).toBeTypeOf('function');
+    expect(AudienceChatMessage.encode).toBeTypeOf('function');
+    
+    expect(CreatorChatEvent).toBeDefined();
+    expect(CreatorChatEvent.decode).toBeTypeOf('function');
+    expect(CreatorChatEvent.encode).toBeTypeOf('function');
     
     expect(BatchedChatMessages).toBeDefined();
     expect(BatchedChatMessages.decode).toBeTypeOf('function');
     expect(BatchedChatMessages.encode).toBeTypeOf('function');
-    
-    expect(AnalyticsHeartbeat).toBeDefined();
-    expect(AnalyticsHeartbeat.decode).toBeTypeOf('function');
-    expect(AnalyticsHeartbeat.encode).toBeTypeOf('function');
-    
-    expect(ActivityEvent).toBeDefined();
-    expect(ActivityEvent.decode).toBeTypeOf('function');
-    expect(ActivityEvent.encode).toBeTypeOf('function');
   });
 });

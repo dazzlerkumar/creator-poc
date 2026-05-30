@@ -17,6 +17,7 @@ interface FlexibleRawChatMessage {
   authorName?: string;
   body?: string;
   messageText?: string;
+  message?: string;
   sent_at?: { seconds?: number; nanos?: number } | string | number | null;
   sentAt?: { seconds?: number; nanos?: number } | string | number | null;
   pinned?: boolean;
@@ -94,6 +95,8 @@ export class BroadcastRealtimeClient {
   private client: ReturnType<typeof centrifugeClient.get> = null;
   private subscriptions: Subscription[] = [];
   private audienceSub: Subscription | null = null;
+  private dmSub: Subscription | null = null;
+  private sentMessageIds = new Set<string>();
 
   constructor(options: BroadcastRealtimeClientOptions) {
     this.sessionId = options.sessionId;
@@ -120,7 +123,20 @@ export class BroadcastRealtimeClient {
 
     this.client.connect();
 
-    this.audienceSub = this.setupSubscription(channels.audience(this.sessionId), this.handleAudiencePublication.bind(this));
+    this.audienceSub = this.setupSubscription(
+      channels.audience(this.sessionId),
+      this.handleAudiencePublication.bind(this)
+    );
+
+    this.setupSubscription(
+      channels.broadcast(this.sessionId),
+      this.handleCreatorPublication.bind(this)
+    );
+
+    this.dmSub = this.setupSubscription(
+      channels.directMessage(this.sessionId, this.userId),
+      this.handleDmPublication.bind(this)
+    );
   }
 
   public disconnect() {
@@ -133,6 +149,7 @@ export class BroadcastRealtimeClient {
     });
     this.subscriptions = [];
     this.audienceSub = null;
+    this.dmSub = null;
 
     // We don't necessarily call centrifugeClient.destroy() here 
     // because other components might be using the client. 
@@ -180,7 +197,7 @@ export class BroadcastRealtimeClient {
           : new Uint8Array((ctx.data as ArrayBufferView).buffer, (ctx.data as ArrayBufferView).byteOffset, (ctx.data as ArrayBufferView).byteLength);
 
         try {
-          const decodedEvent = creator_stage.realtime.v1.AudienceChatEvents.decode(bytes);
+          const decodedEvent = creator_stage.realtime.v1.AudienceChatEvent.decode(bytes);
           if (decodedEvent.chatMessage) {
             const uiMsg = mapToUiMessage(decodedEvent.chatMessage as FlexibleRawChatMessage);
             this.buffer.push(uiMsg);
@@ -217,9 +234,9 @@ export class BroadcastRealtimeClient {
       } else if (typeof ctx.data === "object" && ctx.data !== null && "kind" in ctx.data && (ctx.data as Record<string, unknown>).kind === "audienceChatEvents") {
         const envelope = ctx.data as { kind: string; payload: Record<string, unknown> };
         try {
-          const decodedEvent = creator_stage.realtime.v1.AudienceChatEvents.decode(
-            creator_stage.realtime.v1.AudienceChatEvents.encode(
-              creator_stage.realtime.v1.AudienceChatEvents.fromObject(envelope.payload),
+          const decodedEvent = creator_stage.realtime.v1.AudienceChatEvent.decode(
+            creator_stage.realtime.v1.AudienceChatEvent.encode(
+              creator_stage.realtime.v1.AudienceChatEvent.fromObject(envelope.payload),
             ).finish(),
           );
 
@@ -244,9 +261,109 @@ export class BroadcastRealtimeClient {
     }
   }
 
+  private handleCreatorPublication(ctx: PublicationContext) {
+    try {
+      if (!ctx.data) return;
+
+      if (ctx.data instanceof Uint8Array || ArrayBuffer.isView(ctx.data)) {
+        const bytes = ctx.data instanceof Uint8Array
+          ? ctx.data
+          : new Uint8Array(
+            (ctx.data as ArrayBufferView).buffer,
+            (ctx.data as ArrayBufferView).byteOffset,
+            (ctx.data as ArrayBufferView).byteLength,
+          );
+
+        try {
+          const decoded = creator_stage.realtime.v1.CreatorChatEvent.decode(bytes);
+          
+          if (decoded.creatorChatMessage) {
+            const uiMsg = mapToUiMessage(decoded.creatorChatMessage as FlexibleRawChatMessage);
+            if (!this.sentMessageIds.has(uiMsg.id)) {
+              this.buffer.push(uiMsg);
+              if (!this.flushScheduled) {
+                this.flushScheduled = true;
+                requestAnimationFrame(() => {
+                  this.flushScheduled = false;
+                  this.flushBuffer();
+                });
+              }
+            }
+          } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_PIN && decoded.pin) {
+            this.onPin?.(mapToUiMessage(decoded.pin as FlexibleRawChatMessage));
+          } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_UNPIN) {
+            this.onPin?.(null);
+          }
+        } catch (err) {
+          console.warn("Unknown binary publication on :broadcast", err);
+        }
+      } else if (typeof ctx.data === "object" && ctx.data !== null && "kind" in ctx.data && (ctx.data as Record<string, unknown>).kind === "activity") {
+        const envelope = ctx.data as { kind: string; payload: Record<string, unknown> };
+        try {
+          const activity = creator_stage.realtime.v1.CreatorChatEvent.decode(
+            creator_stage.realtime.v1.CreatorChatEvent.encode(
+              creator_stage.realtime.v1.CreatorChatEvent.fromObject(envelope.payload),
+            ).finish(),
+          );
+
+          if (activity.body === "pin" && activity.pin) {
+            this.onPin?.(mapToUiMessage(activity.pin as FlexibleRawChatMessage));
+          } else if (activity.body === "unpin") {
+            this.onPin?.(null);
+          }
+        } catch (activityErr) {
+          console.warn("Failed to process CreatorChatEvent:", activityErr);
+        }
+      }
+    } catch (err) {
+      console.error("Error handling creator publication:", err);
+    }
+  }
+
+  private handleDmPublication(ctx: PublicationContext) {
+    try {
+      if (!ctx.data) return;
+
+      if (!(ctx.data instanceof Uint8Array || ArrayBuffer.isView(ctx.data))) return;
+
+      const bytes = ctx.data instanceof Uint8Array
+        ? ctx.data
+        : new Uint8Array(
+          (ctx.data as ArrayBufferView).buffer,
+          (ctx.data as ArrayBufferView).byteOffset,
+          (ctx.data as ArrayBufferView).byteLength,
+        );
+
+      try {
+        const decoded = creator_stage.realtime.v1.CreatorChatEvent.decode(bytes);
+        
+        // The broker echoes our own publishes. Drop ROLE_AUDIENCE.
+        if (decoded.role === creator_stage.realtime.v1.Role.ROLE_AUDIENCE) return;
+
+        if (decoded && decoded.type === creator_stage.realtime.v1.Type.TYPE_CREATOR_MESSAGE && decoded.creatorChatMessage) {
+          const uiMsg = { ...mapToUiMessage(decoded.creatorChatMessage as FlexibleRawChatMessage), isDm: true };
+          if (!this.sentMessageIds.has(uiMsg.id)) {
+            this.buffer.push(uiMsg);
+            if (!this.flushScheduled) {
+              this.flushScheduled = true;
+              requestAnimationFrame(() => {
+                this.flushScheduled = false;
+                this.flushBuffer();
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.error("[handleDmPublication] Decode error:", err);
+      }
+    } catch (err) {
+      console.error("Error handling DM publication:", err);
+    }
+  }
+
   public async sendMessage(text: string): Promise<ChatMessage | null> {
-    if (!this.audienceSub) {
-      console.warn("Cannot send message: no active audience subscription");
+    if (!this.dmSub) {
+      console.warn("Cannot send message: no active DM subscription");
       return null;
     }
 
@@ -260,22 +377,19 @@ export class BroadcastRealtimeClient {
       role: "viewer",
     };
 
-    const event = creator_stage.realtime.v1.AudienceChatEvents.create({
+    const event = creator_stage.realtime.v1.AudienceChatEvent.create({
+      role: creator_stage.realtime.v1.Role.ROLE_AUDIENCE,
       type: creator_stage.realtime.v1.AudienceMessageType.TYPE_AUDIENCE_MESSAGE,
       chatMessage: creator_stage.realtime.v1.AudienceChatMessage.create({
         id: messageId,
         body: text,
-        userId: this.userId,
-        videoBroadcastId: this.sessionId,
-        displayName: this.displayName,
-        role: creator_stage.realtime.v1.Role.ROLE_AUDIENCE,
-      })
+      }),
     });
-    
-    const bytes = creator_stage.realtime.v1.AudienceChatEvents.encode(event).finish();
+
+    const bytes = creator_stage.realtime.v1.AudienceChatEvent.encode(event).finish();
 
     try {
-      await this.audienceSub.publish(bytes);
+      await this.dmSub.publish(bytes);
       return localMsg;
     } catch (err) {
       console.error("Failed to publish message:", err);

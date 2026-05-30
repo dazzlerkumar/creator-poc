@@ -10,1087 +10,17 @@ export namespace creator_stage {
         /** Namespace v1. */
         namespace v1 {
 
-            /** Type enum. */
-            enum Type {
+            /** AudienceIngestRoute enum. */
+            enum AudienceIngestRoute {
 
-                /** TYPE_UNSPECIFIED value */
-                TYPE_UNSPECIFIED = 0,
+                /** AUDIENCE_INGEST_ROUTE_UNSPECIFIED value */
+                AUDIENCE_INGEST_ROUTE_UNSPECIFIED = 0,
 
-                /** TYPE_PIN value */
-                TYPE_PIN = 1,
+                /** AUDIENCE_INGEST_ROUTE_PEER value */
+                AUDIENCE_INGEST_ROUTE_PEER = 1,
 
-                /** TYPE_UNPIN value */
-                TYPE_UNPIN = 2,
-
-                /** TYPE_CTA_PUSH value */
-                TYPE_CTA_PUSH = 3,
-
-                /** TYPE_CTA_DISMISS value */
-                TYPE_CTA_DISMISS = 4
-            }
-
-            /**
-             * Properties of an Unpin.
-             * @deprecated Use creator_stage.realtime.v1.Unpin.$Properties instead.
-             */
-            interface IUnpin extends creator_stage.realtime.v1.Unpin.$Properties {
-            }
-
-            /** Represents an Unpin. */
-            class Unpin {
-
-                /**
-                 * Constructs a new Unpin.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.Unpin.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /** Unpin messageId. */
-                messageId: string;
-
-                /**
-                 * Creates a new Unpin instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns Unpin instance
-                 */
-                static create(properties: creator_stage.realtime.v1.Unpin.$Shape): creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape;
-                static create(properties?: creator_stage.realtime.v1.Unpin.$Properties): creator_stage.realtime.v1.Unpin;
-
-                /**
-                 * Encodes the specified Unpin message. Does not implicitly {@link creator_stage.realtime.v1.Unpin.verify|verify} messages.
-                 * @param message Unpin message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.Unpin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified Unpin message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.Unpin.verify|verify} messages.
-                 * @param message Unpin message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.Unpin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes an Unpin message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape} Unpin
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape;
-
-                /**
-                 * Decodes an Unpin message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape} Unpin
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape;
-
-                /**
-                 * Verifies an Unpin message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates an Unpin message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Unpin
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.Unpin;
-
-                /**
-                 * Creates a plain object from an Unpin message. Also converts values to other types if specified.
-                 * @param message Unpin
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.Unpin, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this Unpin to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for Unpin
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace Unpin {
-
-                /** Properties of an Unpin. */
-                interface $Properties {
-
-                    /** Unpin messageId */
-                    messageId?: (string|null);
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Shape of an Unpin. */
-                type $Shape = creator_stage.realtime.v1.Unpin.$Properties;
-            }
-
-            /**
-             * Properties of a CTAPush.
-             * @deprecated Use creator_stage.realtime.v1.CTAPush.$Properties instead.
-             */
-            interface ICTAPush extends creator_stage.realtime.v1.CTAPush.$Properties {
-            }
-
-            /** Represents a CTAPush. */
-            class CTAPush {
-
-                /**
-                 * Constructs a new CTAPush.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.CTAPush.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /** CTAPush label. */
-                label: string;
-
-                /** CTAPush url. */
-                url: string;
-
-                /**
-                 * Creates a new CTAPush instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns CTAPush instance
-                 */
-                static create(properties: creator_stage.realtime.v1.CTAPush.$Shape): creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape;
-                static create(properties?: creator_stage.realtime.v1.CTAPush.$Properties): creator_stage.realtime.v1.CTAPush;
-
-                /**
-                 * Encodes the specified CTAPush message. Does not implicitly {@link creator_stage.realtime.v1.CTAPush.verify|verify} messages.
-                 * @param message CTAPush message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.CTAPush.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified CTAPush message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.CTAPush.verify|verify} messages.
-                 * @param message CTAPush message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.CTAPush.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a CTAPush message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape} CTAPush
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape;
-
-                /**
-                 * Decodes a CTAPush message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape} CTAPush
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape;
-
-                /**
-                 * Verifies a CTAPush message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a CTAPush message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns CTAPush
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.CTAPush;
-
-                /**
-                 * Creates a plain object from a CTAPush message. Also converts values to other types if specified.
-                 * @param message CTAPush
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.CTAPush, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this CTAPush to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for CTAPush
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace CTAPush {
-
-                /** Properties of a CTAPush. */
-                interface $Properties {
-
-                    /** CTAPush label */
-                    label?: (string|null);
-
-                    /** CTAPush url */
-                    url?: (string|null);
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Shape of a CTAPush. */
-                type $Shape = creator_stage.realtime.v1.CTAPush.$Properties;
-            }
-
-            /**
-             * Properties of a CTADismiss.
-             * @deprecated Use creator_stage.realtime.v1.CTADismiss.$Properties instead.
-             */
-            interface ICTADismiss extends creator_stage.realtime.v1.CTADismiss.$Properties {
-            }
-
-            /** Represents a CTADismiss. */
-            class CTADismiss {
-
-                /**
-                 * Constructs a new CTADismiss.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.CTADismiss.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /**
-                 * Creates a new CTADismiss instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns CTADismiss instance
-                 */
-                static create(properties: creator_stage.realtime.v1.CTADismiss.$Shape): creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape;
-                static create(properties?: creator_stage.realtime.v1.CTADismiss.$Properties): creator_stage.realtime.v1.CTADismiss;
-
-                /**
-                 * Encodes the specified CTADismiss message. Does not implicitly {@link creator_stage.realtime.v1.CTADismiss.verify|verify} messages.
-                 * @param message CTADismiss message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.CTADismiss.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified CTADismiss message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.CTADismiss.verify|verify} messages.
-                 * @param message CTADismiss message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.CTADismiss.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a CTADismiss message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape} CTADismiss
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape;
-
-                /**
-                 * Decodes a CTADismiss message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape} CTADismiss
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape;
-
-                /**
-                 * Verifies a CTADismiss message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a CTADismiss message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns CTADismiss
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.CTADismiss;
-
-                /**
-                 * Creates a plain object from a CTADismiss message. Also converts values to other types if specified.
-                 * @param message CTADismiss
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.CTADismiss, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this CTADismiss to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for CTADismiss
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace CTADismiss {
-
-                /** Properties of a CTADismiss. */
-                interface $Properties {
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Shape of a CTADismiss. */
-                type $Shape = creator_stage.realtime.v1.CTADismiss.$Properties;
-            }
-
-            /**
-             * Properties of an ActivityEvent.
-             * @deprecated Use creator_stage.realtime.v1.ActivityEvent.$Properties instead.
-             */
-            interface IActivityEvent extends creator_stage.realtime.v1.ActivityEvent.$Properties {
-            }
-
-            /** Represents an ActivityEvent. */
-            class ActivityEvent {
-
-                /**
-                 * Constructs a new ActivityEvent.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.ActivityEvent.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /** ActivityEvent type. */
-                type: creator_stage.realtime.v1.Type;
-
-                /** ActivityEvent at. */
-                at?: (google.protobuf.Timestamp.$Properties|null);
-
-                /** ActivityEvent pin. */
-                pin?: (creator_stage.realtime.v1.ChatMessage.$Properties|null);
-
-                /** ActivityEvent unpin. */
-                unpin?: (creator_stage.realtime.v1.Unpin.$Properties|null);
-
-                /** ActivityEvent ctaPush. */
-                ctaPush?: (creator_stage.realtime.v1.CTAPush.$Properties|null);
-
-                /** ActivityEvent ctaDismiss. */
-                ctaDismiss?: (creator_stage.realtime.v1.CTADismiss.$Properties|null);
-
-                /** ActivityEvent body. */
-                body?: ("pin"|"unpin"|"ctaPush"|"ctaDismiss");
-
-                /**
-                 * Creates a new ActivityEvent instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns ActivityEvent instance
-                 */
-                static create(properties: creator_stage.realtime.v1.ActivityEvent.$Shape): creator_stage.realtime.v1.ActivityEvent & creator_stage.realtime.v1.ActivityEvent.$Shape;
-                static create(properties?: creator_stage.realtime.v1.ActivityEvent.$Properties): creator_stage.realtime.v1.ActivityEvent;
-
-                /**
-                 * Encodes the specified ActivityEvent message. Does not implicitly {@link creator_stage.realtime.v1.ActivityEvent.verify|verify} messages.
-                 * @param message ActivityEvent message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.ActivityEvent.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified ActivityEvent message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.ActivityEvent.verify|verify} messages.
-                 * @param message ActivityEvent message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.ActivityEvent.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes an ActivityEvent message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.ActivityEvent & creator_stage.realtime.v1.ActivityEvent.$Shape} ActivityEvent
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.ActivityEvent & creator_stage.realtime.v1.ActivityEvent.$Shape;
-
-                /**
-                 * Decodes an ActivityEvent message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.ActivityEvent & creator_stage.realtime.v1.ActivityEvent.$Shape} ActivityEvent
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.ActivityEvent & creator_stage.realtime.v1.ActivityEvent.$Shape;
-
-                /**
-                 * Verifies an ActivityEvent message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates an ActivityEvent message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns ActivityEvent
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.ActivityEvent;
-
-                /**
-                 * Creates a plain object from an ActivityEvent message. Also converts values to other types if specified.
-                 * @param message ActivityEvent
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.ActivityEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this ActivityEvent to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for ActivityEvent
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace ActivityEvent {
-
-                /** Properties of an ActivityEvent. */
-                interface $Properties {
-
-                    /** ActivityEvent type */
-                    type?: (creator_stage.realtime.v1.Type|null);
-
-                    /** ActivityEvent at */
-                    at?: (google.protobuf.Timestamp.$Properties|null);
-
-                    /** ActivityEvent pin */
-                    pin?: (creator_stage.realtime.v1.ChatMessage.$Properties|null);
-
-                    /** ActivityEvent unpin */
-                    unpin?: (creator_stage.realtime.v1.Unpin.$Properties|null);
-
-                    /** ActivityEvent ctaPush */
-                    ctaPush?: (creator_stage.realtime.v1.CTAPush.$Properties|null);
-
-                    /** ActivityEvent ctaDismiss */
-                    ctaDismiss?: (creator_stage.realtime.v1.CTADismiss.$Properties|null);
-
-                    /** ActivityEvent body */
-                    body?: ("pin"|"unpin"|"ctaPush"|"ctaDismiss");
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Narrowed shape of an ActivityEvent. */
-                type $Shape = {
-  type?: creator_stage.realtime.v1.Type|null;
-  at?: google.protobuf.Timestamp.$Shape|null;
-  pin?: creator_stage.realtime.v1.ChatMessage.$Shape|null;
-  unpin?: creator_stage.realtime.v1.Unpin.$Shape|null;
-  ctaPush?: creator_stage.realtime.v1.CTAPush.$Shape|null;
-  ctaDismiss?: creator_stage.realtime.v1.CTADismiss.$Shape|null;
-  $unknowns?: Uint8Array[];
-} & (
-  ({ body?: undefined; pin?: null; unpin?: null; ctaPush?: null; ctaDismiss?: null }|{ body?: "pin"; pin: creator_stage.realtime.v1.ChatMessage.$Shape; unpin?: null; ctaPush?: null; ctaDismiss?: null }|{ body?: "unpin"; pin?: null; unpin: creator_stage.realtime.v1.Unpin.$Shape; ctaPush?: null; ctaDismiss?: null }|{ body?: "ctaPush"; pin?: null; unpin?: null; ctaPush: creator_stage.realtime.v1.CTAPush.$Shape; ctaDismiss?: null }|{ body?: "ctaDismiss"; pin?: null; unpin?: null; ctaPush?: null; ctaDismiss: creator_stage.realtime.v1.CTADismiss.$Shape })
-);
-            }
-
-            /** Role enum. */
-            enum Role {
-
-                /** ROLE_UNSPECIFIED value */
-                ROLE_UNSPECIFIED = 0,
-
-                /** ROLE_CREATOR value */
-                ROLE_CREATOR = 1,
-
-                /** ROLE_TEAM value */
-                ROLE_TEAM = 2,
-
-                /** ROLE_AUDIENCE value */
-                ROLE_AUDIENCE = 3
-            }
-
-            /**
-             * Properties of a ChatMessage.
-             * @deprecated Use creator_stage.realtime.v1.ChatMessage.$Properties instead.
-             */
-            interface IChatMessage extends creator_stage.realtime.v1.ChatMessage.$Properties {
-            }
-
-            /** Represents a ChatMessage. */
-            class ChatMessage {
-
-                /**
-                 * Constructs a new ChatMessage.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.ChatMessage.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /** ChatMessage id. */
-                id: string;
-
-                /** ChatMessage videoBroadcastId. */
-                videoBroadcastId: string;
-
-                /** ChatMessage userId. */
-                userId: string;
-
-                /** ChatMessage role. */
-                role: creator_stage.realtime.v1.Role;
-
-                /** ChatMessage displayName. */
-                displayName: string;
-
-                /** ChatMessage body. */
-                body: string;
-
-                /** ChatMessage sentAt. */
-                sentAt?: (google.protobuf.Timestamp.$Properties|null);
-
-                /** ChatMessage pinned. */
-                pinned: boolean;
-
-                /**
-                 * Creates a new ChatMessage instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns ChatMessage instance
-                 */
-                static create(properties: creator_stage.realtime.v1.ChatMessage.$Shape): creator_stage.realtime.v1.ChatMessage & creator_stage.realtime.v1.ChatMessage.$Shape;
-                static create(properties?: creator_stage.realtime.v1.ChatMessage.$Properties): creator_stage.realtime.v1.ChatMessage;
-
-                /**
-                 * Encodes the specified ChatMessage message. Does not implicitly {@link creator_stage.realtime.v1.ChatMessage.verify|verify} messages.
-                 * @param message ChatMessage message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.ChatMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.ChatMessage.verify|verify} messages.
-                 * @param message ChatMessage message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.ChatMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a ChatMessage message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.ChatMessage & creator_stage.realtime.v1.ChatMessage.$Shape} ChatMessage
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.ChatMessage & creator_stage.realtime.v1.ChatMessage.$Shape;
-
-                /**
-                 * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.ChatMessage & creator_stage.realtime.v1.ChatMessage.$Shape} ChatMessage
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.ChatMessage & creator_stage.realtime.v1.ChatMessage.$Shape;
-
-                /**
-                 * Verifies a ChatMessage message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns ChatMessage
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.ChatMessage;
-
-                /**
-                 * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
-                 * @param message ChatMessage
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.ChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this ChatMessage to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for ChatMessage
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace ChatMessage {
-
-                /** Properties of a ChatMessage. */
-                interface $Properties {
-
-                    /** ChatMessage id */
-                    id?: (string|null);
-
-                    /** ChatMessage videoBroadcastId */
-                    videoBroadcastId?: (string|null);
-
-                    /** ChatMessage userId */
-                    userId?: (string|null);
-
-                    /** ChatMessage role */
-                    role?: (creator_stage.realtime.v1.Role|null);
-
-                    /** ChatMessage displayName */
-                    displayName?: (string|null);
-
-                    /** ChatMessage body */
-                    body?: (string|null);
-
-                    /** ChatMessage sentAt */
-                    sentAt?: (google.protobuf.Timestamp.$Properties|null);
-
-                    /** ChatMessage pinned */
-                    pinned?: (boolean|null);
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Shape of a ChatMessage. */
-                type $Shape = creator_stage.realtime.v1.ChatMessage.$Properties;
-            }
-
-            /**
-             * Properties of a BatchedChatMessages.
-             * @deprecated Use creator_stage.realtime.v1.BatchedChatMessages.$Properties instead.
-             */
-            interface IBatchedChatMessages extends creator_stage.realtime.v1.BatchedChatMessages.$Properties {
-            }
-
-            /** Represents a BatchedChatMessages. */
-            class BatchedChatMessages {
-
-                /**
-                 * Constructs a new BatchedChatMessages.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.BatchedChatMessages.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /** BatchedChatMessages messages. */
-                messages: creator_stage.realtime.v1.ChatMessage.$Properties[];
-
-                /**
-                 * Creates a new BatchedChatMessages instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns BatchedChatMessages instance
-                 */
-                static create(properties: creator_stage.realtime.v1.BatchedChatMessages.$Shape): creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape;
-                static create(properties?: creator_stage.realtime.v1.BatchedChatMessages.$Properties): creator_stage.realtime.v1.BatchedChatMessages;
-
-                /**
-                 * Encodes the specified BatchedChatMessages message. Does not implicitly {@link creator_stage.realtime.v1.BatchedChatMessages.verify|verify} messages.
-                 * @param message BatchedChatMessages message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.BatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified BatchedChatMessages message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.BatchedChatMessages.verify|verify} messages.
-                 * @param message BatchedChatMessages message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.BatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a BatchedChatMessages message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape} BatchedChatMessages
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape;
-
-                /**
-                 * Decodes a BatchedChatMessages message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape} BatchedChatMessages
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape;
-
-                /**
-                 * Verifies a BatchedChatMessages message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a BatchedChatMessages message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns BatchedChatMessages
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.BatchedChatMessages;
-
-                /**
-                 * Creates a plain object from a BatchedChatMessages message. Also converts values to other types if specified.
-                 * @param message BatchedChatMessages
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.BatchedChatMessages, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this BatchedChatMessages to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for BatchedChatMessages
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace BatchedChatMessages {
-
-                /** Properties of a BatchedChatMessages. */
-                interface $Properties {
-
-                    /** BatchedChatMessages messages */
-                    messages?: (creator_stage.realtime.v1.ChatMessage.$Properties[]|null);
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Shape of a BatchedChatMessages. */
-                type $Shape = creator_stage.realtime.v1.BatchedChatMessages.$Properties;
-            }
-
-            /**
-             * Properties of a ChatPublishRequest.
-             * @deprecated Use creator_stage.realtime.v1.ChatPublishRequest.$Properties instead.
-             */
-            interface IChatPublishRequest extends creator_stage.realtime.v1.ChatPublishRequest.$Properties {
-            }
-
-            /** Represents a ChatPublishRequest. */
-            class ChatPublishRequest {
-
-                /**
-                 * Constructs a new ChatPublishRequest.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.ChatPublishRequest.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /** ChatPublishRequest body. */
-                body: string;
-
-                /** ChatPublishRequest targetUserId. */
-                targetUserId: string;
-
-                /**
-                 * Creates a new ChatPublishRequest instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns ChatPublishRequest instance
-                 */
-                static create(properties: creator_stage.realtime.v1.ChatPublishRequest.$Shape): creator_stage.realtime.v1.ChatPublishRequest & creator_stage.realtime.v1.ChatPublishRequest.$Shape;
-                static create(properties?: creator_stage.realtime.v1.ChatPublishRequest.$Properties): creator_stage.realtime.v1.ChatPublishRequest;
-
-                /**
-                 * Encodes the specified ChatPublishRequest message. Does not implicitly {@link creator_stage.realtime.v1.ChatPublishRequest.verify|verify} messages.
-                 * @param message ChatPublishRequest message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.ChatPublishRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified ChatPublishRequest message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.ChatPublishRequest.verify|verify} messages.
-                 * @param message ChatPublishRequest message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.ChatPublishRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a ChatPublishRequest message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.ChatPublishRequest & creator_stage.realtime.v1.ChatPublishRequest.$Shape} ChatPublishRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.ChatPublishRequest & creator_stage.realtime.v1.ChatPublishRequest.$Shape;
-
-                /**
-                 * Decodes a ChatPublishRequest message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.ChatPublishRequest & creator_stage.realtime.v1.ChatPublishRequest.$Shape} ChatPublishRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.ChatPublishRequest & creator_stage.realtime.v1.ChatPublishRequest.$Shape;
-
-                /**
-                 * Verifies a ChatPublishRequest message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a ChatPublishRequest message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns ChatPublishRequest
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.ChatPublishRequest;
-
-                /**
-                 * Creates a plain object from a ChatPublishRequest message. Also converts values to other types if specified.
-                 * @param message ChatPublishRequest
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.ChatPublishRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this ChatPublishRequest to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for ChatPublishRequest
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace ChatPublishRequest {
-
-                /** Properties of a ChatPublishRequest. */
-                interface $Properties {
-
-                    /** ChatPublishRequest body */
-                    body?: (string|null);
-
-                    /** ChatPublishRequest targetUserId */
-                    targetUserId?: (string|null);
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Shape of a ChatPublishRequest. */
-                type $Shape = creator_stage.realtime.v1.ChatPublishRequest.$Properties;
-            }
-
-            /**
-             * Properties of an AnalyticsHeartbeat.
-             * @deprecated Use creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties instead.
-             */
-            interface IAnalyticsHeartbeat extends creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties {
-            }
-
-            /** Represents an AnalyticsHeartbeat. */
-            class AnalyticsHeartbeat {
-
-                /**
-                 * Constructs a new AnalyticsHeartbeat.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties);
-
-                /** Unknown fields preserved while decoding */
-                $unknowns?: Uint8Array[];
-
-                /** AnalyticsHeartbeat viewerCount. */
-                viewerCount: number;
-
-                /** AnalyticsHeartbeat chatVelocity. */
-                chatVelocity: number;
-
-                /** AnalyticsHeartbeat engagementRate. */
-                engagementRate: number;
-
-                /** AnalyticsHeartbeat at. */
-                at?: (google.protobuf.Timestamp.$Properties|null);
-
-                /**
-                 * Creates a new AnalyticsHeartbeat instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns AnalyticsHeartbeat instance
-                 */
-                static create(properties: creator_stage.realtime.v1.AnalyticsHeartbeat.$Shape): creator_stage.realtime.v1.AnalyticsHeartbeat & creator_stage.realtime.v1.AnalyticsHeartbeat.$Shape;
-                static create(properties?: creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties): creator_stage.realtime.v1.AnalyticsHeartbeat;
-
-                /**
-                 * Encodes the specified AnalyticsHeartbeat message. Does not implicitly {@link creator_stage.realtime.v1.AnalyticsHeartbeat.verify|verify} messages.
-                 * @param message AnalyticsHeartbeat message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encode(message: creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified AnalyticsHeartbeat message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AnalyticsHeartbeat.verify|verify} messages.
-                 * @param message AnalyticsHeartbeat message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                static encodeDelimited(message: creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes an AnalyticsHeartbeat message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.AnalyticsHeartbeat & creator_stage.realtime.v1.AnalyticsHeartbeat.$Shape} AnalyticsHeartbeat
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AnalyticsHeartbeat & creator_stage.realtime.v1.AnalyticsHeartbeat.$Shape;
-
-                /**
-                 * Decodes an AnalyticsHeartbeat message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.AnalyticsHeartbeat & creator_stage.realtime.v1.AnalyticsHeartbeat.$Shape} AnalyticsHeartbeat
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AnalyticsHeartbeat & creator_stage.realtime.v1.AnalyticsHeartbeat.$Shape;
-
-                /**
-                 * Verifies an AnalyticsHeartbeat message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates an AnalyticsHeartbeat message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns AnalyticsHeartbeat
-                 */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AnalyticsHeartbeat;
-
-                /**
-                 * Creates a plain object from an AnalyticsHeartbeat message. Also converts values to other types if specified.
-                 * @param message AnalyticsHeartbeat
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                static toObject(message: creator_stage.realtime.v1.AnalyticsHeartbeat, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this AnalyticsHeartbeat to JSON.
-                 * @returns JSON object
-                 */
-                toJSON(): { [k: string]: any };
-
-                /**
-                 * Gets the type url for AnalyticsHeartbeat
-                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-                 * @returns The type url
-                 */
-                static getTypeUrl(prefix?: string): string;
-            }
-
-            namespace AnalyticsHeartbeat {
-
-                /** Properties of an AnalyticsHeartbeat. */
-                interface $Properties {
-
-                    /** AnalyticsHeartbeat viewerCount */
-                    viewerCount?: (number|null);
-
-                    /** AnalyticsHeartbeat chatVelocity */
-                    chatVelocity?: (number|null);
-
-                    /** AnalyticsHeartbeat engagementRate */
-                    engagementRate?: (number|null);
-
-                    /** AnalyticsHeartbeat at */
-                    at?: (google.protobuf.Timestamp.$Properties|null);
-
-                    /** Unknown fields preserved while decoding */
-                    $unknowns?: Uint8Array[];
-                }
-
-                /** Shape of an AnalyticsHeartbeat. */
-                type $Shape = creator_stage.realtime.v1.AnalyticsHeartbeat.$Properties;
+                /** AUDIENCE_INGEST_ROUTE_DM value */
+                AUDIENCE_INGEST_ROUTE_DM = 2
             }
 
             /**
@@ -1118,20 +48,20 @@ export namespace creator_stage {
                 /** AudienceChatMessage sentAt. */
                 sentAt?: (google.protobuf.Timestamp.$Properties|null);
 
-                /** AudienceChatMessage videoBroadcastId. */
-                videoBroadcastId: string;
+                /** AudienceChatMessage body. */
+                body: string;
 
                 /** AudienceChatMessage userId. */
                 userId: string;
 
-                /** AudienceChatMessage role. */
-                role: creator_stage.realtime.v1.Role;
-
                 /** AudienceChatMessage displayName. */
                 displayName: string;
 
-                /** AudienceChatMessage body. */
-                body: string;
+                /** AudienceChatMessage videoBroadcastId. */
+                videoBroadcastId: string;
+
+                /** AudienceChatMessage ingestRoute. */
+                ingestRoute: creator_stage.realtime.v1.AudienceIngestRoute;
 
                 /**
                  * Creates a new AudienceChatMessage instance using the specified properties.
@@ -1223,20 +153,20 @@ export namespace creator_stage {
                     /** AudienceChatMessage sentAt */
                     sentAt?: (google.protobuf.Timestamp.$Properties|null);
 
-                    /** AudienceChatMessage videoBroadcastId */
-                    videoBroadcastId?: (string|null);
+                    /** AudienceChatMessage body */
+                    body?: (string|null);
 
                     /** AudienceChatMessage userId */
                     userId?: (string|null);
 
-                    /** AudienceChatMessage role */
-                    role?: (creator_stage.realtime.v1.Role|null);
-
                     /** AudienceChatMessage displayName */
                     displayName?: (string|null);
 
-                    /** AudienceChatMessage body */
-                    body?: (string|null);
+                    /** AudienceChatMessage videoBroadcastId */
+                    videoBroadcastId?: (string|null);
+
+                    /** AudienceChatMessage ingestRoute */
+                    ingestRoute?: (creator_stage.realtime.v1.AudienceIngestRoute|null);
 
                     /** Unknown fields preserved while decoding */
                     $unknowns?: Uint8Array[];
@@ -1381,6 +311,135 @@ export namespace creator_stage {
                 type $Shape = creator_stage.realtime.v1.AudienceQuizResponse.$Properties;
             }
 
+            /**
+             * Properties of an AudienceVideoMetadata.
+             * @deprecated Use creator_stage.realtime.v1.AudienceVideoMetadata.$Properties instead.
+             */
+            interface IAudienceVideoMetadata extends creator_stage.realtime.v1.AudienceVideoMetadata.$Properties {
+            }
+
+            /** Represents an AudienceVideoMetadata. */
+            class AudienceVideoMetadata {
+
+                /**
+                 * Constructs a new AudienceVideoMetadata.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.AudienceVideoMetadata.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** AudienceVideoMetadata id. */
+                id: string;
+
+                /** AudienceVideoMetadata sentAt. */
+                sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                /** AudienceVideoMetadata liveActiveConnections. */
+                liveActiveConnections: number;
+
+                /**
+                 * Creates a new AudienceVideoMetadata instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns AudienceVideoMetadata instance
+                 */
+                static create(properties: creator_stage.realtime.v1.AudienceVideoMetadata.$Shape): creator_stage.realtime.v1.AudienceVideoMetadata & creator_stage.realtime.v1.AudienceVideoMetadata.$Shape;
+                static create(properties?: creator_stage.realtime.v1.AudienceVideoMetadata.$Properties): creator_stage.realtime.v1.AudienceVideoMetadata;
+
+                /**
+                 * Encodes the specified AudienceVideoMetadata message. Does not implicitly {@link creator_stage.realtime.v1.AudienceVideoMetadata.verify|verify} messages.
+                 * @param message AudienceVideoMetadata message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.AudienceVideoMetadata.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified AudienceVideoMetadata message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceVideoMetadata.verify|verify} messages.
+                 * @param message AudienceVideoMetadata message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.AudienceVideoMetadata.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes an AudienceVideoMetadata message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.AudienceVideoMetadata & creator_stage.realtime.v1.AudienceVideoMetadata.$Shape} AudienceVideoMetadata
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceVideoMetadata & creator_stage.realtime.v1.AudienceVideoMetadata.$Shape;
+
+                /**
+                 * Decodes an AudienceVideoMetadata message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.AudienceVideoMetadata & creator_stage.realtime.v1.AudienceVideoMetadata.$Shape} AudienceVideoMetadata
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceVideoMetadata & creator_stage.realtime.v1.AudienceVideoMetadata.$Shape;
+
+                /**
+                 * Verifies an AudienceVideoMetadata message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AudienceVideoMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AudienceVideoMetadata
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceVideoMetadata;
+
+                /**
+                 * Creates a plain object from an AudienceVideoMetadata message. Also converts values to other types if specified.
+                 * @param message AudienceVideoMetadata
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.AudienceVideoMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AudienceVideoMetadata to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for AudienceVideoMetadata
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace AudienceVideoMetadata {
+
+                /** Properties of an AudienceVideoMetadata. */
+                interface $Properties {
+
+                    /** AudienceVideoMetadata id */
+                    id?: (string|null);
+
+                    /** AudienceVideoMetadata sentAt */
+                    sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                    /** AudienceVideoMetadata liveActiveConnections */
+                    liveActiveConnections?: (number|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of an AudienceVideoMetadata. */
+                type $Shape = creator_stage.realtime.v1.AudienceVideoMetadata.$Properties;
+            }
+
             /** AudienceMessageType enum. */
             enum AudienceMessageType {
 
@@ -1388,142 +447,152 @@ export namespace creator_stage {
                 TYPE_AUDIENCE_MESSAGE = 0,
 
                 /** TYPE_POLL_RESPONSE value */
-                TYPE_POLL_RESPONSE = 1
+                TYPE_POLL_RESPONSE = 1,
+
+                /** TYPE_VIDEO_METADATA value */
+                TYPE_VIDEO_METADATA = 2
             }
 
             /**
-             * Properties of an AudienceChatEvents.
-             * @deprecated Use creator_stage.realtime.v1.AudienceChatEvents.$Properties instead.
+             * Properties of an AudienceChatEvent.
+             * @deprecated Use creator_stage.realtime.v1.AudienceChatEvent.$Properties instead.
              */
-            interface IAudienceChatEvents extends creator_stage.realtime.v1.AudienceChatEvents.$Properties {
+            interface IAudienceChatEvent extends creator_stage.realtime.v1.AudienceChatEvent.$Properties {
             }
 
-            /** Represents an AudienceChatEvents. */
-            class AudienceChatEvents {
+            /** Represents an AudienceChatEvent. */
+            class AudienceChatEvent {
 
                 /**
-                 * Constructs a new AudienceChatEvents.
+                 * Constructs a new AudienceChatEvent.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: creator_stage.realtime.v1.AudienceChatEvents.$Properties);
+                constructor(properties?: creator_stage.realtime.v1.AudienceChatEvent.$Properties);
 
                 /** Unknown fields preserved while decoding */
                 $unknowns?: Uint8Array[];
 
-                /** AudienceChatEvents type. */
+                /** AudienceChatEvent role. */
+                role: creator_stage.realtime.v1.Role;
+
+                /** AudienceChatEvent type. */
                 type: creator_stage.realtime.v1.AudienceMessageType;
 
-                /** AudienceChatEvents chatMessage. */
+                /** AudienceChatEvent chatMessage. */
                 chatMessage?: (creator_stage.realtime.v1.AudienceChatMessage.$Properties|null);
 
-                /** AudienceChatEvents quizResponse. */
+                /** AudienceChatEvent quizResponse. */
                 quizResponse?: (creator_stage.realtime.v1.AudienceQuizResponse.$Properties|null);
 
-                /** AudienceChatEvents body. */
+                /** AudienceChatEvent body. */
                 body?: ("chatMessage"|"quizResponse");
 
                 /**
-                 * Creates a new AudienceChatEvents instance using the specified properties.
+                 * Creates a new AudienceChatEvent instance using the specified properties.
                  * @param [properties] Properties to set
-                 * @returns AudienceChatEvents instance
+                 * @returns AudienceChatEvent instance
                  */
-                static create(properties: creator_stage.realtime.v1.AudienceChatEvents.$Shape): creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape;
-                static create(properties?: creator_stage.realtime.v1.AudienceChatEvents.$Properties): creator_stage.realtime.v1.AudienceChatEvents;
+                static create(properties: creator_stage.realtime.v1.AudienceChatEvent.$Shape): creator_stage.realtime.v1.AudienceChatEvent & creator_stage.realtime.v1.AudienceChatEvent.$Shape;
+                static create(properties?: creator_stage.realtime.v1.AudienceChatEvent.$Properties): creator_stage.realtime.v1.AudienceChatEvent;
 
                 /**
-                 * Encodes the specified AudienceChatEvents message. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvents.verify|verify} messages.
-                 * @param message AudienceChatEvents message or plain object to encode
+                 * Encodes the specified AudienceChatEvent message. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvent.verify|verify} messages.
+                 * @param message AudienceChatEvent message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                static encode(message: creator_stage.realtime.v1.AudienceChatEvents.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+                static encode(message: creator_stage.realtime.v1.AudienceChatEvent.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified AudienceChatEvents message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvents.verify|verify} messages.
-                 * @param message AudienceChatEvents message or plain object to encode
+                 * Encodes the specified AudienceChatEvent message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceChatEvent.verify|verify} messages.
+                 * @param message AudienceChatEvent message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                static encodeDelimited(message: creator_stage.realtime.v1.AudienceChatEvents.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+                static encodeDelimited(message: creator_stage.realtime.v1.AudienceChatEvent.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Decodes an AudienceChatEvents message from the specified reader or buffer.
+                 * Decodes an AudienceChatEvent message from the specified reader or buffer.
                  * @param reader Reader or buffer to decode from
                  * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape} AudienceChatEvents
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvent & creator_stage.realtime.v1.AudienceChatEvent.$Shape} AudienceChatEvent
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape;
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceChatEvent & creator_stage.realtime.v1.AudienceChatEvent.$Shape;
 
                 /**
-                 * Decodes an AudienceChatEvents message from the specified reader or buffer, length delimited.
+                 * Decodes an AudienceChatEvent message from the specified reader or buffer, length delimited.
                  * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape} AudienceChatEvents
+                 * @returns {creator_stage.realtime.v1.AudienceChatEvent & creator_stage.realtime.v1.AudienceChatEvent.$Shape} AudienceChatEvent
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceChatEvents & creator_stage.realtime.v1.AudienceChatEvents.$Shape;
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceChatEvent & creator_stage.realtime.v1.AudienceChatEvent.$Shape;
 
                 /**
-                 * Verifies an AudienceChatEvents message.
+                 * Verifies an AudienceChatEvent message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates an AudienceChatEvents message from a plain object. Also converts values to their respective internal types.
+                 * Creates an AudienceChatEvent message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns AudienceChatEvents
+                 * @returns AudienceChatEvent
                  */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceChatEvents;
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceChatEvent;
 
                 /**
-                 * Creates a plain object from an AudienceChatEvents message. Also converts values to other types if specified.
-                 * @param message AudienceChatEvents
+                 * Creates a plain object from an AudienceChatEvent message. Also converts values to other types if specified.
+                 * @param message AudienceChatEvent
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                static toObject(message: creator_stage.realtime.v1.AudienceChatEvents, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                static toObject(message: creator_stage.realtime.v1.AudienceChatEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this AudienceChatEvents to JSON.
+                 * Converts this AudienceChatEvent to JSON.
                  * @returns JSON object
                  */
                 toJSON(): { [k: string]: any };
 
                 /**
-                 * Gets the type url for AudienceChatEvents
+                 * Gets the type url for AudienceChatEvent
                  * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
                  * @returns The type url
                  */
                 static getTypeUrl(prefix?: string): string;
             }
 
-            namespace AudienceChatEvents {
+            namespace AudienceChatEvent {
 
-                /** Properties of an AudienceChatEvents. */
+                /** Properties of an AudienceChatEvent. */
                 interface $Properties {
 
-                    /** AudienceChatEvents type */
+                    /** AudienceChatEvent role */
+                    role?: (creator_stage.realtime.v1.Role|null);
+
+                    /** AudienceChatEvent type */
                     type?: (creator_stage.realtime.v1.AudienceMessageType|null);
 
-                    /** AudienceChatEvents chatMessage */
+                    /** AudienceChatEvent chatMessage */
                     chatMessage?: (creator_stage.realtime.v1.AudienceChatMessage.$Properties|null);
 
-                    /** AudienceChatEvents quizResponse */
+                    /** AudienceChatEvent quizResponse */
                     quizResponse?: (creator_stage.realtime.v1.AudienceQuizResponse.$Properties|null);
 
-                    /** AudienceChatEvents body */
+                    /** AudienceChatEvent body */
                     body?: ("chatMessage"|"quizResponse");
 
                     /** Unknown fields preserved while decoding */
                     $unknowns?: Uint8Array[];
                 }
 
-                /** Narrowed shape of an AudienceChatEvents. */
+                /** Narrowed shape of an AudienceChatEvent. */
                 type $Shape = {
+  role?: creator_stage.realtime.v1.Role|null;
   type?: creator_stage.realtime.v1.AudienceMessageType|null;
   chatMessage?: creator_stage.realtime.v1.AudienceChatMessage.$Shape|null;
   quizResponse?: creator_stage.realtime.v1.AudienceQuizResponse.$Shape|null;
@@ -1534,126 +603,126 @@ export namespace creator_stage {
             }
 
             /**
-             * Properties of an AudienceBatchedChatMessages.
-             * @deprecated Use creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties instead.
+             * Properties of a BatchedChatMessages.
+             * @deprecated Use creator_stage.realtime.v1.BatchedChatMessages.$Properties instead.
              */
-            interface IAudienceBatchedChatMessages extends creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties {
+            interface IBatchedChatMessages extends creator_stage.realtime.v1.BatchedChatMessages.$Properties {
             }
 
-            /** Represents an AudienceBatchedChatMessages. */
-            class AudienceBatchedChatMessages {
+            /** Represents a BatchedChatMessages. */
+            class BatchedChatMessages {
 
                 /**
-                 * Constructs a new AudienceBatchedChatMessages.
+                 * Constructs a new BatchedChatMessages.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties);
+                constructor(properties?: creator_stage.realtime.v1.BatchedChatMessages.$Properties);
 
                 /** Unknown fields preserved while decoding */
                 $unknowns?: Uint8Array[];
 
-                /** AudienceBatchedChatMessages liveActiveConnections. */
+                /** BatchedChatMessages liveActiveConnections. */
                 liveActiveConnections: number;
 
-                /** AudienceBatchedChatMessages messages. */
+                /** BatchedChatMessages messages. */
                 messages: creator_stage.realtime.v1.AudienceChatMessage.$Properties[];
 
                 /**
-                 * Creates a new AudienceBatchedChatMessages instance using the specified properties.
+                 * Creates a new BatchedChatMessages instance using the specified properties.
                  * @param [properties] Properties to set
-                 * @returns AudienceBatchedChatMessages instance
+                 * @returns BatchedChatMessages instance
                  */
-                static create(properties: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape): creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape;
-                static create(properties?: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties): creator_stage.realtime.v1.AudienceBatchedChatMessages;
+                static create(properties: creator_stage.realtime.v1.BatchedChatMessages.$Shape): creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape;
+                static create(properties?: creator_stage.realtime.v1.BatchedChatMessages.$Properties): creator_stage.realtime.v1.BatchedChatMessages;
 
                 /**
-                 * Encodes the specified AudienceBatchedChatMessages message. Does not implicitly {@link creator_stage.realtime.v1.AudienceBatchedChatMessages.verify|verify} messages.
-                 * @param message AudienceBatchedChatMessages message or plain object to encode
+                 * Encodes the specified BatchedChatMessages message. Does not implicitly {@link creator_stage.realtime.v1.BatchedChatMessages.verify|verify} messages.
+                 * @param message BatchedChatMessages message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                static encode(message: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+                static encode(message: creator_stage.realtime.v1.BatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified AudienceBatchedChatMessages message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.AudienceBatchedChatMessages.verify|verify} messages.
-                 * @param message AudienceBatchedChatMessages message or plain object to encode
+                 * Encodes the specified BatchedChatMessages message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.BatchedChatMessages.verify|verify} messages.
+                 * @param message BatchedChatMessages message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                static encodeDelimited(message: creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+                static encodeDelimited(message: creator_stage.realtime.v1.BatchedChatMessages.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Decodes an AudienceBatchedChatMessages message from the specified reader or buffer.
+                 * Decodes a BatchedChatMessages message from the specified reader or buffer.
                  * @param reader Reader or buffer to decode from
                  * @param [length] Message length if known beforehand
-                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape} AudienceBatchedChatMessages
+                 * @returns {creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape} BatchedChatMessages
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape;
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape;
 
                 /**
-                 * Decodes an AudienceBatchedChatMessages message from the specified reader or buffer, length delimited.
+                 * Decodes a BatchedChatMessages message from the specified reader or buffer, length delimited.
                  * @param reader Reader or buffer to decode from
-                 * @returns {creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape} AudienceBatchedChatMessages
+                 * @returns {creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape} BatchedChatMessages
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.AudienceBatchedChatMessages & creator_stage.realtime.v1.AudienceBatchedChatMessages.$Shape;
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.BatchedChatMessages & creator_stage.realtime.v1.BatchedChatMessages.$Shape;
 
                 /**
-                 * Verifies an AudienceBatchedChatMessages message.
+                 * Verifies a BatchedChatMessages message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates an AudienceBatchedChatMessages message from a plain object. Also converts values to their respective internal types.
+                 * Creates a BatchedChatMessages message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns AudienceBatchedChatMessages
+                 * @returns BatchedChatMessages
                  */
-                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.AudienceBatchedChatMessages;
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.BatchedChatMessages;
 
                 /**
-                 * Creates a plain object from an AudienceBatchedChatMessages message. Also converts values to other types if specified.
-                 * @param message AudienceBatchedChatMessages
+                 * Creates a plain object from a BatchedChatMessages message. Also converts values to other types if specified.
+                 * @param message BatchedChatMessages
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                static toObject(message: creator_stage.realtime.v1.AudienceBatchedChatMessages, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                static toObject(message: creator_stage.realtime.v1.BatchedChatMessages, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this AudienceBatchedChatMessages to JSON.
+                 * Converts this BatchedChatMessages to JSON.
                  * @returns JSON object
                  */
                 toJSON(): { [k: string]: any };
 
                 /**
-                 * Gets the type url for AudienceBatchedChatMessages
+                 * Gets the type url for BatchedChatMessages
                  * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
                  * @returns The type url
                  */
                 static getTypeUrl(prefix?: string): string;
             }
 
-            namespace AudienceBatchedChatMessages {
+            namespace BatchedChatMessages {
 
-                /** Properties of an AudienceBatchedChatMessages. */
+                /** Properties of a BatchedChatMessages. */
                 interface $Properties {
 
-                    /** AudienceBatchedChatMessages liveActiveConnections */
+                    /** BatchedChatMessages liveActiveConnections */
                     liveActiveConnections?: (number|null);
 
-                    /** AudienceBatchedChatMessages messages */
+                    /** BatchedChatMessages messages */
                     messages?: (creator_stage.realtime.v1.AudienceChatMessage.$Properties[]|null);
 
                     /** Unknown fields preserved while decoding */
                     $unknowns?: Uint8Array[];
                 }
 
-                /** Shape of an AudienceBatchedChatMessages. */
-                type $Shape = creator_stage.realtime.v1.AudienceBatchedChatMessages.$Properties;
+                /** Shape of a BatchedChatMessages. */
+                type $Shape = creator_stage.realtime.v1.BatchedChatMessages.$Properties;
             }
 
             /**
@@ -1783,6 +852,1402 @@ export namespace creator_stage {
 
                 /** Shape of an AudienceConnectData. */
                 type $Shape = creator_stage.realtime.v1.AudienceConnectData.$Properties;
+            }
+
+            /** Role enum. */
+            enum Role {
+
+                /** ROLE_UNSPECIFIED value */
+                ROLE_UNSPECIFIED = 0,
+
+                /** ROLE_CREATOR value */
+                ROLE_CREATOR = 1,
+
+                /** ROLE_TEAM value */
+                ROLE_TEAM = 2,
+
+                /** ROLE_AUDIENCE value */
+                ROLE_AUDIENCE = 3
+            }
+
+            /** Type enum. */
+            enum Type {
+
+                /** TYPE_CREATOR_MESSAGE value */
+                TYPE_CREATOR_MESSAGE = 0,
+
+                /** TYPE_PIN value */
+                TYPE_PIN = 1,
+
+                /** TYPE_UNPIN value */
+                TYPE_UNPIN = 2,
+
+                /** TYPE_CTA_PUSH value */
+                TYPE_CTA_PUSH = 3,
+
+                /** TYPE_CTA_DISMISS value */
+                TYPE_CTA_DISMISS = 4,
+
+                /** TYPE_QUIZ_START value */
+                TYPE_QUIZ_START = 5,
+
+                /** TYPE_QUIZ_END value */
+                TYPE_QUIZ_END = 6
+            }
+
+            /**
+             * Properties of a CreatorChatMessage.
+             * @deprecated Use creator_stage.realtime.v1.CreatorChatMessage.$Properties instead.
+             */
+            interface ICreatorChatMessage extends creator_stage.realtime.v1.CreatorChatMessage.$Properties {
+            }
+
+            /** Represents a CreatorChatMessage. */
+            class CreatorChatMessage {
+
+                /**
+                 * Constructs a new CreatorChatMessage.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.CreatorChatMessage.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** CreatorChatMessage id. */
+                id: string;
+
+                /** CreatorChatMessage message. */
+                message: string;
+
+                /** CreatorChatMessage audienceMessageId. */
+                audienceMessageId?: (string|null);
+
+                /**
+                 * Creates a new CreatorChatMessage instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CreatorChatMessage instance
+                 */
+                static create(properties: creator_stage.realtime.v1.CreatorChatMessage.$Shape): creator_stage.realtime.v1.CreatorChatMessage & creator_stage.realtime.v1.CreatorChatMessage.$Shape;
+                static create(properties?: creator_stage.realtime.v1.CreatorChatMessage.$Properties): creator_stage.realtime.v1.CreatorChatMessage;
+
+                /**
+                 * Encodes the specified CreatorChatMessage message. Does not implicitly {@link creator_stage.realtime.v1.CreatorChatMessage.verify|verify} messages.
+                 * @param message CreatorChatMessage message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.CreatorChatMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CreatorChatMessage message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.CreatorChatMessage.verify|verify} messages.
+                 * @param message CreatorChatMessage message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.CreatorChatMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CreatorChatMessage message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.CreatorChatMessage & creator_stage.realtime.v1.CreatorChatMessage.$Shape} CreatorChatMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.CreatorChatMessage & creator_stage.realtime.v1.CreatorChatMessage.$Shape;
+
+                /**
+                 * Decodes a CreatorChatMessage message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.CreatorChatMessage & creator_stage.realtime.v1.CreatorChatMessage.$Shape} CreatorChatMessage
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.CreatorChatMessage & creator_stage.realtime.v1.CreatorChatMessage.$Shape;
+
+                /**
+                 * Verifies a CreatorChatMessage message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreatorChatMessage message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreatorChatMessage
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.CreatorChatMessage;
+
+                /**
+                 * Creates a plain object from a CreatorChatMessage message. Also converts values to other types if specified.
+                 * @param message CreatorChatMessage
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.CreatorChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreatorChatMessage to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for CreatorChatMessage
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace CreatorChatMessage {
+
+                /** Properties of a CreatorChatMessage. */
+                interface $Properties {
+
+                    /** CreatorChatMessage id */
+                    id?: (string|null);
+
+                    /** CreatorChatMessage message */
+                    message?: (string|null);
+
+                    /** CreatorChatMessage audienceMessageId */
+                    audienceMessageId?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a CreatorChatMessage. */
+                type $Shape = creator_stage.realtime.v1.CreatorChatMessage.$Properties;
+            }
+
+            /**
+             * Properties of a Pin.
+             * @deprecated Use creator_stage.realtime.v1.Pin.$Properties instead.
+             */
+            interface IPin extends creator_stage.realtime.v1.Pin.$Properties {
+            }
+
+            /** Represents a Pin. */
+            class Pin {
+
+                /**
+                 * Constructs a new Pin.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.Pin.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** Pin id. */
+                id: string;
+
+                /** Pin message. */
+                message: string;
+
+                /**
+                 * Creates a new Pin instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns Pin instance
+                 */
+                static create(properties: creator_stage.realtime.v1.Pin.$Shape): creator_stage.realtime.v1.Pin & creator_stage.realtime.v1.Pin.$Shape;
+                static create(properties?: creator_stage.realtime.v1.Pin.$Properties): creator_stage.realtime.v1.Pin;
+
+                /**
+                 * Encodes the specified Pin message. Does not implicitly {@link creator_stage.realtime.v1.Pin.verify|verify} messages.
+                 * @param message Pin message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.Pin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Pin message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.Pin.verify|verify} messages.
+                 * @param message Pin message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.Pin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a Pin message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.Pin & creator_stage.realtime.v1.Pin.$Shape} Pin
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.Pin & creator_stage.realtime.v1.Pin.$Shape;
+
+                /**
+                 * Decodes a Pin message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.Pin & creator_stage.realtime.v1.Pin.$Shape} Pin
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.Pin & creator_stage.realtime.v1.Pin.$Shape;
+
+                /**
+                 * Verifies a Pin message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Pin message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Pin
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.Pin;
+
+                /**
+                 * Creates a plain object from a Pin message. Also converts values to other types if specified.
+                 * @param message Pin
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.Pin, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Pin to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for Pin
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace Pin {
+
+                /** Properties of a Pin. */
+                interface $Properties {
+
+                    /** Pin id */
+                    id?: (string|null);
+
+                    /** Pin message */
+                    message?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a Pin. */
+                type $Shape = creator_stage.realtime.v1.Pin.$Properties;
+            }
+
+            /**
+             * Properties of an Unpin.
+             * @deprecated Use creator_stage.realtime.v1.Unpin.$Properties instead.
+             */
+            interface IUnpin extends creator_stage.realtime.v1.Unpin.$Properties {
+            }
+
+            /** Represents an Unpin. */
+            class Unpin {
+
+                /**
+                 * Constructs a new Unpin.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.Unpin.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** Unpin messageId. */
+                messageId: string;
+
+                /**
+                 * Creates a new Unpin instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns Unpin instance
+                 */
+                static create(properties: creator_stage.realtime.v1.Unpin.$Shape): creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape;
+                static create(properties?: creator_stage.realtime.v1.Unpin.$Properties): creator_stage.realtime.v1.Unpin;
+
+                /**
+                 * Encodes the specified Unpin message. Does not implicitly {@link creator_stage.realtime.v1.Unpin.verify|verify} messages.
+                 * @param message Unpin message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.Unpin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Unpin message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.Unpin.verify|verify} messages.
+                 * @param message Unpin message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.Unpin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes an Unpin message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape} Unpin
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape;
+
+                /**
+                 * Decodes an Unpin message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape} Unpin
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.Unpin & creator_stage.realtime.v1.Unpin.$Shape;
+
+                /**
+                 * Verifies an Unpin message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an Unpin message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Unpin
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.Unpin;
+
+                /**
+                 * Creates a plain object from an Unpin message. Also converts values to other types if specified.
+                 * @param message Unpin
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.Unpin, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Unpin to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for Unpin
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace Unpin {
+
+                /** Properties of an Unpin. */
+                interface $Properties {
+
+                    /** Unpin messageId */
+                    messageId?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of an Unpin. */
+                type $Shape = creator_stage.realtime.v1.Unpin.$Properties;
+            }
+
+            /** CtaType enum. */
+            enum CtaType {
+
+                /** TYPE_PAYMENT value */
+                TYPE_PAYMENT = 0
+            }
+
+            /**
+             * Properties of a CTAPush.
+             * @deprecated Use creator_stage.realtime.v1.CTAPush.$Properties instead.
+             */
+            interface ICTAPush extends creator_stage.realtime.v1.CTAPush.$Properties {
+            }
+
+            /** Represents a CTAPush. */
+            class CTAPush {
+
+                /**
+                 * Constructs a new CTAPush.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.CTAPush.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** CTAPush id. */
+                id: string;
+
+                /** CTAPush label. */
+                label: string;
+
+                /** CTAPush url. */
+                url: string;
+
+                /** CTAPush type. */
+                type: creator_stage.realtime.v1.CtaType;
+
+                /**
+                 * Creates a new CTAPush instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CTAPush instance
+                 */
+                static create(properties: creator_stage.realtime.v1.CTAPush.$Shape): creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape;
+                static create(properties?: creator_stage.realtime.v1.CTAPush.$Properties): creator_stage.realtime.v1.CTAPush;
+
+                /**
+                 * Encodes the specified CTAPush message. Does not implicitly {@link creator_stage.realtime.v1.CTAPush.verify|verify} messages.
+                 * @param message CTAPush message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.CTAPush.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CTAPush message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.CTAPush.verify|verify} messages.
+                 * @param message CTAPush message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.CTAPush.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CTAPush message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape} CTAPush
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape;
+
+                /**
+                 * Decodes a CTAPush message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape} CTAPush
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.CTAPush & creator_stage.realtime.v1.CTAPush.$Shape;
+
+                /**
+                 * Verifies a CTAPush message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CTAPush message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CTAPush
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.CTAPush;
+
+                /**
+                 * Creates a plain object from a CTAPush message. Also converts values to other types if specified.
+                 * @param message CTAPush
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.CTAPush, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CTAPush to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for CTAPush
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace CTAPush {
+
+                /** Properties of a CTAPush. */
+                interface $Properties {
+
+                    /** CTAPush id */
+                    id?: (string|null);
+
+                    /** CTAPush label */
+                    label?: (string|null);
+
+                    /** CTAPush url */
+                    url?: (string|null);
+
+                    /** CTAPush type */
+                    type?: (creator_stage.realtime.v1.CtaType|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a CTAPush. */
+                type $Shape = creator_stage.realtime.v1.CTAPush.$Properties;
+            }
+
+            /**
+             * Properties of a CTADismiss.
+             * @deprecated Use creator_stage.realtime.v1.CTADismiss.$Properties instead.
+             */
+            interface ICTADismiss extends creator_stage.realtime.v1.CTADismiss.$Properties {
+            }
+
+            /** Represents a CTADismiss. */
+            class CTADismiss {
+
+                /**
+                 * Constructs a new CTADismiss.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.CTADismiss.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** CTADismiss messageId. */
+                messageId: string;
+
+                /**
+                 * Creates a new CTADismiss instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CTADismiss instance
+                 */
+                static create(properties: creator_stage.realtime.v1.CTADismiss.$Shape): creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape;
+                static create(properties?: creator_stage.realtime.v1.CTADismiss.$Properties): creator_stage.realtime.v1.CTADismiss;
+
+                /**
+                 * Encodes the specified CTADismiss message. Does not implicitly {@link creator_stage.realtime.v1.CTADismiss.verify|verify} messages.
+                 * @param message CTADismiss message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.CTADismiss.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CTADismiss message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.CTADismiss.verify|verify} messages.
+                 * @param message CTADismiss message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.CTADismiss.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CTADismiss message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape} CTADismiss
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape;
+
+                /**
+                 * Decodes a CTADismiss message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape} CTADismiss
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.CTADismiss & creator_stage.realtime.v1.CTADismiss.$Shape;
+
+                /**
+                 * Verifies a CTADismiss message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CTADismiss message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CTADismiss
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.CTADismiss;
+
+                /**
+                 * Creates a plain object from a CTADismiss message. Also converts values to other types if specified.
+                 * @param message CTADismiss
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.CTADismiss, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CTADismiss to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for CTADismiss
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace CTADismiss {
+
+                /** Properties of a CTADismiss. */
+                interface $Properties {
+
+                    /** CTADismiss messageId */
+                    messageId?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a CTADismiss. */
+                type $Shape = creator_stage.realtime.v1.CTADismiss.$Properties;
+            }
+
+            /**
+             * Properties of a QuizOption.
+             * @deprecated Use creator_stage.realtime.v1.QuizOption.$Properties instead.
+             */
+            interface IQuizOption extends creator_stage.realtime.v1.QuizOption.$Properties {
+            }
+
+            /** Represents a QuizOption. */
+            class QuizOption {
+
+                /**
+                 * Constructs a new QuizOption.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.QuizOption.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** QuizOption id. */
+                id: string;
+
+                /** QuizOption label. */
+                label: string;
+
+                /**
+                 * Creates a new QuizOption instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns QuizOption instance
+                 */
+                static create(properties: creator_stage.realtime.v1.QuizOption.$Shape): creator_stage.realtime.v1.QuizOption & creator_stage.realtime.v1.QuizOption.$Shape;
+                static create(properties?: creator_stage.realtime.v1.QuizOption.$Properties): creator_stage.realtime.v1.QuizOption;
+
+                /**
+                 * Encodes the specified QuizOption message. Does not implicitly {@link creator_stage.realtime.v1.QuizOption.verify|verify} messages.
+                 * @param message QuizOption message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.QuizOption.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified QuizOption message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.QuizOption.verify|verify} messages.
+                 * @param message QuizOption message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.QuizOption.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a QuizOption message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.QuizOption & creator_stage.realtime.v1.QuizOption.$Shape} QuizOption
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.QuizOption & creator_stage.realtime.v1.QuizOption.$Shape;
+
+                /**
+                 * Decodes a QuizOption message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.QuizOption & creator_stage.realtime.v1.QuizOption.$Shape} QuizOption
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.QuizOption & creator_stage.realtime.v1.QuizOption.$Shape;
+
+                /**
+                 * Verifies a QuizOption message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a QuizOption message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns QuizOption
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.QuizOption;
+
+                /**
+                 * Creates a plain object from a QuizOption message. Also converts values to other types if specified.
+                 * @param message QuizOption
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.QuizOption, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this QuizOption to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for QuizOption
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace QuizOption {
+
+                /** Properties of a QuizOption. */
+                interface $Properties {
+
+                    /** QuizOption id */
+                    id?: (string|null);
+
+                    /** QuizOption label */
+                    label?: (string|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a QuizOption. */
+                type $Shape = creator_stage.realtime.v1.QuizOption.$Properties;
+            }
+
+            /**
+             * Properties of a Quiz.
+             * @deprecated Use creator_stage.realtime.v1.Quiz.$Properties instead.
+             */
+            interface IQuiz extends creator_stage.realtime.v1.Quiz.$Properties {
+            }
+
+            /** Represents a Quiz. */
+            class Quiz {
+
+                /**
+                 * Constructs a new Quiz.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.Quiz.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** Quiz id. */
+                id: string;
+
+                /** Quiz quizId. */
+                quizId: string;
+
+                /** Quiz videoBroadcastId. */
+                videoBroadcastId: string;
+
+                /** Quiz question. */
+                question: string;
+
+                /** Quiz options. */
+                options: creator_stage.realtime.v1.QuizOption.$Properties[];
+
+                /** Quiz durationSecs. */
+                durationSecs: number;
+
+                /**
+                 * Creates a new Quiz instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns Quiz instance
+                 */
+                static create(properties: creator_stage.realtime.v1.Quiz.$Shape): creator_stage.realtime.v1.Quiz & creator_stage.realtime.v1.Quiz.$Shape;
+                static create(properties?: creator_stage.realtime.v1.Quiz.$Properties): creator_stage.realtime.v1.Quiz;
+
+                /**
+                 * Encodes the specified Quiz message. Does not implicitly {@link creator_stage.realtime.v1.Quiz.verify|verify} messages.
+                 * @param message Quiz message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.Quiz.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Quiz message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.Quiz.verify|verify} messages.
+                 * @param message Quiz message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.Quiz.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a Quiz message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.Quiz & creator_stage.realtime.v1.Quiz.$Shape} Quiz
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.Quiz & creator_stage.realtime.v1.Quiz.$Shape;
+
+                /**
+                 * Decodes a Quiz message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.Quiz & creator_stage.realtime.v1.Quiz.$Shape} Quiz
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.Quiz & creator_stage.realtime.v1.Quiz.$Shape;
+
+                /**
+                 * Verifies a Quiz message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Quiz message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Quiz
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.Quiz;
+
+                /**
+                 * Creates a plain object from a Quiz message. Also converts values to other types if specified.
+                 * @param message Quiz
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.Quiz, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Quiz to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for Quiz
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace Quiz {
+
+                /** Properties of a Quiz. */
+                interface $Properties {
+
+                    /** Quiz id */
+                    id?: (string|null);
+
+                    /** Quiz quizId */
+                    quizId?: (string|null);
+
+                    /** Quiz videoBroadcastId */
+                    videoBroadcastId?: (string|null);
+
+                    /** Quiz question */
+                    question?: (string|null);
+
+                    /** Quiz options */
+                    options?: (creator_stage.realtime.v1.QuizOption.$Properties[]|null);
+
+                    /** Quiz durationSecs */
+                    durationSecs?: (number|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a Quiz. */
+                type $Shape = creator_stage.realtime.v1.Quiz.$Properties;
+            }
+
+            /**
+             * Properties of a QuizOptionCount.
+             * @deprecated Use creator_stage.realtime.v1.QuizOptionCount.$Properties instead.
+             */
+            interface IQuizOptionCount extends creator_stage.realtime.v1.QuizOptionCount.$Properties {
+            }
+
+            /** Represents a QuizOptionCount. */
+            class QuizOptionCount {
+
+                /**
+                 * Constructs a new QuizOptionCount.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.QuizOptionCount.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** QuizOptionCount optionId. */
+                optionId: string;
+
+                /** QuizOptionCount count. */
+                count: number;
+
+                /**
+                 * Creates a new QuizOptionCount instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns QuizOptionCount instance
+                 */
+                static create(properties: creator_stage.realtime.v1.QuizOptionCount.$Shape): creator_stage.realtime.v1.QuizOptionCount & creator_stage.realtime.v1.QuizOptionCount.$Shape;
+                static create(properties?: creator_stage.realtime.v1.QuizOptionCount.$Properties): creator_stage.realtime.v1.QuizOptionCount;
+
+                /**
+                 * Encodes the specified QuizOptionCount message. Does not implicitly {@link creator_stage.realtime.v1.QuizOptionCount.verify|verify} messages.
+                 * @param message QuizOptionCount message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.QuizOptionCount.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified QuizOptionCount message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.QuizOptionCount.verify|verify} messages.
+                 * @param message QuizOptionCount message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.QuizOptionCount.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a QuizOptionCount message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.QuizOptionCount & creator_stage.realtime.v1.QuizOptionCount.$Shape} QuizOptionCount
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.QuizOptionCount & creator_stage.realtime.v1.QuizOptionCount.$Shape;
+
+                /**
+                 * Decodes a QuizOptionCount message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.QuizOptionCount & creator_stage.realtime.v1.QuizOptionCount.$Shape} QuizOptionCount
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.QuizOptionCount & creator_stage.realtime.v1.QuizOptionCount.$Shape;
+
+                /**
+                 * Verifies a QuizOptionCount message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a QuizOptionCount message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns QuizOptionCount
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.QuizOptionCount;
+
+                /**
+                 * Creates a plain object from a QuizOptionCount message. Also converts values to other types if specified.
+                 * @param message QuizOptionCount
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.QuizOptionCount, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this QuizOptionCount to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for QuizOptionCount
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace QuizOptionCount {
+
+                /** Properties of a QuizOptionCount. */
+                interface $Properties {
+
+                    /** QuizOptionCount optionId */
+                    optionId?: (string|null);
+
+                    /** QuizOptionCount count */
+                    count?: (number|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a QuizOptionCount. */
+                type $Shape = creator_stage.realtime.v1.QuizOptionCount.$Properties;
+            }
+
+            /**
+             * Properties of a QuizResults.
+             * @deprecated Use creator_stage.realtime.v1.QuizResults.$Properties instead.
+             */
+            interface IQuizResults extends creator_stage.realtime.v1.QuizResults.$Properties {
+            }
+
+            /** Represents a QuizResults. */
+            class QuizResults {
+
+                /**
+                 * Constructs a new QuizResults.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.QuizResults.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** QuizResults id. */
+                id: string;
+
+                /** QuizResults quizId. */
+                quizId: string;
+
+                /** QuizResults counts. */
+                counts: creator_stage.realtime.v1.QuizOptionCount.$Properties[];
+
+                /**
+                 * Creates a new QuizResults instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns QuizResults instance
+                 */
+                static create(properties: creator_stage.realtime.v1.QuizResults.$Shape): creator_stage.realtime.v1.QuizResults & creator_stage.realtime.v1.QuizResults.$Shape;
+                static create(properties?: creator_stage.realtime.v1.QuizResults.$Properties): creator_stage.realtime.v1.QuizResults;
+
+                /**
+                 * Encodes the specified QuizResults message. Does not implicitly {@link creator_stage.realtime.v1.QuizResults.verify|verify} messages.
+                 * @param message QuizResults message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.QuizResults.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified QuizResults message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.QuizResults.verify|verify} messages.
+                 * @param message QuizResults message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.QuizResults.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a QuizResults message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.QuizResults & creator_stage.realtime.v1.QuizResults.$Shape} QuizResults
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.QuizResults & creator_stage.realtime.v1.QuizResults.$Shape;
+
+                /**
+                 * Decodes a QuizResults message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.QuizResults & creator_stage.realtime.v1.QuizResults.$Shape} QuizResults
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.QuizResults & creator_stage.realtime.v1.QuizResults.$Shape;
+
+                /**
+                 * Verifies a QuizResults message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a QuizResults message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns QuizResults
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.QuizResults;
+
+                /**
+                 * Creates a plain object from a QuizResults message. Also converts values to other types if specified.
+                 * @param message QuizResults
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.QuizResults, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this QuizResults to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for QuizResults
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace QuizResults {
+
+                /** Properties of a QuizResults. */
+                interface $Properties {
+
+                    /** QuizResults id */
+                    id?: (string|null);
+
+                    /** QuizResults quizId */
+                    quizId?: (string|null);
+
+                    /** QuizResults counts */
+                    counts?: (creator_stage.realtime.v1.QuizOptionCount.$Properties[]|null);
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Shape of a QuizResults. */
+                type $Shape = creator_stage.realtime.v1.QuizResults.$Properties;
+            }
+
+            /**
+             * Properties of a CreatorChatEvent.
+             * @deprecated Use creator_stage.realtime.v1.CreatorChatEvent.$Properties instead.
+             */
+            interface ICreatorChatEvent extends creator_stage.realtime.v1.CreatorChatEvent.$Properties {
+            }
+
+            /** Represents a CreatorChatEvent. */
+            class CreatorChatEvent {
+
+                /**
+                 * Constructs a new CreatorChatEvent.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: creator_stage.realtime.v1.CreatorChatEvent.$Properties);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+
+                /** CreatorChatEvent role. */
+                role: creator_stage.realtime.v1.Role;
+
+                /** CreatorChatEvent type. */
+                type: creator_stage.realtime.v1.Type;
+
+                /** CreatorChatEvent sentAt. */
+                sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                /** CreatorChatEvent targetUserId. */
+                targetUserId: string;
+
+                /** CreatorChatEvent videoBroadcastId. */
+                videoBroadcastId: string;
+
+                /** CreatorChatEvent creatorChatMessage. */
+                creatorChatMessage?: (creator_stage.realtime.v1.CreatorChatMessage.$Properties|null);
+
+                /** CreatorChatEvent pin. */
+                pin?: (creator_stage.realtime.v1.Pin.$Properties|null);
+
+                /** CreatorChatEvent unpin. */
+                unpin?: (creator_stage.realtime.v1.Unpin.$Properties|null);
+
+                /** CreatorChatEvent ctaPush. */
+                ctaPush?: (creator_stage.realtime.v1.CTAPush.$Properties|null);
+
+                /** CreatorChatEvent ctaDismiss. */
+                ctaDismiss?: (creator_stage.realtime.v1.CTADismiss.$Properties|null);
+
+                /** CreatorChatEvent quizStart. */
+                quizStart?: (creator_stage.realtime.v1.Quiz.$Properties|null);
+
+                /** CreatorChatEvent quizEnd. */
+                quizEnd?: (creator_stage.realtime.v1.QuizResults.$Properties|null);
+
+                /** CreatorChatEvent body. */
+                body?: ("creatorChatMessage"|"pin"|"unpin"|"ctaPush"|"ctaDismiss"|"quizStart"|"quizEnd");
+
+                /**
+                 * Creates a new CreatorChatEvent instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CreatorChatEvent instance
+                 */
+                static create(properties: creator_stage.realtime.v1.CreatorChatEvent.$Shape): creator_stage.realtime.v1.CreatorChatEvent & creator_stage.realtime.v1.CreatorChatEvent.$Shape;
+                static create(properties?: creator_stage.realtime.v1.CreatorChatEvent.$Properties): creator_stage.realtime.v1.CreatorChatEvent;
+
+                /**
+                 * Encodes the specified CreatorChatEvent message. Does not implicitly {@link creator_stage.realtime.v1.CreatorChatEvent.verify|verify} messages.
+                 * @param message CreatorChatEvent message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encode(message: creator_stage.realtime.v1.CreatorChatEvent.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified CreatorChatEvent message, length delimited. Does not implicitly {@link creator_stage.realtime.v1.CreatorChatEvent.verify|verify} messages.
+                 * @param message CreatorChatEvent message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                static encodeDelimited(message: creator_stage.realtime.v1.CreatorChatEvent.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a CreatorChatEvent message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns {creator_stage.realtime.v1.CreatorChatEvent & creator_stage.realtime.v1.CreatorChatEvent.$Shape} CreatorChatEvent
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): creator_stage.realtime.v1.CreatorChatEvent & creator_stage.realtime.v1.CreatorChatEvent.$Shape;
+
+                /**
+                 * Decodes a CreatorChatEvent message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns {creator_stage.realtime.v1.CreatorChatEvent & creator_stage.realtime.v1.CreatorChatEvent.$Shape} CreatorChatEvent
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): creator_stage.realtime.v1.CreatorChatEvent & creator_stage.realtime.v1.CreatorChatEvent.$Shape;
+
+                /**
+                 * Verifies a CreatorChatEvent message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreatorChatEvent message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreatorChatEvent
+                 */
+                static fromObject(object: { [k: string]: any }): creator_stage.realtime.v1.CreatorChatEvent;
+
+                /**
+                 * Creates a plain object from a CreatorChatEvent message. Also converts values to other types if specified.
+                 * @param message CreatorChatEvent
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                static toObject(message: creator_stage.realtime.v1.CreatorChatEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreatorChatEvent to JSON.
+                 * @returns JSON object
+                 */
+                toJSON(): { [k: string]: any };
+
+                /**
+                 * Gets the type url for CreatorChatEvent
+                 * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+                 * @returns The type url
+                 */
+                static getTypeUrl(prefix?: string): string;
+            }
+
+            namespace CreatorChatEvent {
+
+                /** Properties of a CreatorChatEvent. */
+                interface $Properties {
+
+                    /** CreatorChatEvent role */
+                    role?: (creator_stage.realtime.v1.Role|null);
+
+                    /** CreatorChatEvent type */
+                    type?: (creator_stage.realtime.v1.Type|null);
+
+                    /** CreatorChatEvent sentAt */
+                    sentAt?: (google.protobuf.Timestamp.$Properties|null);
+
+                    /** CreatorChatEvent targetUserId */
+                    targetUserId?: (string|null);
+
+                    /** CreatorChatEvent videoBroadcastId */
+                    videoBroadcastId?: (string|null);
+
+                    /** CreatorChatEvent creatorChatMessage */
+                    creatorChatMessage?: (creator_stage.realtime.v1.CreatorChatMessage.$Properties|null);
+
+                    /** CreatorChatEvent pin */
+                    pin?: (creator_stage.realtime.v1.Pin.$Properties|null);
+
+                    /** CreatorChatEvent unpin */
+                    unpin?: (creator_stage.realtime.v1.Unpin.$Properties|null);
+
+                    /** CreatorChatEvent ctaPush */
+                    ctaPush?: (creator_stage.realtime.v1.CTAPush.$Properties|null);
+
+                    /** CreatorChatEvent ctaDismiss */
+                    ctaDismiss?: (creator_stage.realtime.v1.CTADismiss.$Properties|null);
+
+                    /** CreatorChatEvent quizStart */
+                    quizStart?: (creator_stage.realtime.v1.Quiz.$Properties|null);
+
+                    /** CreatorChatEvent quizEnd */
+                    quizEnd?: (creator_stage.realtime.v1.QuizResults.$Properties|null);
+
+                    /** CreatorChatEvent body */
+                    body?: ("creatorChatMessage"|"pin"|"unpin"|"ctaPush"|"ctaDismiss"|"quizStart"|"quizEnd");
+
+                    /** Unknown fields preserved while decoding */
+                    $unknowns?: Uint8Array[];
+                }
+
+                /** Narrowed shape of a CreatorChatEvent. */
+                type $Shape = {
+  role?: creator_stage.realtime.v1.Role|null;
+  type?: creator_stage.realtime.v1.Type|null;
+  sentAt?: google.protobuf.Timestamp.$Shape|null;
+  targetUserId?: string|null;
+  videoBroadcastId?: string|null;
+  creatorChatMessage?: creator_stage.realtime.v1.CreatorChatMessage.$Shape|null;
+  pin?: creator_stage.realtime.v1.Pin.$Shape|null;
+  unpin?: creator_stage.realtime.v1.Unpin.$Shape|null;
+  ctaPush?: creator_stage.realtime.v1.CTAPush.$Shape|null;
+  ctaDismiss?: creator_stage.realtime.v1.CTADismiss.$Shape|null;
+  quizStart?: creator_stage.realtime.v1.Quiz.$Shape|null;
+  quizEnd?: creator_stage.realtime.v1.QuizResults.$Shape|null;
+  $unknowns?: Uint8Array[];
+} & (
+  ({ body?: undefined; creatorChatMessage?: null; pin?: null; unpin?: null; ctaPush?: null; ctaDismiss?: null; quizStart?: null; quizEnd?: null }|{ body?: "creatorChatMessage"; creatorChatMessage: creator_stage.realtime.v1.CreatorChatMessage.$Shape; pin?: null; unpin?: null; ctaPush?: null; ctaDismiss?: null; quizStart?: null; quizEnd?: null }|{ body?: "pin"; creatorChatMessage?: null; pin: creator_stage.realtime.v1.Pin.$Shape; unpin?: null; ctaPush?: null; ctaDismiss?: null; quizStart?: null; quizEnd?: null }|{ body?: "unpin"; creatorChatMessage?: null; pin?: null; unpin: creator_stage.realtime.v1.Unpin.$Shape; ctaPush?: null; ctaDismiss?: null; quizStart?: null; quizEnd?: null }|{ body?: "ctaPush"; creatorChatMessage?: null; pin?: null; unpin?: null; ctaPush: creator_stage.realtime.v1.CTAPush.$Shape; ctaDismiss?: null; quizStart?: null; quizEnd?: null }|{ body?: "ctaDismiss"; creatorChatMessage?: null; pin?: null; unpin?: null; ctaPush?: null; ctaDismiss: creator_stage.realtime.v1.CTADismiss.$Shape; quizStart?: null; quizEnd?: null }|{ body?: "quizStart"; creatorChatMessage?: null; pin?: null; unpin?: null; ctaPush?: null; ctaDismiss?: null; quizStart: creator_stage.realtime.v1.Quiz.$Shape; quizEnd?: null }|{ body?: "quizEnd"; creatorChatMessage?: null; pin?: null; unpin?: null; ctaPush?: null; ctaDismiss?: null; quizStart?: null; quizEnd: creator_stage.realtime.v1.QuizResults.$Shape })
+);
             }
         }
     }
