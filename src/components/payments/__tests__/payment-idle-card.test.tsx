@@ -1,4 +1,4 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { PaymentIdleCard } from "../payment-idle-card";
 import type { ApiPlan } from "@/types/payment";

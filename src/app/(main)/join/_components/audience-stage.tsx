@@ -17,12 +17,12 @@ const YouTubePlayer = dynamic(
 );
 
 interface AudienceStageProps {
-  sid: string;
+  videoBroadcastId: string;
 }
 
-export function AudienceStage({ sid }: AudienceStageProps) {
+export function AudienceStage({ videoBroadcastId }: AudienceStageProps) {
   const searchParams = useSearchParams();
-  const videoId = searchParams.get("v") || "xLC-PdO9sfs";
+  const videoId = searchParams.get("v") || "-";
 
   const {
     isChatVisible,
@@ -30,6 +30,8 @@ export function AudienceStage({ sid }: AudienceStageProps) {
     setChatLoading,
     showPayment,
     setShowPayment,
+    showQuiz,
+    setShowQuiz
   } = useUIStore();
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -86,17 +88,25 @@ export function AudienceStage({ sid }: AudienceStageProps) {
                   </h2>
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_6px_rgba(34,197,94,0.5)]"></span>
                 </div>
-                <button
-                  onClick={() => setShowPayment(!showPayment)}
-                  className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
-                >
-                  Pay
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowQuiz(!showQuiz)}
+                    className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
+                  >
+                    Quiz
+                  </button>
+                  <button
+                    onClick={() => setShowPayment(!showPayment)}
+                    className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
+                  >
+                    Pay
+                  </button>
+                </div>
               </div>
               <div className="flex-1 overflow-y-auto">
                 {showPayment && <PaymentOverlay />}
-                <QuizOverlay sid={sid} />
-                <LiveChat sid={sid} />
+                {showQuiz && <QuizOverlay sid={videoBroadcastId} />}
+                <LiveChat sid={videoBroadcastId} />
               </div>
             </div>
           )}

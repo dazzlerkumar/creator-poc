@@ -34,11 +34,16 @@ const mockSetChatLoading = vi.fn();
 let mockChatVisible = true;
 let mockChatLoading = true;
 
+let mockShowPayment = false;
+const mockSetShowPayment = vi.fn();
+
 vi.mock('@/stores/ui-store', () => ({
   useUIStore: () => ({
     isChatVisible: mockChatVisible,
     isChatLoading: mockChatLoading,
     setChatLoading: mockSetChatLoading,
+    showPayment: mockShowPayment,
+    setShowPayment: mockSetShowPayment,
   }),
 }));
 
@@ -48,12 +53,21 @@ vi.mock('../_components/youtube-player', () => ({
   ),
 }));
 
+vi.mock('../_components/payment-overlay', () => ({
+  PaymentOverlay: () => <div data-testid="mock-payment-overlay">Mock Payment</div>,
+}));
+
+vi.mock('../_components/quiz-overlay', () => ({
+  QuizOverlay: () => <div data-testid="mock-quiz-overlay">Mock Quiz</div>,
+}));
+
 describe('AudienceStage', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
     mockChatVisible = true;
     mockChatLoading = true;
+    mockShowPayment = false;
     mockGetQuery.mockReturnValue('F1bQwUOh5Hs');
   });
 
@@ -103,7 +117,7 @@ describe('AudienceStage', () => {
     mockChatVisible = false;
     mockChatLoading = false;
     render(<AudienceStage sid="test-session" />);
-    const sidebar = screen.getByTestId('mock-live-chat').parentElement?.parentElement;
+    const sidebar = screen.getByTestId('mock-live-chat').parentElement?.parentElement?.parentElement;
     expect(sidebar?.className).toContain('hidden');
   });
 });
