@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, FormEvent } from "react";
-import { MessageSquare, Pin, Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
+import Image from "next/image";
+import { Pin, Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLiveChat } from "@/hooks/use-live-chat";
 import { ChatMessage } from "@/types/chat";
@@ -73,7 +74,7 @@ export function LiveChat({ sid }: { sid: string }) {
 
   return (
     <section
-      className="flex-grow flex flex-col bg-background overflow-hidden relative h-full min-h-0"
+      className="flex-grow flex flex-col bg-white overflow-hidden relative h-full min-h-0"
       id="chat-section"
     >
       {pinnedMessage && (
@@ -108,11 +109,10 @@ export function LiveChat({ sid }: { sid: string }) {
           </div>
         ) : messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-muted-foreground/40 gap-2">
-            <MessageSquare
-              size={32}
-              className="opacity-40 animate-bounce duration-1000"
-            />
-            <p className="text-sm italic">
+            <div className="flex items-center justify-center">
+              <Image src="/logo.png" alt="logo" height={32} width={32} />
+            </div>
+            <p className="text-sm italic mt-4">
               Welcome to the stream. Say something!
             </p>
           </div>
@@ -159,18 +159,20 @@ export function LiveChat({ sid }: { sid: string }) {
         )}
       </div>
 
-      {showScrollBanner && (
-        <button
-          onClick={scrollToBottom}
-          className={cn(
-            "absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-primary hover:brightness-95 border border-border rounded-full text-xs font-bold text-primary-foreground shadow-lg flex items-center gap-2 select-none active:scale-95 transition-all animate-bounce",
-            showEmojis ? "bottom-[130px]" : "bottom-[90px]",
-          )}
-        >
-          <ArrowDown size={14} />
-          New messages below
-        </button>
-      )}
+      {
+        showScrollBanner && (
+          <button
+            onClick={scrollToBottom}
+            className={cn(
+              "absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-primary hover:brightness-95 border border-border rounded-full text-xs font-bold text-primary-foreground shadow-lg flex items-center gap-2 select-none active:scale-95 transition-all animate-bounce",
+              showEmojis ? "bottom-[130px]" : "bottom-[90px]",
+            )}
+          >
+            <ArrowDown size={14} />
+            New messages below
+          </button>
+        )
+      }
 
       <div className="p-4 bg-card border-t border-border bottom-0 left-0 right-0 z-30 fixed z-50 shrink-0">
         {showEmojis && (
@@ -235,6 +237,6 @@ export function LiveChat({ sid }: { sid: string }) {
           </button>
         </form>
       </div>
-    </section>
+    </section >
   );
 }
