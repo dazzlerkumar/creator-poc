@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package creator_stage.realtime.v1;
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_CREATOR     = 1;
+  ROLE_TEAM        = 2;
+  ROLE_AUDIENCE    = 3;
+}

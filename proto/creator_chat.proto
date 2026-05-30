@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package creator_stage.realtime.v1;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+enum Type {
+  TYPE_CREATOR_MESSAGE = 0;
+  TYPE_PIN             = 1;
+  TYPE_UNPIN           = 2;
+  TYPE_CTA_PUSH        = 3;
+  TYPE_CTA_DISMISS     = 4;
+  TYPE_QUIZ_START      = 5;
+  TYPE_QUIZ_END        = 6;
+}
+
+message CreatorChatMessage {
+  string          id                  = 1;
+  string          message             = 2;
+  optional string audience_message_id = 3;
+}
+
+message Pin {
+  string id      = 1;
+  string message = 2;
+}
+
+message Unpin {
+  string message_id = 1;
+}
+
+enum CtaType {
+  TYPE_PAYMENT = 0;
+}
+
+message CTAPush {
+  string  id    = 1;
+  string  label = 2;
+  string  url   = 3;
+  CtaType type  = 4;
+}
+
+message CTADismiss {
+  string message_id = 1;
+}
+
+message QuizOption {
+  string id    = 1;
+  string label = 2;
+}
+
+message Quiz {
+  string              id                 = 1;
+  string              quiz_id            = 2;
+  string              video_broadcast_id = 3;
+  string              question           = 4;
+  repeated QuizOption options            = 5;
+  int32               duration_secs      = 6;
+}
+
+message QuizOptionCount {
+  string option_id = 1;
+  int32  count     = 2;
+}
+
+message QuizResults {
+  string                   id     = 1;
+  string                   quiz_id = 2;
+  repeated QuizOptionCount counts = 3;
+}
+
+// Server → audience on :creator and :dm.
+message CreatorChatEvent {
+  Role                      role               = 1;
+  Type                      type               = 2;
+  google.protobuf.Timestamp sent_at            = 3;
+  string                    target_user_id     = 4;  // set for DMs; empty for room broadcast
+  string                    video_broadcast_id = 5;
+
+  oneof body {
+    CreatorChatMessage creator_chat_message = 10;
+    Pin                pin                  = 11;
+    Unpin              unpin                = 12;
+    CTAPush            cta_push             = 13;
+    CTADismiss         cta_dismiss          = 14;
+    Quiz               quiz_start           = 15;
+    QuizResults        quiz_end             = 16;
+  }
+}

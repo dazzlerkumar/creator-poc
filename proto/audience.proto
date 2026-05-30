@@ -2,27 +2,31 @@ syntax = "proto3";
 
 package creator_stage.realtime.v1;
 
-option go_package = "github.com/creator-stage/internal/realtime/proto;realtimepb";
+option go_package = "github.com/creator-stage/internal/proto;realtimepb";
 
 import "google/protobuf/timestamp.proto";
-
+import "common.proto";
 // this is for the direction of audience to creator
 
-enum Role {
-  ROLE_UNSPECIFIED = 0;
-  ROLE_CREATOR     = 1;
-  ROLE_TEAM        = 2;
-  ROLE_AUDIENCE    = 3;
+// Audience WS uplink only (:dm for chat text). Set by the gateway on chat_ingest;
+// clients omit on publish. Creator DMs use CreatorChatEvent (HTTP → chat_ingest).
+// DM → replicated to audience_chat for derived :audience fan-out + ChatDB inbox.
+// PEER is reserved/legacy (no :audience chat uplink in current design).
+enum AudienceIngestRoute {
+  AUDIENCE_INGEST_ROUTE_UNSPECIFIED = 0;
+  AUDIENCE_INGEST_ROUTE_PEER        = 1;
+  AUDIENCE_INGEST_ROUTE_DM          = 2;
 }
 
 message AudienceChatMessage {
   string                    id                 = 1;
-  google.protobuf.Timestamp sent_at   = 2;
-  string                    video_broadcast_id = 3;
+  google.protobuf.Timestamp sent_at            = 2;
+  string                    body               = 3;
   string                    user_id            = 4;
-  Role                      role               = 5;
-  string                    display_name       = 6;
-  string                    body               = 7;
+  string                    display_name       = 5;
+  // Set by the server on ingest/archive; clients omit on WS publish (vb comes from the connection).
+  string                    video_broadcast_id = 6;
+  AudienceIngestRoute       ingest_route       = 7;
 }
 
 
@@ -34,14 +38,23 @@ message AudienceQuizResponse {
 
 }
 
+message AudienceVideoMetadata {
+  string id = 1;
+  google.protobuf.Timestamp sent_at   = 2;
+  uint32 live_active_connections =3;
+
+}
+
 enum AudienceMessageType {
   TYPE_AUDIENCE_MESSAGE = 0;
   TYPE_POLL_RESPONSE=1;
+  TYPE_VIDEO_METADATA=2;
 }
 
 
-message AudienceChatEvents {
-  AudienceMessageType                      type = 1;
+message AudienceChatEvent {
+  Role role = 1;
+  AudienceMessageType                      type = 2;
 
   oneof body {
     AudienceChatMessage chat_message         = 10;
@@ -51,10 +64,10 @@ message AudienceChatEvents {
 
 
 message BatchedChatMessages {
-  uint32 live_active_connections =1;
+  uint32 live_active_connections = 1;
   repeated AudienceChatMessage messages = 2;
-
 }
+
 
 // Client → server in Centrifuge ConnectRequest.data when connecting without JWT.
 message AudienceConnectData {
