@@ -25,8 +25,8 @@ interface FlexibleRawChatMessage {
   timestamp?: string;
 }
 
-function mapToUiMessage(raw: FlexibleRawChatMessage, isDm = false): ChatMessage {
-  const body = raw.body ?? raw.messageText ?? "";
+function mapToUiMessage(raw: FlexibleRawChatMessage, isDm = false, isCreatorMessage = false): ChatMessage {
+  const body = raw.body ?? raw.messageText ?? raw.message ?? "";
   const displayName =
     raw.displayName ?? raw.display_name ?? raw.authorName ?? "Unknown";
   const role = raw.role ?? 3;
@@ -38,6 +38,9 @@ function mapToUiMessage(raw: FlexibleRawChatMessage, isDm = false): ChatMessage 
     roleStr = "owner";
   } else if (role === 2 || role === "ROLE_TEAM") {
     roleStr = "moderator";
+  }
+  if (isCreatorMessage) {
+    roleStr = "owner";
   }
 
   let timestampStr = new Date().toISOString();
@@ -275,10 +278,12 @@ export class BroadcastRealtimeClient {
           );
 
         try {
+          console.log("CreatorChatEvent decoded data", bytes);
           const decoded = creator_stage.realtime.v1.CreatorChatEvent.decode(bytes);
-          
+          console.log("decode", decoded);
           if (decoded.creatorChatMessage) {
-            const uiMsg = mapToUiMessage(decoded.creatorChatMessage as FlexibleRawChatMessage);
+            const uiMsg = mapToUiMessage(decoded.creatorChatMessage as FlexibleRawChatMessage, false, true);
+            console.log("uiMsg", uiMsg);
             if (!this.sentMessageIds.has(uiMsg.id)) {
               this.buffer.push(uiMsg);
               if (!this.flushScheduled) {
@@ -290,7 +295,7 @@ export class BroadcastRealtimeClient {
               }
             }
           } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_PIN && decoded.pin) {
-            this.onPin?.(mapToUiMessage(decoded.pin as FlexibleRawChatMessage));
+            this.onPin?.(mapToUiMessage(decoded.pin as FlexibleRawChatMessage, false, true));
           } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_UNPIN) {
             this.onPin?.(null);
           }
@@ -307,7 +312,7 @@ export class BroadcastRealtimeClient {
           );
 
           if (activity.body === "pin" && activity.pin) {
-            this.onPin?.(mapToUiMessage(activity.pin as FlexibleRawChatMessage));
+            this.onPin?.(mapToUiMessage(activity.pin as FlexibleRawChatMessage, false, true));
           } else if (activity.body === "unpin") {
             this.onPin?.(null);
           }
@@ -336,7 +341,7 @@ export class BroadcastRealtimeClient {
 
       try {
         const decoded = creator_stage.realtime.v1.CreatorChatEvent.decode(bytes);
-        
+
         // The broker echoes our own publishes. Drop ROLE_AUDIENCE.
         if (decoded.role === creator_stage.realtime.v1.Role.ROLE_AUDIENCE) return;
 
