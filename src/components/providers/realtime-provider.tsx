@@ -17,11 +17,11 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
       bannerTimer = setTimeout(() => {
         setShowBanner(true);
       }, 2000);
-    } else if (connectionStatus === ConnectionStatus.CONNECTED) {
+    } else if (connectionStatus === ConnectionStatus.CONNECTING) {
       bannerTimer = setTimeout(() => {
         setShowBanner(true);
-        setBannerText("Connected");
-      }, 2000);
+        setBannerText("Connecting...");
+      }, 500);
     } else if (connectionStatus === ConnectionStatus.DENIED) {
       bannerTimer = setTimeout(() => {
         setShowBanner(true);
@@ -39,11 +39,10 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
     <>
       {showBanner && (
         <div
-          className={`text-destructive-foreground text-center py-2 text-xs font-semibold select-none ${
-            connectionStatus === ConnectionStatus.CONNECTED
-              ? "bg-green-500"
-              : "bg-destructive"
-          }`}
+          className={`text-destructive-foreground text-center py-2 text-xs font-semibold select-none fixed w-full top-0 z-50 shadow-2xl ${connectionStatus === ConnectionStatus.CONNECTED
+            ? "bg-green-500"
+            : "bg-destructive"
+            }`}
         >
           {bannerText}
         </div>
