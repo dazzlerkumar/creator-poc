@@ -33,10 +33,25 @@ describe("LiveChat component", () => {
           timestamp: new Date().toISOString(),
           role: "moderator",
         },
+        {
+          id: "msg-owner",
+          authorName: "OriginalOwnerName",
+          messageText: "Hello from the owner!",
+          timestamp: new Date().toISOString(),
+          role: "owner",
+        },
+        {
+          id: "msg-dm",
+          authorName: "Dave",
+          messageText: "This is a direct message",
+          timestamp: new Date().toISOString(),
+          role: "viewer",
+          isDm: true,
+        },
       ],
       pinnedMessage: {
         id: "msg-3",
-        authorName: "Saurabh",
+        authorName: "PinnedSaurabh",
         messageText: "Welcome everyone!",
         timestamp: new Date().toISOString(),
         role: "owner",
@@ -50,13 +65,23 @@ describe("LiveChat component", () => {
 
     // Verify pinned message is rendered
     expect(screen.getByText("Welcome everyone!")).toBeInTheDocument();
-    expect(screen.getByText("Saurabh")).toBeInTheDocument();
+    expect(screen.getByText("PinnedSaurabh")).toBeInTheDocument();
 
     // Verify chat messages are rendered
     expect(screen.getByText("Hello from Alice!")).toBeInTheDocument();
     expect(screen.getByText("Alice:")).toBeInTheDocument();
     expect(screen.getByText("Hello from Bob!")).toBeInTheDocument();
     expect(screen.getByText("Bob:")).toBeInTheDocument();
+
+    // Verify owner message uses "Saurabh" instead of authorName
+    expect(screen.getByText("Hello from the owner!")).toBeInTheDocument();
+    expect(screen.queryByText("OriginalOwnerName:")).not.toBeInTheDocument();
+    expect(screen.getByText("Saurabh")).toBeInTheDocument();
+
+    // Verify DM message is rendered with DM indicator
+    expect(screen.getByText("This is a direct message")).toBeInTheDocument();
+    expect(screen.getByText("Dave:")).toBeInTheDocument();
+    expect(screen.getByText("DM")).toBeInTheDocument();
   });
 
   it("calls sendMessage callback on composer form submission and clears input", () => {

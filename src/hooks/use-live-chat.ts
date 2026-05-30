@@ -5,6 +5,10 @@ import { ChatMessage } from "@/types/chat";
 import { useRealtimeStore } from "@/stores/realtime-store";
 import { useAuthStore } from "@/stores/auth-store";
 import { BroadcastRealtimeClient } from "@/lib/broadcast-realtime-client";
+import Cookies from "js-cookie";
+import { decodeJwt } from "@/lib/jwt-decode";
+
+
 
 export function useLiveChat(sessionId = "4uPEuX") {
   const [prevSessionId, setPrevSessionId] = useState(sessionId);
@@ -28,11 +32,12 @@ export function useLiveChat(sessionId = "4uPEuX") {
 
   useEffect(() => {
     if (!sessionId) return;
-
+    const token = Cookies.get('audienceAccessToken') || '';
+    const decoded = decodeJwt(token);
     const client = new BroadcastRealtimeClient({
       sessionId,
-      userId: "adaf980b-df25-4197-9efd-6ca69c35bfcf",
-      displayName: "Deepak",
+      userId: decoded?.payload?.accountId || 'anonymous-user',
+      displayName: JSON.parse(Cookies.get('USER_DATA') || '{}')?.name || 'Anonymous',
       ...(jwt ? { token: jwt } : {}),
       onMessages: (newMessages) => {
         setMessages((prev) => {

@@ -17,6 +17,6 @@ export const PAYMENT_CONFIG = {
 };
 
 export const COOKIES_KEYS = {
-  ACCESS_TOKEN: 'accessToken',
-  REFRESH_TOKEN: 'refreshToken',
+  ACCESS_TOKEN: 'audienceAccessToken',
+  REFRESH_TOKEN: 'audienceRefreshToken',
 }
