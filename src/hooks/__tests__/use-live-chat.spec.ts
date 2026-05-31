@@ -16,6 +16,19 @@ vi.mock('@/stores/auth-store', () => ({
   useAuthStore: vi.fn(),
 }));
 
+vi.mock('js-cookie', () => ({
+  default: {
+    get: vi.fn(),
+  },
+}));
+
+vi.mock('@/lib/jwt-decode', () => ({
+  decodeJwt: vi.fn(),
+}));
+
+import Cookies from 'js-cookie';
+import { decodeJwt } from '@/lib/jwt-decode';
+
 describe('useLiveChat hook', () => {
   let setConnectionStatusMock: Mock;
   let mockClientInstance: Partial<BroadcastRealtimeClient> & {
@@ -52,12 +65,22 @@ describe('useLiveChat hook', () => {
   });
 
   it('initializes BroadcastRealtimeClient and connects', () => {
+    vi.mocked(Cookies.get).mockImplementation((key) => {
+      if (key === 'audienceAccessToken') return 'fake-token';
+      if (key === 'USER_DATA') return JSON.stringify({ name: 'TestUser' });
+      return undefined;
+    });
+
+    vi.mocked(decodeJwt).mockReturnValue({
+      payload: { accountId: 'test-account-id' },
+    } as unknown as ReturnType<typeof decodeJwt>);
+
     const { unmount } = renderHook(() => useLiveChat('123'));
 
     expect(BroadcastRealtimeClient).toHaveBeenCalledWith(expect.objectContaining({
       sessionId: '123',
-      userId: expect.any(String),
-      displayName: expect.any(String),
+      userId: 'test-account-id',
+      displayName: 'TestUser',
       token: 'test-jwt',
     }));
 
@@ -147,5 +170,28 @@ describe('useLiveChat hook', () => {
     });
     
     expect(result.current.isLoading).toBe(false);
+  });
+
+  it('removes message when onRemoveMessage callback is invoked', () => {
+    const { result } = renderHook(() => useLiveChat('123'));
+    
+    const options = vi.mocked(BroadcastRealtimeClient).mock.calls[0]![0];
+    
+    act(() => {
+      options.onMessages?.([
+        { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false },
+        { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false }
+      ]);
+    });
+
+    expect(result.current.messages).toHaveLength(2);
+
+    act(() => {
+      options.onRemoveMessage?.('1');
+    });
+
+    expect(result.current.messages).toEqual([
+      { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false }
+    ]);
   });
 });

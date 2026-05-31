@@ -78,6 +78,7 @@ export interface BroadcastRealtimeClientOptions {
   displayName: string;
   onMessages?: (messages: ChatMessage[]) => void;
   onPin?: (message: ChatMessage | null) => void;
+  onRemoveMessage?: (id: string) => void;
   onConnectionStatus?: (status: ConnectionStatus) => void;
   onLoading?: (isLoading: boolean) => void;
 }
@@ -89,6 +90,7 @@ export class BroadcastRealtimeClient {
 
   private onMessages: ((messages: ChatMessage[]) => void) | undefined;
   private onPin: ((message: ChatMessage | null) => void) | undefined;
+  private onRemoveMessage: ((id: string) => void) | undefined;
   private onConnectionStatus: ((status: ConnectionStatus) => void) | undefined;
   private onLoading: ((isLoading: boolean) => void) | undefined;
 
@@ -107,6 +109,7 @@ export class BroadcastRealtimeClient {
     this.displayName = options.displayName;
     this.onMessages = options.onMessages;
     this.onPin = options.onPin;
+    this.onRemoveMessage = options.onRemoveMessage;
     this.onConnectionStatus = options.onConnectionStatus;
     this.onLoading = options.onLoading;
   }
@@ -295,7 +298,9 @@ export class BroadcastRealtimeClient {
               }
             }
           } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_PIN && decoded.pin) {
-            this.onPin?.(mapToUiMessage(decoded.pin as FlexibleRawChatMessage, false, true));
+            const pinMsg = mapToUiMessage(decoded.pin as FlexibleRawChatMessage, false, true);
+            this.onPin?.(pinMsg);
+            this.onRemoveMessage?.(pinMsg.id);
           } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_UNPIN) {
             this.onPin?.(null);
           }

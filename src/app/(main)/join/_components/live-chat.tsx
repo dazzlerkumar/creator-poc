@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef, FormEvent } from "react";
 import Image from "next/image";
-import { Pin, Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
+import { Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLiveChat } from "@/hooks/use-live-chat";
 import { ChatMessage } from "@/types/chat";
+import PinnedMessageCard from "@/components/live-chats/pinned-message"
 
 export type { ChatMessage };
 
@@ -78,23 +79,8 @@ export function LiveChat({ sid }: { sid: string }) {
       id="chat-section"
     >
       {pinnedMessage && (
-        <div className="flex items-start justify-between gap-3 px-5 py-3 bg-primary/10 border-b border-border animate-in slide-in-from-top duration-300 select-none">
-          <div className="flex gap-3">
-            <div className="bg-primary/20 p-1 rounded-lg text-primary shrink-0 self-start">
-              <Pin size={16} className="rotate-45" />
-            </div>
-            <div className="text-xs leading-relaxed">
-              <div className="flex items-center gap-1.5 font-bold text-primary mb-0.5">
-                {pinnedMessage.authorName}
-              </div>
-              <p className="text-foreground font-medium break-words">
-                {pinnedMessage.messageText}
-              </p>
-            </div>
-          </div>
-        </div>
+        <PinnedMessageCard pinnedMessage={pinnedMessage} />
       )}
-
       <div
         className={cn(
           "flex-grow p-4 space-y-5 overflow-y-auto relative min-h-0",

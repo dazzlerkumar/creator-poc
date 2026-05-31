@@ -33,7 +33,16 @@ export function useLiveChat(sessionId = "4uPEuX") {
   useEffect(() => {
     if (!sessionId) return;
     const token = Cookies.get('audienceAccessToken') || '';
-    const decoded = decodeJwt(token);
+    let decoded = null;
+    
+    if (token) {
+      try {
+        decoded = decodeJwt(token);
+      } catch (error) {
+        console.error('Invalid JWT in cookie:', error);
+      }
+    }
+
     const client = new BroadcastRealtimeClient({
       sessionId,
       userId: decoded?.payload?.accountId || 'anonymous-user',
@@ -49,6 +58,7 @@ export function useLiveChat(sessionId = "4uPEuX") {
         });
       },
       onPin: (msg) => setPinnedMessage(msg),
+      onRemoveMessage: (id) => setMessages((prev) => prev.filter((m) => m.id !== id)),
       onConnectionStatus: setConnectionStatus,
       onLoading: setIsLoading,
     });
