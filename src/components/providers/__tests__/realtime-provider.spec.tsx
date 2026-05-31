@@ -53,19 +53,19 @@ describe('RealtimeProvider', () => {
     expect(banner).toHaveClass('bg-destructive');
   });
 
-  it('shows connected banner after 2 seconds of being connected', () => {
-    mockStore(ConnectionStatus.CONNECTED);
+  it('shows connecting banner after 500ms of being connecting', () => {
+    mockStore(ConnectionStatus.CONNECTING);
     render(<RealtimeProvider><div /></RealtimeProvider>);
 
-    expect(screen.queryByText(/Connected/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Connecting\.\.\./i)).not.toBeInTheDocument();
 
     act(() => {
-      vi.advanceTimersByTime(2000);
+      vi.advanceTimersByTime(500);
     });
 
-    const banner = screen.getByText('Connected');
+    const banner = screen.getByText('Connecting...');
     expect(banner).toBeInTheDocument();
-    expect(banner).toHaveClass('bg-green-500');
+    expect(banner).toHaveClass('bg-destructive');
   });
 
   it('shows connection denied banner after 2 seconds of being denied', () => {
@@ -83,7 +83,7 @@ describe('RealtimeProvider', () => {
     expect(banner).toHaveClass('bg-destructive');
   });
 
-  it('hides banner immediately when status is connecting (or any other status)', () => {
+  it('hides banner immediately when status is connected', () => {
     // First render with disconnected to show the banner
     let currentStatus = ConnectionStatus.DISCONNECTED;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -98,8 +98,8 @@ describe('RealtimeProvider', () => {
     });
     expect(screen.getByText(/Connection lost/i)).toBeInTheDocument();
 
-    // Now change to connecting
-    currentStatus = ConnectionStatus.CONNECTING;
+    // Now change to connected
+    currentStatus = ConnectionStatus.CONNECTED;
     rerender(<RealtimeProvider><div /></RealtimeProvider>);
 
     act(() => {

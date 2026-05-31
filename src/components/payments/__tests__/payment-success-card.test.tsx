@@ -13,14 +13,9 @@ describe("PaymentSuccessCard", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
     (useUIStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       setShowPayment: mockSetShowPayment,
     });
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   it("renders success content correctly", () => {
@@ -32,37 +27,11 @@ describe("PaymentSuccessCard", () => {
     ).toBeInTheDocument();
   });
 
-  it("does not show close button initially", () => {
+  it("calls setShowPayment(false) when Hide button is clicked", () => {
     render(<PaymentSuccessCard />);
 
-    // The close button has a lucide X icon, and there's only one button
-    const closeButton = screen.queryByRole("button");
-    expect(closeButton).not.toBeInTheDocument();
-  });
-
-  it("shows close button after 5 seconds", () => {
-    render(<PaymentSuccessCard />);
-
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
-
-    act(() => {
-      vi.advanceTimersByTime(5000);
-    });
-
-    const closeButton = screen.getByRole("button");
-    expect(closeButton).toBeInTheDocument();
-  });
-
-  it("calls setShowPayment(false) when close button is clicked", () => {
-    render(<PaymentSuccessCard />);
-
-    // Fast-forward time to show the button
-    act(() => {
-      vi.advanceTimersByTime(5000);
-    });
-
-    const closeButton = screen.getByRole("button");
-    fireEvent.click(closeButton);
+    const hideButton = screen.getByRole("button", { name: "Hide" });
+    fireEvent.click(hideButton);
 
     expect(mockSetShowPayment).toHaveBeenCalledTimes(1);
     expect(mockSetShowPayment).toHaveBeenCalledWith(false);
