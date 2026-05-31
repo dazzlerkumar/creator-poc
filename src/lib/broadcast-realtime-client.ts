@@ -5,7 +5,7 @@ import { centrifugeClient } from "@/lib/centrifuge-client";
 import { channels } from "@/config/channels";
 import { ConnectionStatus } from "@/types/realtime";
 import { PublicationContext, Subscription, SubscriptionState } from "centrifuge/build/protobuf";
-import { ChatMessage } from "@/app/(main)/join/_components/live-chat";
+import { ChatMessage, CtaPush } from "@/types/chat";
 
 interface FlexibleRawChatMessage {
   id?: string;
@@ -81,6 +81,7 @@ export interface BroadcastRealtimeClientOptions {
   onRemoveMessage?: (id: string) => void;
   onConnectionStatus?: (status: ConnectionStatus) => void;
   onLoading?: (isLoading: boolean) => void;
+  onCtaPush?: (cta: CtaPush | null) => void;
 }
 
 export class BroadcastRealtimeClient {
@@ -93,6 +94,7 @@ export class BroadcastRealtimeClient {
   private onRemoveMessage: ((id: string) => void) | undefined;
   private onConnectionStatus: ((status: ConnectionStatus) => void) | undefined;
   private onLoading: ((isLoading: boolean) => void) | undefined;
+  private onCtaPush: ((cta: CtaPush | null) => void) | undefined;
 
   private buffer = new RingBuffer<ChatMessage>(500);
   private flushScheduled = false;
@@ -112,6 +114,7 @@ export class BroadcastRealtimeClient {
     this.onRemoveMessage = options.onRemoveMessage;
     this.onConnectionStatus = options.onConnectionStatus;
     this.onLoading = options.onLoading;
+    this.onCtaPush = options.onCtaPush;
   }
 
   public connect() {
@@ -303,6 +306,10 @@ export class BroadcastRealtimeClient {
             this.onRemoveMessage?.(pinMsg.id);
           } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_UNPIN) {
             this.onPin?.(null);
+          } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_CTA_PUSH && decoded.ctaPush) {
+            this.onCtaPush?.({ id: decoded.ctaPush.id ?? "", label: decoded.ctaPush.label ?? "", url: decoded.ctaPush.url ?? "" });
+          } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_CTA_DISMISS) {
+            this.onCtaPush?.(null);
           }
         } catch (err) {
           console.warn("Unknown binary publication on :broadcast", err);
@@ -320,6 +327,10 @@ export class BroadcastRealtimeClient {
             this.onPin?.(mapToUiMessage(activity.pin as FlexibleRawChatMessage, false, true));
           } else if (activity.body === "unpin") {
             this.onPin?.(null);
+          } else if (activity.ctaPush) {
+            this.onCtaPush?.({ id: activity.ctaPush.id ?? "", label: activity.ctaPush.label ?? "", url: activity.ctaPush.url ?? "" });
+          } else if (activity.type === creator_stage.realtime.v1.Type.TYPE_CTA_DISMISS) {
+            this.onCtaPush?.(null);
           }
         } catch (activityErr) {
           console.warn("Failed to process CreatorChatEvent:", activityErr);

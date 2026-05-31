@@ -6,7 +6,7 @@ import { Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLiveChat } from "@/hooks/use-live-chat";
 import { ChatMessage } from "@/types/chat";
-import PinnedMessageCard from "@/components/live-chats/pinned-message"
+import PinnedMessageCard from "@/components/live-chats/pinned-message";
 
 export type { ChatMessage };
 

@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { ChatMessage } from "@/types/chat";
 import { useRealtimeStore } from "@/stores/realtime-store";
 import { useAuthStore } from "@/stores/auth-store";
+import { useUIStore } from "@/stores/ui-store";
 import { BroadcastRealtimeClient } from "@/lib/broadcast-realtime-client";
 import Cookies from "js-cookie";
 import { decodeJwt } from "@/lib/jwt-decode";
@@ -19,6 +20,7 @@ export function useLiveChat(sessionId = "4uPEuX") {
   const setConnectionStatus = useRealtimeStore(
     (state) => state.setConnectionStatus,
   );
+  const setShowPayment = useUIStore((state) => state.setShowPayment);
   const jwt = useAuthStore((state) => state.jwt);
 
   const clientRef = useRef<BroadcastRealtimeClient | null>(null);
@@ -34,7 +36,7 @@ export function useLiveChat(sessionId = "4uPEuX") {
     if (!sessionId) return;
     const token = Cookies.get('audienceAccessToken') || '';
     let decoded = null;
-    
+
     if (token) {
       try {
         decoded = decodeJwt(token);
@@ -61,6 +63,7 @@ export function useLiveChat(sessionId = "4uPEuX") {
       onRemoveMessage: (id) => setMessages((prev) => prev.filter((m) => m.id !== id)),
       onConnectionStatus: setConnectionStatus,
       onLoading: setIsLoading,
+      onCtaPush: (cta) => setShowPayment(cta !== null),
     });
 
     clientRef.current = client;
@@ -70,7 +73,7 @@ export function useLiveChat(sessionId = "4uPEuX") {
       client.disconnect();
       clientRef.current = null;
     };
-  }, [sessionId, setConnectionStatus, jwt]);
+  }, [sessionId, setConnectionStatus, jwt, setShowPayment]);
 
   const sendMessage = useCallback(async (text: string) => {
     if (!clientRef.current) return;

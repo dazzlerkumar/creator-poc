@@ -4,7 +4,9 @@ import { useLiveChat } from '@/hooks/use-live-chat';
 import { BroadcastRealtimeClient } from '@/lib/broadcast-realtime-client';
 import { useRealtimeStore } from '@/stores/realtime-store';
 import { useAuthStore } from '@/stores/auth-store';
+import { useUIStore } from '@/stores/ui-store';
 import { ConnectionStatus } from '@/types/realtime';
+import type { ChatMessage } from '@/types/chat';
 
 vi.mock('@/lib/broadcast-realtime-client');
 
@@ -14,6 +16,10 @@ vi.mock('@/stores/realtime-store', () => ({
 
 vi.mock('@/stores/auth-store', () => ({
   useAuthStore: vi.fn(),
+}));
+
+vi.mock('@/stores/ui-store', () => ({
+  useUIStore: vi.fn(),
 }));
 
 vi.mock('js-cookie', () => ({
@@ -31,6 +37,7 @@ import { decodeJwt } from '@/lib/jwt-decode';
 
 describe('useLiveChat hook', () => {
   let setConnectionStatusMock: Mock;
+  let setShowPaymentMock: Mock;
   let mockClientInstance: Partial<BroadcastRealtimeClient> & {
     connect: Mock;
     disconnect: Mock;
@@ -41,12 +48,18 @@ describe('useLiveChat hook', () => {
     vi.clearAllMocks();
 
     setConnectionStatusMock = vi.fn();
+    setShowPaymentMock = vi.fn();
+
     vi.mocked(useRealtimeStore).mockImplementation((selector: unknown) => {
       return (selector as (state: unknown) => unknown)({ setConnectionStatus: setConnectionStatusMock });
     });
 
     vi.mocked(useAuthStore).mockImplementation((selector: unknown) => {
       return (selector as (state: unknown) => unknown)({ jwt: 'test-jwt' });
+    });
+
+    vi.mocked(useUIStore).mockImplementation((selector: unknown) => {
+      return (selector as (state: unknown) => unknown)({ setShowPayment: setShowPaymentMock });
     });
 
     mockClientInstance = {
@@ -95,38 +108,30 @@ describe('useLiveChat hook', () => {
     const { result } = renderHook(() => useLiveChat('123'));
 
     const options = vi.mocked(BroadcastRealtimeClient).mock.calls[0]![0];
-    
+
+    const msg1: ChatMessage = { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false };
+    const msg2: ChatMessage = { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false };
+
     act(() => {
-      options.onMessages?.([
-        { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false }
-      ]);
+      options.onMessages?.([msg1]);
     });
 
-    expect(result.current.messages).toEqual([
-      { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false }
-    ]);
+    expect(result.current.messages).toEqual([msg1]);
 
-    // De-duplication check
     act(() => {
-      options.onMessages?.([
-        { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false },
-        { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false }
-      ]);
+      options.onMessages?.([msg1, msg2]);
     });
 
-    expect(result.current.messages).toEqual([
-      { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false },
-      { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false }
-    ]);
+    expect(result.current.messages).toEqual([msg1, msg2]);
   });
 
   it('updates pinned message when onPin callback is invoked', () => {
     const { result } = renderHook(() => useLiveChat('123'));
 
     const options = vi.mocked(BroadcastRealtimeClient).mock.calls[0]![0];
-    
-    const pinnedMsg = { id: 'pin1', authorName: 'Admin', messageText: 'Pinned', timestamp: 'time', role: 'owner' as const, isPinned: true, isDm: false };
-    
+
+    const pinnedMsg: ChatMessage = { id: 'pin1', authorName: 'Admin', messageText: 'Pinned', timestamp: 'time', role: 'owner', isPinned: true, isDm: false };
+
     act(() => {
       options.onPin?.(pinnedMsg);
     });
@@ -140,8 +145,26 @@ describe('useLiveChat hook', () => {
     expect(result.current.pinnedMessage).toBeNull();
   });
 
+  it('calls setShowPayment(true) on onCtaPush with data and false on null', () => {
+    renderHook(() => useLiveChat('123'));
+
+    const options = vi.mocked(BroadcastRealtimeClient).mock.calls[0]![0];
+
+    act(() => {
+      options.onCtaPush?.({ id: 'cta-1', label: 'Pay now', url: 'https://pay.example.com/checkout/abc' });
+    });
+
+    expect(setShowPaymentMock).toHaveBeenCalledWith(true);
+
+    act(() => {
+      options.onCtaPush?.(null);
+    });
+
+    expect(setShowPaymentMock).toHaveBeenCalledWith(false);
+  });
+
   it('sends message via client and optimistically updates messages', async () => {
-    const localMsg = { id: 'local1', authorName: 'Deepak', messageText: 'Sending this', timestamp: 'time', role: 'viewer' as const, isPinned: false, isDm: false };
+    const localMsg: ChatMessage = { id: 'local1', authorName: 'Deepak', messageText: 'Sending this', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false };
     mockClientInstance.sendMessage.mockResolvedValue(localMsg);
 
     const { result } = renderHook(() => useLiveChat('123'));
@@ -153,35 +176,35 @@ describe('useLiveChat hook', () => {
     expect(mockClientInstance.sendMessage).toHaveBeenCalledWith('Sending this');
     expect(result.current.messages).toContainEqual(localMsg);
   });
-  
+
   it('updates connection status and loading state', () => {
     const { result } = renderHook(() => useLiveChat('123'));
-    
+
     const options = vi.mocked(BroadcastRealtimeClient).mock.calls[0]![0];
-    
+
     act(() => {
       options.onConnectionStatus?.(ConnectionStatus.CONNECTED);
     });
-    
+
     expect(setConnectionStatusMock).toHaveBeenCalledWith(ConnectionStatus.CONNECTED);
-    
+
     act(() => {
       options.onLoading?.(false);
     });
-    
+
     expect(result.current.isLoading).toBe(false);
   });
 
   it('removes message when onRemoveMessage callback is invoked', () => {
     const { result } = renderHook(() => useLiveChat('123'));
-    
+
     const options = vi.mocked(BroadcastRealtimeClient).mock.calls[0]![0];
-    
+
+    const msg1: ChatMessage = { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false };
+    const msg2: ChatMessage = { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false };
+
     act(() => {
-      options.onMessages?.([
-        { id: '1', authorName: 'Alice', messageText: 'Hello', timestamp: 'time', role: 'viewer', isPinned: false, isDm: false },
-        { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false }
-      ]);
+      options.onMessages?.([msg1, msg2]);
     });
 
     expect(result.current.messages).toHaveLength(2);
@@ -190,8 +213,6 @@ describe('useLiveChat hook', () => {
       options.onRemoveMessage?.('1');
     });
 
-    expect(result.current.messages).toEqual([
-      { id: '2', authorName: 'Bob', messageText: 'World', timestamp: 'time2', role: 'viewer', isPinned: false, isDm: false }
-    ]);
+    expect(result.current.messages).toEqual([msg2]);
   });
 });

@@ -7,3 +7,9 @@ export interface ChatMessage {
   isPinned?: boolean;
   isDm?: boolean;
 }
+
+export interface CtaPush {
+  id: string;
+  label: string;
+  url: string;
+}

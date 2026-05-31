@@ -1,5 +1,5 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { PaymentSuccessCard } from "../payment-success-card";
 import { useUIStore } from "@/stores/ui-store";
 

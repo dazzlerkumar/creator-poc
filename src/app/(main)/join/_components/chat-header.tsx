@@ -7,7 +7,7 @@ import { useRealtimeStore } from "@/stores/realtime-store";
 import { ConnectionStatus } from "@/types/realtime";
 
 export function ChatHeader() {
-  const { showPayment, setShowPayment, showQuiz, setShowQuiz } = useUIStore();
+  const { showQuiz, setShowQuiz } = useUIStore();
   const connectionStatus = useRealtimeStore((state) => state.connectionStatus);
 
   return (
@@ -34,12 +34,6 @@ export function ChatHeader() {
           className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
         >
           Quiz
-        </button>
-        <button
-          onClick={() => setShowPayment(!showPayment)}
-          className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
-        >
-          Pay
         </button>
       </div>
     </div>
