@@ -1,11 +1,19 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
-import React from "react";
 import { LiveChat } from "../_components/live-chat";
 import { useLiveChat } from "@/hooks/use-live-chat";
 
 vi.mock("@/hooks/use-live-chat", () => ({
   useLiveChat: vi.fn(),
+}));
+
+vi.mock("@/components/live-chats/pinned-message", () => ({
+  default: ({ pinnedMessage }: { pinnedMessage: { authorName: string; messageText: string } }) => (
+    <div data-testid="mock-pinned-message">
+      <span>{pinnedMessage.authorName}</span>
+      <span>{pinnedMessage.messageText}</span>
+    </div>
+  ),
 }));
 
 describe("LiveChat component", () => {
@@ -64,6 +72,7 @@ describe("LiveChat component", () => {
     render(<LiveChat sid="session-123" />);
 
     // Verify pinned message is rendered
+    expect(screen.getByTestId("mock-pinned-message")).toBeInTheDocument();
     expect(screen.getByText("Welcome everyone!")).toBeInTheDocument();
     expect(screen.getByText("PinnedSaurabh")).toBeInTheDocument();
 
