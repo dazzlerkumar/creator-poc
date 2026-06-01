@@ -5,6 +5,7 @@ import { ChatMessage } from "@/types/chat";
 import { useRealtimeStore } from "@/stores/realtime-store";
 import { useAuthStore } from "@/stores/auth-store";
 import { useUIStore } from "@/stores/ui-store";
+import { useQuizStore } from "@/stores/quiz-store";
 import { BroadcastRealtimeClient } from "@/lib/broadcast-realtime-client";
 import Cookies from "js-cookie";
 import { decodeJwt } from "@/lib/jwt-decode";
@@ -64,6 +65,29 @@ export function useLiveChat(sessionId = "4uPEuX") {
       onConnectionStatus: setConnectionStatus,
       onLoading: setIsLoading,
       onCtaPush: (cta) => setShowPayment(cta !== null),
+      onQuizStart: (quizPayload) => {
+        // Map protobuf Quiz payload to QuizQuestion store type
+        const question = {
+          questionId: quizPayload.id || quizPayload.quizId,
+          text: quizPayload.question,
+          options: (quizPayload.options || []).map((o: {
+            id: string,
+            label: string
+          }) => ({
+            id: o.id,
+            text: o.label
+          })),
+          durationSeconds: quizPayload.durationSecs || 60
+        };
+        useQuizStore.getState().startQuiz(question);
+        useUIStore.getState().setShowQuiz(true);
+      },
+      onQuizEnd: (resultsPayload) => {
+        console.log(resultsPayload)
+        // In a real app we might parse results, here we just end it
+        useQuizStore.getState().endQuiz();
+        useUIStore.getState().setShowQuiz(false);
+      },
     });
 
     clientRef.current = client;

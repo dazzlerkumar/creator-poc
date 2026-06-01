@@ -15,19 +15,9 @@ interface QuizState {
 }
 
 export const useQuizStore = create<QuizState>((set, get) => ({
-  isActive: true,
-  question: {
-    questionId: "q-123",
-    text: "What is the primary benefit of morning yoga?",
-    options: [
-      { id: "opt-1", text: "Improves Flexibility" },
-      { id: "opt-2", text: "Builds Core Strength" },
-      { id: "opt-3", text: "Mental Clarity" },
-      { id: "opt-4", text: "All of the above" }
-    ],
-    durationSeconds: 30
-  },
-  status: QuizStatus.ACTIVE,
+  isActive: false,
+  question: null,
+  status: QuizStatus.IDLE,
   selectedOptionId: null,
   correctOptionId: null,
 
@@ -68,5 +58,6 @@ export const useQuizStore = create<QuizState>((set, get) => ({
       selectedOptionId: null,
       correctOptionId: null,
     });
+    import('./ui-store').then(({ useUIStore }) => useUIStore.getState().setShowQuiz(false));
   },
 }));

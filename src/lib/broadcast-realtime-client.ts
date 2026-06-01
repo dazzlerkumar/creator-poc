@@ -82,6 +82,8 @@ export interface BroadcastRealtimeClientOptions {
   onConnectionStatus?: (status: ConnectionStatus) => void;
   onLoading?: (isLoading: boolean) => void;
   onCtaPush?: (cta: CtaPush | null) => void;
+  onQuizStart?: (quiz: unknown) => void;
+  onQuizEnd?: (results: unknown) => void;
 }
 
 export class BroadcastRealtimeClient {
@@ -95,6 +97,8 @@ export class BroadcastRealtimeClient {
   private onConnectionStatus: ((status: ConnectionStatus) => void) | undefined;
   private onLoading: ((isLoading: boolean) => void) | undefined;
   private onCtaPush: ((cta: CtaPush | null) => void) | undefined;
+  private onQuizStart: ((quiz: unknown) => void) | undefined;
+  private onQuizEnd: ((results: unknown) => void) | undefined;
 
   private buffer = new RingBuffer<ChatMessage>(500);
   private flushScheduled = false;
@@ -115,6 +119,8 @@ export class BroadcastRealtimeClient {
     this.onConnectionStatus = options.onConnectionStatus;
     this.onLoading = options.onLoading;
     this.onCtaPush = options.onCtaPush;
+    this.onQuizStart = options.onQuizStart;
+    this.onQuizEnd = options.onQuizEnd;
   }
 
   public connect() {
@@ -205,21 +211,21 @@ export class BroadcastRealtimeClient {
           ? ctx.data
           : new Uint8Array((ctx.data as ArrayBufferView).buffer, (ctx.data as ArrayBufferView).byteOffset, (ctx.data as ArrayBufferView).byteLength);
 
+        let handled = false;
+
         try {
           const decodedEvent = creator_stage.realtime.v1.AudienceChatEvent.decode(bytes);
+          console.log("Audience Decoed", decodedEvent);
           if (decodedEvent.chatMessage) {
             const uiMsg = mapToUiMessage(decodedEvent.chatMessage as FlexibleRawChatMessage);
             this.buffer.push(uiMsg);
-
-            if (!this.flushScheduled) {
-              this.flushScheduled = true;
-              requestAnimationFrame(() => {
-                this.flushScheduled = false;
-                this.flushBuffer();
-              });
-            }
+            handled = true;
           }
         } catch {
+          // ignore error and try next
+        }
+
+        if (!handled) {
           try {
             const batched = creator_stage.realtime.v1.BatchedChatMessages.decode(bytes);
             if (batched.messages && batched.messages.length > 0) {
@@ -227,18 +233,19 @@ export class BroadcastRealtimeClient {
                 const uiMsg = mapToUiMessage(msg as FlexibleRawChatMessage);
                 this.buffer.push(uiMsg);
               });
-
-              if (!this.flushScheduled) {
-                this.flushScheduled = true;
-                requestAnimationFrame(() => {
-                  this.flushScheduled = false;
-                  this.flushBuffer();
-                });
-              }
+              handled = true;
             }
           } catch {
-            // ignore
+            // ignore error
           }
+        }
+
+        if (handled && !this.flushScheduled) {
+          this.flushScheduled = true;
+          requestAnimationFrame(() => {
+            this.flushScheduled = false;
+            this.flushBuffer();
+          });
         }
       } else if (typeof ctx.data === "object" && ctx.data !== null && "kind" in ctx.data && (ctx.data as Record<string, unknown>).kind === "audienceChatEvents") {
         const envelope = ctx.data as { kind: string; payload: Record<string, unknown> };
@@ -310,6 +317,10 @@ export class BroadcastRealtimeClient {
             this.onCtaPush?.({ id: decoded.ctaPush.id ?? "", label: decoded.ctaPush.label ?? "", url: decoded.ctaPush.url ?? "" });
           } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_CTA_DISMISS) {
             this.onCtaPush?.(null);
+          } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_QUIZ_START && decoded.quizStart) {
+            this.onQuizStart?.(decoded.quizStart);
+          } else if (decoded.type === creator_stage.realtime.v1.Type.TYPE_QUIZ_END && decoded.quizEnd) {
+            this.onQuizEnd?.(decoded.quizEnd);
           }
         } catch (err) {
           console.warn("Unknown binary publication on :broadcast", err);
@@ -331,6 +342,10 @@ export class BroadcastRealtimeClient {
             this.onCtaPush?.({ id: activity.ctaPush.id ?? "", label: activity.ctaPush.label ?? "", url: activity.ctaPush.url ?? "" });
           } else if (activity.type === creator_stage.realtime.v1.Type.TYPE_CTA_DISMISS) {
             this.onCtaPush?.(null);
+          } else if (activity.type === creator_stage.realtime.v1.Type.TYPE_QUIZ_START && activity.quizStart) {
+            this.onQuizStart?.(activity.quizStart);
+          } else if (activity.type === creator_stage.realtime.v1.Type.TYPE_QUIZ_END && activity.quizEnd) {
+            this.onQuizEnd?.(activity.quizEnd);
           }
         } catch (activityErr) {
           console.warn("Failed to process CreatorChatEvent:", activityErr);

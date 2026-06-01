@@ -2,12 +2,10 @@
 
 import { MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useUIStore } from "@/stores/ui-store";
 import { useRealtimeStore } from "@/stores/realtime-store";
 import { ConnectionStatus } from "@/types/realtime";
 
 export function ChatHeader() {
-  const { showQuiz, setShowQuiz } = useUIStore();
   const connectionStatus = useRealtimeStore((state) => state.connectionStatus);
 
   return (
@@ -27,14 +25,6 @@ export function ChatHeader() {
                 : "bg-red-500"
           )}
         ></span>
-      </div>
-      <div className="flex gap-2">
-        <button
-          onClick={() => setShowQuiz(!showQuiz)}
-          className="w-10 h-7 flex items-center justify-center rounded-xl text-xs hover:bg-muted transition-colors text-muted-foreground border border-dashed border-primary"
-        >
-          Quiz
-        </button>
       </div>
     </div>
   );

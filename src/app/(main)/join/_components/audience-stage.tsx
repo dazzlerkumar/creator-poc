@@ -80,7 +80,7 @@ export function AudienceStage({ videoBroadcastId }: AudienceStageProps) {
               <ChatHeader />
               <div className="flex-1 overflow-y-auto">
                 {showPayment && <PaymentOverlay />}
-                {showQuiz && <QuizOverlay sid={videoBroadcastId} />}
+                {showQuiz && <QuizOverlay />}
                 <LiveChat sid={videoBroadcastId} />
               </div>
             </div>
