@@ -66,18 +66,16 @@ export function useLiveChat(sessionId = "4uPEuX") {
       onLoading: setIsLoading,
       onCtaPush: (cta) => setShowPayment(cta !== null),
       onQuizStart: (quizPayload) => {
+        const payload = quizPayload as { id?: string; quizId?: string; question: string; options?: Array<{ id: string; label: string }>; durationSecs?: number };
         // Map protobuf Quiz payload to QuizQuestion store type
         const question = {
-          questionId: quizPayload.id || quizPayload.quizId,
-          text: quizPayload.question,
-          options: (quizPayload.options || []).map((o: {
-            id: string,
-            label: string
-          }) => ({
+          questionId: payload.id || payload.quizId || "",
+          text: payload.question || "",
+          options: (payload.options || []).map((o) => ({
             id: o.id,
             text: o.label
           })),
-          durationSeconds: quizPayload.durationSecs || 60
+          durationSeconds: payload.durationSecs || 60
         };
         useQuizStore.getState().startQuiz(question);
         useUIStore.getState().setShowQuiz(true);
