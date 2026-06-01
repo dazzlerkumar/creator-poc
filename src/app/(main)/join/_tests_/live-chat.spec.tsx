@@ -94,11 +94,12 @@ describe("LiveChat component", () => {
 
     expect(screen.getByText("Hello from the owner!")).toBeInTheDocument();
     expect(screen.queryByText("OriginalOwnerName:")).not.toBeInTheDocument();
-    expect(screen.getByText("Saurabh")).toBeInTheDocument();
+    expect(screen.getAllByText("Saurabh").length).toBeGreaterThan(0);
 
     expect(screen.getByText("This is a direct message")).toBeInTheDocument();
-    expect(screen.getByText("Dave:")).toBeInTheDocument();
-    expect(screen.getByText("DM")).toBeInTheDocument();
+    expect(screen.queryByText("Dave:")).not.toBeInTheDocument(); // Dave is ignored in RepliedMessage as it uses "Saurabh"
+    expect(screen.getByText("Dev")).toBeInTheDocument();
+    expect(screen.getByText("Can I pause my habuild subscription for sometime?")).toBeInTheDocument();
   });
 
   it("calls sendMessage callback on composer form submission and clears input", () => {

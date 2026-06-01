@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef, FormEvent } from "react";
 import Image from "next/image";
-import { Send, Smile, ArrowDown, Mail, Crown } from "lucide-react";
+import { Send, Smile, ArrowDown, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLiveChat } from "@/hooks/use-live-chat";
 import { ChatMessage } from "@/types/chat";
 import PinnedMessageCard from "@/components/live-chats/pinned-message";
+import { RepliedMessage } from "@/components/live-chats/replied-message";
 
 export type { ChatMessage };
 
@@ -104,43 +105,37 @@ export function LiveChat({ sid }: { sid: string }) {
           </div>
         ) : (
           messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={cn(
-                "flex items-start gap-3 text-sm",
-                msg.isDm &&
-                "pl-3 border-l-2 border-primary bg-primary/5 rounded-r-lg py-1.5 -mx-1 px-2",
-              )}
-            >
-              <div className="text-[11px] text-muted-foreground/60 font-medium pt-1 w-8 select-none shrink-0">
-                {new Date(msg.timestamp).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })}
-              </div>
-              <div className="flex-1 min-w-0 flex">
-                <span
-                  className={cn(
-                    "text-xs font-bold mr-1.5 transition-colors flex gap-1",
-                    msg.role === "owner"
-                      ? "text-secondary"
-                      : "text-foreground",
-                  )}
-                >
-                  {msg.role === "owner" ? <><span className="text-md">Saurabh</span> <Crown size={10} fill="text-yellow-500" stroke="text-yellow-500" /></> : msg.authorName}:
-                </span>
-                <span className="text-sm text-muted-foreground break-words">
-                  {msg.messageText}
-                </span>
-                {msg.isDm && (
-                  <span className="inline-flex items-center gap-0.5 ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/15 text-primary select-none align-middle">
-                    <Mail size={9} />
-                    DM
+            msg.isDm ? (
+              <RepliedMessage key={msg.id} message={msg} />
+            ) : (
+              <div
+                key={msg.id}
+                className="flex items-start gap-3 text-sm"
+              >
+                <div className="text-[11px] text-muted-foreground/60 font-medium pt-1 w-8 select-none shrink-0">
+                  {new Date(msg.timestamp).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })}
+                </div>
+                <div className="flex-1 min-w-0 flex">
+                  <span
+                    className={cn(
+                      "text-xs font-bold mr-1.5 transition-colors flex gap-1",
+                      msg.role === "owner"
+                        ? "text-secondary"
+                        : "text-foreground",
+                    )}
+                  >
+                    {msg.role === "owner" ? <><span className="text-md">Saurabh</span> <Crown size={10} fill="text-yellow-500" stroke="text-yellow-500" /></> : msg.authorName}:
                   </span>
-                )}
+                  <span className="text-sm text-muted-foreground break-words">
+                    {msg.messageText}
+                  </span>
+                </div>
               </div>
-            </div>
+            )
           ))
         )}
       </div>

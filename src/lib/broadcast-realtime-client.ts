@@ -372,7 +372,7 @@ export class BroadcastRealtimeClient {
 
       try {
         const decoded = creator_stage.realtime.v1.CreatorChatEvent.decode(bytes);
-
+        console.log("DM decoed", decoded)
         // The broker echoes our own publishes. Drop ROLE_AUDIENCE.
         if (decoded.role === creator_stage.realtime.v1.Role.ROLE_AUDIENCE) return;
 
